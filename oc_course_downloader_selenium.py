@@ -10,6 +10,10 @@ from bs4 import BeautifulSoup
 
 import jmm.browsers
 
+from jmm.soups import soupifyContent
+
+from markdown import html_to_markdown
+
 # class OcCourseFetcherSpider(scrapy.Spider):
 # class OcCourseFetcher(object):
 #     """
@@ -79,7 +83,8 @@ def parse_course_page_content(html_page, driver=None, verbose=1):
         
         image_infos.append((url, description, caption, image_data, i))
         # image_infos.append((url, description, caption))
-        
+    
+    
     ### getting video infos
     # look for all iframe with src pointing to a vimeo player. Like
     # <iframe ... src="//player.vimeo.com/video/217633247?color=7451eb">
@@ -93,7 +98,6 @@ def parse_course_page_content(html_page, driver=None, verbose=1):
 
     ### we now have already returned the html content and the image urls
     pass
-    
 
 
 def helper_parse_course_page_url(url):
@@ -119,6 +123,15 @@ def helper_parse_course_page_url(url):
     # for url="https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation"
     # would return: ('4011851-initiez-vous-au-machine-learning', '4011858-identifez-les-differentes-etapes-de-modelisation', 'fr')
     return (course_id, course_page, lang)
+
+def helper_course_page_url(course_id, course_page=None, lang=None):
+    """
+    """
+    lang = "fr" if lang is None
+    arr = ["https://openclassrooms.com", lang, "courses", course_id]
+    if course_page is not None:
+        arr.append(course_page)
+    return "/".join(arr)
 
 
 ###############################################################################
