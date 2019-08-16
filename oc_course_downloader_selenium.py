@@ -8,9 +8,9 @@ import requests
 
 from bs4 import BeautifulSoup
 
+#
 import jmm.browsers
-
-from jmm.soups import soupifyContent
+from jmm.soups import soupifyContent as soupify_html
 
 from markdown import html_to_markdown
 
@@ -18,15 +18,70 @@ from markdown import html_to_markdown
 # class OcCourseFetcher(object):
 #     """
 #     """
+
+
+def reach_page(driver, url):
+    """Navigates to a page and ensures the page has finished loading properly
+    before returning its source code.
+    :rtype: str
+    :returns: source code of the target page.
+    """
+    driver.get(url)
+    # wait until finished loading
+    print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
+    return driver.page_source
+
+
+
+def helper_parse_course_page_url(url):
+    """
+    Example of urls:
+    course presentation page url example:
+    https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning
+    course chapter page url example:
+    https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation
     
-def extract_course_chapters(html_page, course_url):
+    :return: tuple of str: (course path id, course page subpath or None, language)
+    """
+    hostname = 'openclassrooms.com/'
+    has_hostname = url.find(hostname) >= 0
+    if has_hostname:
+        path = url[url.find(hostname)+len(hostname):]
+    else:
+        path = url[1:] if (url[0] == '/') else url
+    
+    lang, _, course_id, *course_page = path.split('/')
+    course_page = course_page[0] if len(course_page) > 0 else None
+    
+    # for url="https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation"
+    # would return: ('4011851-initiez-vous-au-machine-learning', '4011858-identifez-les-differentes-etapes-de-modelisation', 'fr')
+    return (course_id, course_page, lang)
+
+
+def helper_course_page_url(course_id, course_page=None, lang=None):
+    """
+    """
+    lang = "fr" if lang is None
+    arr = ["https://openclassrooms.com", lang, "courses", course_id]
+    if course_page is not None:
+        arr.append(course_page)
+    return "/".join(arr)
+
+
+def extract_course_chapters(html_page):
+    """
+    :param html_page:
+    :rtype: list<tuple>
+    :returns: list of chapters infos
+            a chapter is a tuple consisting of 
+            (the part number, the chapter number, chapter path, chapter title, chapter url)
+    """
     hostname = 'https://openclassrooms.com'
     
     course_description_page_soup = BeautifulSoup(html_page, 'lxml')
-    if course_url is None:
-        course_url = course_description_page_soup.find('link', {'rel': 'canonical'}).get('href')
-        
-    course_id, course_chapter_subpath, lang = helper_parse_course_page_url(course_url)
+    
+    # course_url = course_description_page_soup.find('link', {'rel': 'canonical'}).get('href')
+    # course_id, course_chapter_subpath, lang = helper_parse_course_page_url(course_url)
     
     course_timeline = course_description_page_soup.find('div', {'class': 'timeline__steps'})
     timeline_elmts = course_timeline.findChildren(recursive=False)
@@ -100,40 +155,6 @@ def parse_course_page_content(html_page, driver=None, verbose=1):
     pass
 
 
-def helper_parse_course_page_url(url):
-    """
-    Example of urls:
-    course presentation page url example:
-    https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning
-    course chapter page url example:
-    https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation
-    
-    :return: tuple of str: (course path id, course page subpath or None, language)
-    """
-    hostname = 'openclassrooms.com/'
-    has_hostname = url.find(hostname) >= 0
-    if has_hostname:
-        path = url[url.find(hostname)+len(hostname):]
-    else:
-        path = url[1:] if (url[0] == '/') else url
-    
-    lang, _, course_id, *course_page = path.split('/')
-    course_page = course_page[0] if len(course_page) > 0 else None
-    
-    # for url="https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation"
-    # would return: ('4011851-initiez-vous-au-machine-learning', '4011858-identifez-les-differentes-etapes-de-modelisation', 'fr')
-    return (course_id, course_page, lang)
-
-def helper_course_page_url(course_id, course_page=None, lang=None):
-    """
-    """
-    lang = "fr" if lang is None
-    arr = ["https://openclassrooms.com", lang, "courses", course_id]
-    if course_page is not None:
-        arr.append(course_page)
-    return "/".join(arr)
-
-
 ###############################################################################
 
 
@@ -160,22 +181,29 @@ def argParser():
 def extract_course_page_content(driver):
     driver.switchTo().defaultContent()
     
-    soup = soupifyContent(driver.page_source)
+    soup = soupify_html(driver.page_source)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
     infos = {'main': html_to_markdown(str(page_content_tag))}
     
     images_to_fetch = []
     videos_to_fetch = []
     
+    # iFrame = d.find_elements_by_tag_name("iframe")[0]
+    # if driver:
+    #     # iframes that have 
+    #     driver.switchTo().frame(iframe);
+    #     driver.getPageSource();
+    #     driver.switchTo().defaultContent();
+    
+    infos.update({'to_fetch': {'images': images_to_fetch, 'videos': videos_to_fetch}})
+    
     return infos
 
 
-def reach_page(driver, url):
-    driver.get(url)
-    # wait until finished loading
-    print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
-    return driver.page_source
-
+def fetch_and_save_course_chapter_infos(infos):
+    """Fetches and writes following the architecture pattern.
+    """
+    pass
 
 def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix=None, video_prefix=None):
     """Fetches the page and saves it to disk
@@ -192,6 +220,17 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
                     The default architecture uses content_prefix.
     """
     directory = os.path.abspath(directory)
+    # ...
+    # fetch content and save them to the prefixed
+    # fetch imges and save them to the prefixed
+    # fetch videos and save them to the prefixed
+    
+    # iFrame = d.find_elements_by_tag_name("iframe")[0]
+    # if driver:
+    #     # iframes that have 
+    #     driver.switchTo().frame(iframe);
+    #     driver.getPageSource();
+    #     driver.switchTo().defaultContent();
     
     pass
 
@@ -201,18 +240,31 @@ def fetch_course(browser, course_url):
     course_home_page_url = helper_course_page_url(course_id, None, lang)
     
     reach_page(browser, course_home_page_url)
-    chapters = extract_course_chapters(browser.page_source, course_home_page_url)
+    
+    chapters = extract_course_chapters(browser.page_source)
+    soup = soupify_html(browser.page_source)
+    course_title = soup.title.get_text().strip()
+
+    home_page_chapter = (0, 1, course_home_page_url, course_title, course_home_page_url)
+    chapters = [home_page_chapter] + chapters
     
     ### cycle through the URLs and pages
-    ### save home page to disk
+    for chapter in chapters:
+        ### save page to disk
+        part_nbr, chap_nbr, chap_path, chap_title, chap_url = chapter
     
-    ### go to a page
-    
-    ### get page source and content ()
-    ## function
+        ### go to a page
+        reach_page(browser, chap_url)
+        
+        infos = extract_course_page_content(browser.driver)
+        fetch_and_save_course_chapter_infos(infos)
+        
+        ### get page source and content ()
+        ## function
         ## reads HTML
+        
+        
     
-    browser.get(course_home_page_url)
     _ = browser.page_source
     pass
 
