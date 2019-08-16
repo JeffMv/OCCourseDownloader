@@ -157,6 +157,66 @@ def argParser():
     return parser
 
 
+def extract_course_page_content(driver):
+    driver.switchTo().defaultContent()
+    
+    soup = soupifyContent(driver.page_source)
+    page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    infos = {'main': html_to_markdown(str(page_content_tag))}
+    
+    images_to_fetch = []
+    videos_to_fetch = []
+    
+    return infos
+
+
+def reach_page(driver, url):
+    driver.get(url)
+    # wait until finished loading
+    print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
+    return driver.page_source
+
+
+def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix=None, video_prefix=None):
+    """Fetches the page and saves it to disk
+    :param str directory: directory to save to.
+    :param str content_prefix: a filepath prefix to prepend to the saved files.
+                    The prefix is relative to the `directory` parameter.
+    :param str image_prefix: a filepath prefix to prepend to image files.
+                    The prefix is relative to the `directory` parameter.
+                    If None, a default architecture will be used.
+                    The default architecture uses content_prefix.
+    :param str video_prefix: a filepath prefix to prepend to image files.
+                    The prefix is relative to the `directory` parameter.
+                    If None, a default architecture will be used.
+                    The default architecture uses content_prefix.
+    """
+    directory = os.path.abspath(directory)
+    
+    pass
+
+
+def fetch_course(browser, course_url):
+    course_id, course_page, lang = helper_parse_course_page_url(course_url)
+    course_home_page_url = helper_course_page_url(course_id, None, lang)
+    
+    reach_page(browser, course_home_page_url)
+    chapters = extract_course_chapters(browser.page_source, course_home_page_url)
+    
+    ### cycle through the URLs and pages
+    ### save home page to disk
+    
+    ### go to a page
+    
+    ### get page source and content ()
+    ## function
+        ## reads HTML
+    
+    browser.get(course_home_page_url)
+    _ = browser.page_source
+    pass
+
+
 def main_selenium():
     parser = argParser()
     args = parser.parse_args()
@@ -165,16 +225,18 @@ def main_selenium():
         args.password = getpass.getpass("Openclassrooms.com password: ")
     
     nav = jmm.browsers.SeleniumHelper()
+    
     ### login
     nav.get('https://openclassrooms.com/fr/login')
     nav.enter_textfield('input#field_username', args.username)
     nav.enter_textfield('input#field_password', args.password)
     nav.click_element('button#login-button')
     
-    
-    ###
-    
-    pass
+    for url in args.courseUrls:
+        print("Fetching course for %s" % url)
+        
+        # ...
+        fetch_course(nav, url)
 
 
 if __name__ == '__main__':
