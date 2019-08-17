@@ -13,6 +13,7 @@ import jmm.browsers
 from jmm.soups import soupifyContent as soupify_html
 
 from markdown import html_to_markdown
+from video_players import vimeo_video_infos
 
 # class OcCourseFetcherSpider(scrapy.Spider):
 # class OcCourseFetcher(object):
@@ -147,9 +148,9 @@ def parse_course_page_content(html_page, driver=None, verbose=1):
     iFrame = d.find_elements_by_tag_name("iframe")[0]
     if driver:
         # iframes that have 
-        driver.switchTo().frame(iframe);
+        driver.switch_to.frame(iframe);
         driver.getPageSource();
-        driver.switchTo().defaultContent();
+        driver.switch_to.defaultContent();
 
     ### we now have already returned the html content and the image urls
     pass
@@ -179,7 +180,7 @@ def argParser():
 
 
 def extract_course_page_content(driver):
-    driver.switchTo().defaultContent()
+    driver.switch_to.defaultContent()
     hostname = "https://openclassrooms.com"
     
     soup = soupify_html(driver.page_source)
@@ -198,21 +199,32 @@ def extract_course_page_content(driver):
         image_file_basename = image_src.split('/')[-1].split('?')[0].split('#')[0]
         image_info = (i + 1, image_src, image_desc, image_file_basename)
         
-        image_tags.append(image_info)
+        images_to_fetch.append(image_info)
+    
     
     video_frame_tags = [[j, iframe, iframe[src]] for j, iframe in enumerate(page_content_tag('iframe')) 
                         if iframe.get('src') and iframe.get('src').find('player.vimeo') >= 0]
-    iframes = driver.find_elements_by_tag_name("iframe")
-    # all_frame
+    iframes_elements = driver.find_elements_by_tag_name("iframe")
     for k, tag in enumerate(video_frame_tags):
-        # iFrame = d.find_elements_by_tag_name("iframe")[0]
-        # if driver:
-        #     # iframes that have 
-        #     driver.switchTo().frame(iframe);
-        #     driver.getPageSource();
-        #     driver.switchTo().defaultContent();
+        frame_index = tag[0]
+        frame = iframes_elements[frame_index]
+        # iframes that have 
+        driver.switch_to.frame(frame)
+        iframe_source = driver.page_source
+        driver.switch_to.defaultContent()
         
-        pass
+        vimeo_page_soup = soupify_html(iframe_source)
+        script_tags_content = [tag.get_text() for tag in vimeo_page_soup.find_all('script') 
+                               if tag.get_text().find('''"mime":"video/mp4"''') >= 0]
+        
+        assert len(script_tags_content) == 1
+        content = script_tags_content[0]
+        video_formats_infos_summary, video_formats_infos = vimeo_video_infos(content)
+        
+        video_title = vimeo_page_soup.title.get_text().strip()
+        
+        video_info = (k + 1, video_title, video_formats_infos_summary, video_formats_infos)
+        videos_to_fetch.append(video_info)
     
     infos.update({'to_fetch': {'images': images_to_fetch, 'videos': videos_to_fetch}})
     
@@ -247,9 +259,9 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
     # iFrame = d.find_elements_by_tag_name("iframe")[0]
     # if driver:
     #     # iframes that have 
-    #     driver.switchTo().frame(iframe);
+    #     driver.switch_to.frame(iframe);
     #     driver.getPageSource();
-    #     driver.switchTo().defaultContent();
+    #     driver.switch_to.defaultContent();
     
     pass
 
