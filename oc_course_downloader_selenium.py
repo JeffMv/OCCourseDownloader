@@ -180,6 +180,7 @@ def argParser():
 
 def extract_course_page_content(driver):
     driver.switchTo().defaultContent()
+    hostname = "https://openclassrooms.com"
     
     soup = soupify_html(driver.page_source)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
@@ -188,12 +189,30 @@ def extract_course_page_content(driver):
     images_to_fetch = []
     videos_to_fetch = []
     
-    # iFrame = d.find_elements_by_tag_name("iframe")[0]
-    # if driver:
-    #     # iframes that have 
-    #     driver.switchTo().frame(iframe);
-    #     driver.getPageSource();
-    #     driver.switchTo().defaultContent();
+    image_tags = page_content_tag('img')
+    for i, tag in enumerate(image_tags):
+        image_desc = tag.get('alt')
+        image_src = tag['src']
+        # get full URL (absolute) for `<img src="/path/to/img.jpg">`
+        image_src = (hostname + "/" + image_src) if image_src.find('/') == 0 else image_src
+        image_file_basename = image_src.split('/')[-1].split('?')[0].split('#')[0]
+        image_info = (i + 1, image_src, image_desc, image_file_basename)
+        
+        image_tags.append(image_info)
+    
+    video_frame_tags = [[j, iframe, iframe[src]] for j, iframe in enumerate(page_content_tag('iframe')) 
+                        if iframe.get('src') and iframe.get('src').find('player.vimeo') >= 0]
+    iframes = driver.find_elements_by_tag_name("iframe")
+    # all_frame
+    for k, tag in enumerate(video_frame_tags):
+        # iFrame = d.find_elements_by_tag_name("iframe")[0]
+        # if driver:
+        #     # iframes that have 
+        #     driver.switchTo().frame(iframe);
+        #     driver.getPageSource();
+        #     driver.switchTo().defaultContent();
+        
+        pass
     
     infos.update({'to_fetch': {'images': images_to_fetch, 'videos': videos_to_fetch}})
     
@@ -263,9 +282,7 @@ def fetch_course(browser, course_url):
         ## function
         ## reads HTML
         
-        
     
-    _ = browser.page_source
     pass
 
 
