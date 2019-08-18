@@ -19,7 +19,25 @@ import json
 def vimeo_video_infos(script_tag_content):
 	"""
 	:rtyoe: dict
-	:returns: ...
+	:returns: summary, video_formats
+				summary: tuple summary of video infos returned by the API
+					(video quality (ex. '540p'), width (int), height (int), video url, video fps)
+				video_formats: exactly what vimeo returns (array of video infos):
+					[
+						{
+		                  "width": 960,
+		                  "height": 540
+		                  "fps": 25,
+		                  "quality": "540p",
+		                  "url": "https://gcs-vimeo.akamaized.net/exp=1565959533~acl=%2A%2F753898738.mp4%2A~hmac=d9edf1c1542b4577bc196d2f942241b755b740087b4345db0299879c59f10f0c/vimeo-prod-skyfire-std-us/01/3526/8/217633069/753898738.mp4",
+		                  "profile": 165,
+		                  "mime": "video/mp4",
+		                  "id": 753898738,
+		                  ...
+		                },
+		                ...
+		            ]
+					
 	"""
 	start_mark = 'var config = '
 	start_index = script_tag_content.find(start_mark) + len(start_mark)
