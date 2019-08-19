@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup
 import jmm.browsers
 from jmm.soups import soupifyContent as soupify_html
 
+import utils
+
 from markdown import html_to_markdown
 from video_players import vimeo_video_infos
 
@@ -21,16 +23,18 @@ from video_players import vimeo_video_infos
 #     """
 
 
-def reach_page(driver, url):
+def reach_page(browser, url, time_to_wait='default'):
     """Navigates to a page and ensures the page has finished loading properly
     before returning its source code.
     :rtype: str
     :returns: source code of the target page.
     """
-    driver.get(url)
+    time_to_wait = 5 if time_to_wait == 'default' else time_to_wait
+    browser.driver.get(url)
     # wait until finished loading
     print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
-    return driver.page_source
+    browser.waitTime(time_to_wait)
+    return browser.driver.page_source
 
 
 
@@ -53,6 +57,7 @@ def helper_parse_course_page_url(url):
     
     lang, _, course_id, *course_page = path.split('/')
     course_page = course_page[0] if len(course_page) > 0 else None
+    course_page = course_page if course_page and len(course_page) > 0 else None
     
     # for url="https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation"
     # would return: ('4011851-initiez-vous-au-machine-learning', '4011858-identifez-les-differentes-etapes-de-modelisation', 'fr')
@@ -62,7 +67,7 @@ def helper_parse_course_page_url(url):
 def helper_course_page_url(course_id, course_page=None, lang=None):
     """
     """
-    lang = "fr" if lang is None
+    lang = "fr" if lang is None else lang
     arr = ["https://openclassrooms.com", lang, "courses", course_id]
     if course_page is not None:
         arr.append(course_page)
@@ -88,7 +93,7 @@ def extract_course_chapters(html_page):
     timeline_elmts = course_timeline.findChildren(recursive=False)
     # first and last childs are chapter separators, so drop them
     timeline_elmts = timeline_elmts[1:-1]
-    nbr_of_course_parts = len(timeline_elmts.find_all('span', {'class': 'timeline__splitChapter'})) - 2
+    nbr_of_course_parts = len(course_timeline.find_all('span', {'class': 'timeline__splitChapter'})) - 2
     curr_part_nbr = 1
     curr_chap = 0
     
@@ -150,7 +155,7 @@ def parse_course_page_content(html_page, driver=None, verbose=1):
         # iframes that have 
         driver.switch_to.frame(iframe);
         driver.getPageSource();
-        driver.switch_to.defaultContent();
+        driver.switch_to.default_content();
 
     ### we now have already returned the html content and the image urls
     pass
@@ -176,11 +181,13 @@ def argParser():
     
     parser.add_argument('--username', '-u', help="username or email of the service")
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
+    
+    parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (generally Vimeo offers "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     return parser
 
 
 def extract_course_page_content(driver):
-    driver.switch_to.defaultContent()
+    driver.switch_to.default_content()
     hostname = "https://openclassrooms.com"
     
     soup = soupify_html(driver.page_source)
@@ -211,7 +218,7 @@ def extract_course_page_content(driver):
         # iframes that have 
         driver.switch_to.frame(frame)
         iframe_source = driver.page_source
-        driver.switch_to.defaultContent()
+        driver.switch_to.default_content()
         
         vimeo_page_soup = soupify_html(iframe_source)
         script_tags_content = [tag.get_text() for tag in vimeo_page_soup.find_all('script') 
@@ -231,10 +238,47 @@ def extract_course_page_content(driver):
     return infos
 
 
-def fetch_and_save_course_chapter_infos(infos):
+def fetch_and_save_course_chapter_infos(infos, prefix, part_nbr, chapter_nbr, video_quality):
+# def fetch_and_save_course_chapter_infos(infos, prefix, video_quality):
     """Fetches and writes following the architecture pattern.
+    :param video_quality:
+                Also accepts 'low', 'medium', 'hd', 'full'
     """
+    ### fetching the chapter's page
+    base_chapter_path = '%i-%i' % (part_nbr, chapter_nbr)
+    
+    ### fetching the images
+    base_media_path = 'medias'
+    # base_media_path = '.'
+    images = infos.get('to_fetch').get('images')
+    # download_infos: [(path to save to,  url, image description), ...]
+    images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
+                       image_info[1],  # url
+                       image_info[2])  # image description
+                      for image_info in images]
+    
+    
+    ### fetching the videos
+    first_element = lambda arr: arr[0] if len(arr) > 0 else None
+    video_for_quality = lambda arr, quality: first_element([infos for infos in arr if str(infos[2][0]) == str(quality)])
+    videos = infos.get('to_fetch').get('videos')
+    video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
+                            video_for_quality(video_info, video_quality),
+                            video_info[1]
+                            )
+                            for video_info in videos]
+    
+    download_infos = images_download_infos + video_download_infos
+    for i, media_infos in enumerate(download_infos):
+        path, url, description = media_infos
+        if url is not None:
+            print("%i/%i) Fetching '%s' to %s ..." % (i+1, len(download_infos), description, path))
+            utils.download_with_progress_indicator(url, path)
+        else:
+            print("Did not find quality '%s' for the video %s" % (description))
+    
     pass
+
 
 def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix=None, video_prefix=None):
     """Fetches the page and saves it to disk
@@ -261,23 +305,23 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
     #     # iframes that have 
     #     driver.switch_to.frame(iframe);
     #     driver.getPageSource();
-    #     driver.switch_to.defaultContent();
+    #     driver.switch_to.default_content();
     
     pass
 
 
-def fetch_course(browser, course_url):
+def fetch_course(browser, course_url, video_quality):
     course_id, course_page, lang = helper_parse_course_page_url(course_url)
     course_home_page_url = helper_course_page_url(course_id, None, lang)
     
     reach_page(browser, course_home_page_url)
     
-    chapters = extract_course_chapters(browser.page_source)
-    soup = soupify_html(browser.page_source)
+    chapters = extract_course_chapters(browser.driver.page_source)
+    soup = soupify_html(browser.driver.page_source)
     course_title = soup.title.get_text().strip()
 
     home_page_chapter = (0, 1, course_home_page_url, course_title, course_home_page_url)
-    chapters = [home_page_chapter] + chapters
+    chapters = [home_page_chapter] + chapters
     
     ### cycle through the URLs and pages
     for chapter in chapters:
@@ -288,7 +332,6 @@ def fetch_course(browser, course_url):
         reach_page(browser, chap_url)
         
         infos = extract_course_page_content(browser.driver)
-        fetch_and_save_course_chapter_infos(infos)
         
         ### get page source and content ()
         ## function
@@ -309,15 +352,17 @@ def main_selenium():
     
     ### login
     nav.get('https://openclassrooms.com/fr/login')
+    nav.waitTillExists('input#field_username')
     nav.enter_textfield('input#field_username', args.username)
     nav.enter_textfield('input#field_password', args.password)
     nav.click_element('button#login-button')
+    nav.waitTime(5)
     
     for url in args.courseUrls:
         print("Fetching course for %s" % url)
         
         # ...
-        fetch_course(nav, url)
+        fetch_course(nav, url, args.videoQuality)
 
 
 if __name__ == '__main__':

@@ -10,6 +10,8 @@ Currently supported APIs:
 import json
 
 
+### Usual video qualities for Vimeo: "360p","540p","720p","1080p"
+
 ### We want to extract the JSON dictionary between the following pargs
 ## var config = {"cdn_url":"https://f.vimeocdn.com","vimeo_api_url":"api.vimeo.com","request":{"files":{"dash":{"separate_av":true,"streams":[{"profile":119,"quality":"1080p","id":753898737,
 ## ...
