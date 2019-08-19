@@ -32,7 +32,8 @@ def reach_page(browser, url, time_to_wait='default'):
     time_to_wait = 5 if time_to_wait == 'default' else time_to_wait
     browser.driver.get(url)
     # wait until finished loading
-    print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
+    # print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
+    print("reaching page @ '%s'" % (url))
     browser.waitTime(time_to_wait)
     return browser.driver.page_source
 
@@ -121,47 +122,6 @@ def extract_course_chapters(html_page):
     return chapters
 
 
-def parse_course_page_content(html_page, driver=None, verbose=1):
-    """
-    should return the HTML content 
-    """
-    soup = BeautifulSoup(html_page, 'lxml')
-    content_node = soup.find('div', {'class': 'userContent'})
-    # content_node = soup.find('div', {'class': 'js-userContent'})
-    image_tags = content_node.find_all('img')
-    
-    image_infos = []
-    for i, tag in enumerate(image_tags):
-        url, description = tag.attrs.get('src'), tag.attrs.get('alt')
-        caption_tag = tag.parent.figcaption
-        caption = caption_tag.get_text().strip() if caption_tag else None
-        
-        course_id, course_page, lang = helper_parse_course_page_url(url)
-        page_url = "/".join([lang, course_id, course_page])
-        if verbose >= 1:
-            print("fetching image %i / %i from course page %s" % (i+1, len(image_tags), page_url))
-        
-        # image_data = requests.get(url).content
-        # image_infos.append((url, description, caption, image_data, i))
-        image_infos.append((url, description, caption, i))
-        # image_infos.append((url, description, caption))
-    
-    
-    ### getting video infos
-    # look for all iframe with src pointing to a vimeo player. Like
-    # <iframe ... src="//player.vimeo.com/video/217633247?color=7451eb">
-    vimeo_player_iframes_tags = [(i, frame) for i, frame in enumerate(soup('iframe')) if frame.get('src') is not None and frame.get('src').lower().find('player.vimeo.com') >= 0]
-    iFrame = d.find_elements_by_tag_name("iframe")[0]
-    if driver:
-        # iframes that have 
-        driver.switch_to.frame(iframe);
-        driver.getPageSource();
-        driver.switch_to.default_content();
-
-    ### we now have already returned the html content and the image urls
-    pass
-
-
 ###############################################################################
 
 
@@ -205,13 +165,12 @@ def extract_course_page_content(driver):
         # get full URL (absolute) for `<img src="/path/to/img.jpg">`
         image_src = (hostname + "/" + image_src) if image_src.find('/') == 0 else image_src
         image_file_basename = image_src.split('/')[-1].split('?')[0].split('#')[0]
-        image_info = (i + 1, image_src, image_desc, image_file_basename)
+        image_info = (i + 1, image_src, image_desc, image_file_basename)    
         
         images_to_fetch.append(image_info)
     
-    
-    video_frame_tags = [[j, iframe, iframe[src]] for j, iframe in enumerate(page_content_tag('iframe')) 
-                        if iframe.get('src') and iframe.get('src').find('player.vimeo') >= 0]
+    video_frame_tags = [[j, iframe, iframe['src']] for j, iframe in enumerate(page_content_tag('iframe')) 
+                        if 'src' in iframe.attrs and iframe.get('src').find('player.vimeo') >= 0]
     iframes_elements = driver.find_elements_by_tag_name("iframe")
     for k, tag in enumerate(video_frame_tags):
         frame_index = tag[0]
@@ -327,7 +286,7 @@ def fetch_course(browser, course_url, video_quality):
     ### cycle through the URLs and pages
     for chapter in chapters:
         ### save page to disk
-        part_nbr, chap_nbr, chap_path, chap_title, chap_url = chapter
+        part_nbr, chapter_nbr, chap_path, chap_title, chap_url = chapter
     
         ### go to a page
         reach_page(browser, chap_url)
