@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+<html class="no-js " lang="fr" prefix="og: http://ogp.me/ns#">
+<head>
+<title>
+                            Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms
+                    </title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" /><script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({1:[function(e,n,t){function r(){}function o(e,n,t){return function(){return i(e,[c.now()].concat(u(arguments)),n?null:this,t),n?void 0:this}}var i=e("handle"),a=e(3),u=e(4),f=e("ee").get("tracer"),c=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(e,n){s[n]=o(d+n,!0,"api")}),s.addPageAction=o(d+"addPageAction",!0),s.setCurrentRouteName=o(d+"routeName",!0),n.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,n){var t={},r=this,o="function"==typeof n;return i(l+"tracer",[c.now(),e,t],r),function(){if(f.emit((o?"":"no-")+"fn-start",[c.now(),r,o],t),o)try{return n.apply(this,arguments)}catch(e){throw f.emit("fn-err",[arguments,this,e],t),e}finally{f.emit("fn-end",[c.now()],t)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,n){m[n]=o(l+n)}),newrelic.noticeError=function(e,n){"string"==typeof e&&(e=new Error(e)),i("err",[e,c.now(),!1,n])}},{}],2:[function(e,n,t){function r(e,n){if(!o)return!1;if(e!==o)return!1;if(!n)return!0;if(!i)return!1;for(var t=i.split("."),r=n.split("."),a=0;a<r.length;a++)if(r[a]!==t[a])return!1;return!0}var o=null,i=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var u=navigator.userAgent,f=u.match(a);f&&u.indexOf("Chrome")===-1&&u.indexOf("Chromium")===-1&&(o="Safari",i=f[1])}n.exports={agent:o,version:i,match:r}},{}],3:[function(e,n,t){function r(e,n){var t=[],r="",i=0;for(r in e)o.call(e,r)&&(t[i]=n(r,e[r]),i+=1);return t}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],4:[function(e,n,t){function r(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(o<0?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=r},{}],5:[function(e,n,t){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,n,t){function r(){}function o(e){function n(e){return e&&e instanceof r?e:e?f(e,u,i):i()}function t(t,r,o,i){if(!d.aborted||i){e&&e(t,r,o);for(var a=n(o),u=v(t),f=u.length,c=0;c<f;c++)u[c].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(e,n){h[e]=v(e).concat(n)}function m(e,n){var t=h[e];if(t)for(var r=0;r<t.length;r++)t[r]===n&&t.splice(r,1)}function v(e){return h[e]||[]}function g(e){return p[e]=p[e]||o(t)}function w(e,n){c(e,function(e,t){n=n||"feature",y[t]=n,n in s||(s[n]=[])})}var h={},y={},b={on:l,addEventListener:l,removeEventListener:m,emit:t,get:g,listeners:v,context:n,buffer:w,abort:a,aborted:!1};return b}function i(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var u="nr@context",f=e("gos"),c=e(3),s={},p={},d=n.exports=o();d.backlog=s},{}],gos:[function(e,n,t){function r(e,n,t){if(o.call(e,n))return e[n];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(e,n,t){function r(e,n,t,r){o.buffer([e],r),o.emit(e,n,t)}var o=e("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(e,n,t){function r(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");n.exports=r},{}],loader:[function(e,n,t){function r(){if(!E++){var e=x.info=NREUM.info,n=l.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&n))return s.abort();c(y,function(n,t){e[n]||(e[n]=t)}),f("mark",["onload",a()+x.offset],null,"api");var t=l.createElement("script");t.src="https://"+e.agent,n.parentNode.insertBefore(t,n)}}function o(){"complete"===l.readyState&&i()}function i(){f("mark",["domContent",a()+x.offset],null,"api")}function a(){return O.exists&&performance.now?Math.round(performance.now()):(u=Math.max((new Date).getTime(),u))-x.offset}var u=(new Date).getTime(),f=e("handle"),c=e(3),s=e("ee"),p=e(2),d=window,l=d.document,m="addEventListener",v="attachEvent",g=d.XMLHttpRequest,w=g&&g.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:g,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var h=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1130.min.js"},b=g&&w&&w[m]&&!/CriOS/.test(navigator.userAgent),x=n.exports={offset:u,now:a,origin:h,features:{},xhrWrappable:b,userAgent:p};e(1),l[m]?(l[m]("DOMContentLoaded",i,!1),d[m]("load",r,!1)):(l[v]("onreadystatechange",o),d[v]("onload",r)),f("mark",["firstbyte",u],null,"api");var E=0,O=e(5)},{}]},{},["loader"]);</script>
+<meta name="application-name" content="OpenClassrooms" />
+<meta name="msapplication-TileColor" content="#7451eb" />
+<meta name="msapplication-TileImage" content="/fav-icon.png?v=3" />
+<meta name="theme-color" content="#7451eb">
+<meta property="og:locale" content="fr_FR" />
+<link rel="icon" sizes="144x144" href="/fav-icon.png?v=3">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" />
+<link rel="apple-touch-icon" href="/apple-touch-icon-iphone.png?v=3" />
+<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-ipad.png?v=3" />
+<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-iphone-retina-display.png?v=3" />
+<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-ipad-retina-display.png?v=3" />
+<link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png?v=3" />
+<link rel="shortcut icon" href="/favicon.ico?547e8e1" />
+<style>.async-hide { opacity: 0 !important} </style>
+<script>
+          window.dataLayer = window.dataLayer || [];
+
+          (function(a,s,y,n,c,h,i,d,e){
+            var isEnabled = [
+              /\/paths/,
+              /\/apprenticeship/,
+              /\/employer/,
+            ].reduce(function (acc, pathReg) {
+                var matchUrl = !!document.location.pathname.match(pathReg);
+                return acc || matchUrl;
+            }, false);
+
+            if (!isEnabled) {
+              return;
+            }
+
+            s.className+=' '+y;
+            h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+            (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);
+          })(window,document.documentElement,'async-hide','dataLayer',2000,{'GTM-5WM9PV':true});
+        </script>
+<link href="/bundles/common/css/master-7722998a.css" type="text/css" rel="stylesheet" media="all" />
+<link href="/bundles/course/css/main-797ecaa6.css" type="text/css" rel="stylesheet" media="all" />
+<link href="https://vjs.zencdn.net/6.2.5/video-js.css" rel="stylesheet">
+<script>
+    /*! modernizr 3.3.1 (Custom Build) | MIT *
+    * https://modernizr.com/download/?-cssfilters-touchevents-setclasses !*/
+    !function(e,n,t){function o(e,n){return typeof e===n}function r(){var e,n,t,r,s,i,a;for(var l in C)if(C.hasOwnProperty(l)){if(e=[],n=C[l],n.name&&(e.push(n.name.toLowerCase()),n.options&&n.options.aliases&&n.options.aliases.length))for(t=0;t<n.options.aliases.length;t++)e.push(n.options.aliases[t].toLowerCase());for(r=o(n.fn,"function")?n.fn():n.fn,s=0;s<e.length;s++)i=e[s],a=i.split("."),1===a.length?Modernizr[a[0]]=r:(!Modernizr[a[0]]||Modernizr[a[0]]instanceof Boolean||(Modernizr[a[0]]=new Boolean(Modernizr[a[0]])),Modernizr[a[0]][a[1]]=r),g.push((r?"":"no-")+a.join("-"))}}function s(e){var n=w.className,t=Modernizr._config.classPrefix||"";if(x&&(n=n.baseVal),Modernizr._config.enableJSClass){var o=new RegExp("(^|\\s)"+t+"no-js(\\s|$)");n=n.replace(o,"$1"+t+"js$2")}Modernizr._config.enableClasses&&(n+=" "+t+e.join(" "+t),x?w.className.baseVal=n:w.className=n)}function i(){return"function"!=typeof n.createElement?n.createElement(arguments[0]):x?n.createElementNS.call(n,"http://www.w3.org/2000/svg",arguments[0]):n.createElement.apply(n,arguments)}function a(){var e=n.body;return e||(e=i(x?"svg":"body"),e.fake=!0),e}function l(e,t,o,r){var s,l,u,f,p="modernizr",c=i("div"),d=a();if(parseInt(o,10))for(;o--;)u=i("div"),u.id=r?r[o]:p+(o+1),c.appendChild(u);return s=i("style"),s.type="text/css",s.id="s"+p,(d.fake?d:c).appendChild(s),d.appendChild(c),s.styleSheet?s.styleSheet.cssText=e:s.appendChild(n.createTextNode(e)),c.id=p,d.fake&&(d.style.background="",d.style.overflow="hidden",f=w.style.overflow,w.style.overflow="hidden",w.appendChild(d)),l=t(c,e),d.fake?(d.parentNode.removeChild(d),w.style.overflow=f,w.offsetHeight):c.parentNode.removeChild(c),!!l}function u(e,n){return!!~(""+e).indexOf(n)}function f(e){return e.replace(/([a-z])-([a-z])/g,function(e,n,t){return n+t.toUpperCase()}).replace(/^-/,"")}function p(e,n){return function(){return e.apply(n,arguments)}}function c(e,n,t){var r;for(var s in e)if(e[s]in n)return t===!1?e[s]:(r=n[e[s]],o(r,"function")?p(r,t||n):r);return!1}function d(e){return e.replace(/([A-Z])/g,function(e,n){return"-"+n.toLowerCase()}).replace(/^ms-/,"-ms-")}function m(n,o){var r=n.length;if("CSS"in e&&"supports"in e.CSS){for(;r--;)if(e.CSS.supports(d(n[r]),o))return!0;return!1}if("CSSSupportsRule"in e){for(var s=[];r--;)s.push("("+d(n[r])+":"+o+")");return s=s.join(" or "),l("@supports ("+s+") { #modernizr { position: absolute; } }",function(e){return"absolute"==getComputedStyle(e,null).position})}return t}function h(e,n,r,s){function a(){p&&(delete k.style,delete k.modElem)}if(s=o(s,"undefined")?!1:s,!o(r,"undefined")){var l=m(e,r);if(!o(l,"undefined"))return l}for(var p,c,d,h,v,y=["modernizr","tspan","samp"];!k.style&&y.length;)p=!0,k.modElem=i(y.shift()),k.style=k.modElem.style;for(d=e.length,c=0;d>c;c++)if(h=e[c],v=k.style[h],u(h,"-")&&(h=f(h)),k.style[h]!==t){if(s||o(r,"undefined"))return a(),"pfx"==n?h:!0;try{k.style[h]=r}catch(g){}if(k.style[h]!=v)return a(),"pfx"==n?h:!0}return a(),!1}function v(e,n,t,r,s){var i=e.charAt(0).toUpperCase()+e.slice(1),a=(e+" "+j.join(i+" ")+i).split(" ");return o(n,"string")||o(n,"undefined")?h(a,n,r,s):(a=(e+" "+E.join(i+" ")+i).split(" "),c(a,n,t))}function y(e,n,o){return v(e,t,t,n,o)}var g=[],C=[],S={_version:"3.3.1",_config:{classPrefix:"",enableClasses:!0,enableJSClass:!0,usePrefixes:!0},_q:[],on:function(e,n){var t=this;setTimeout(function(){n(t[e])},0)},addTest:function(e,n,t){C.push({name:e,fn:n,options:t})},addAsyncTest:function(e){C.push({name:null,fn:e})}},Modernizr=function(){};Modernizr.prototype=S,Modernizr=new Modernizr;var w=n.documentElement,x="svg"===w.nodeName.toLowerCase(),_=S._config.usePrefixes?" -webkit- -moz- -o- -ms- ".split(" "):["",""];S._prefixes=_;var b="CSS"in e&&"supports"in e.CSS,T="supportsCSS"in e;Modernizr.addTest("supports",b||T);var z=S.testStyles=l;Modernizr.addTest("touchevents",function(){var t;if("ontouchstart"in e||e.DocumentTouch&&n instanceof DocumentTouch)t=!0;else{var o=["@media (",_.join("touch-enabled),("),"heartz",")","{#modernizr{top:9px;position:absolute}}"].join("");z(o,function(e){t=9===e.offsetTop})}return t});var P="Moz O ms Webkit",j=S._config.usePrefixes?P.split(" "):[];S._cssomPrefixes=j;var E=S._config.usePrefixes?P.toLowerCase().split(" "):[];S._domPrefixes=E;var N={elem:i("modernizr")};Modernizr._q.push(function(){delete N.elem});var k={style:N.elem.style};Modernizr._q.unshift(function(){delete k.style}),S.testAllProps=v,S.testAllProps=y,Modernizr.addTest("cssfilters",function(){if(Modernizr.supports)return y("filter","blur(2px)");var e=i("a");return e.style.cssText=_.join("filter:blur(2px); "),!!e.style.length&&(n.documentMode===t||n.documentMode>9)}),r(),s(g),delete S.addTest,delete S.addAsyncTest;for(var A=0;A<Modernizr._q.length;A++)Modernizr._q[A]();e.Modernizr=Modernizr}(window,document);
+    </script>
+<script type="text/javascript">
+    var App = {
+        startTime: (new Date()).getTime(),
+        pageGenerationDate: 1566171196000
+    };
+
+    App.user = {
+                    id: 319697,
+            age: '25',
+            createdAt: '2011\u002D07\u002D20T02\u003A14\u003A47\u002B02\u003A00',
+            gender: 'M',
+            premiumType: '',
+            locale: 'fr',
+            language: 'fr',
+            displayableName: 'Jeffrey\u0020Mvutu\u0020Mabilama',
+            email: 'jeffrey.mvutu\u0040gmail.com',
+            country: 'CH',
+            phoneNumber: '',
+            avatar: 'https\u003A\/\/openclassrooms.com\/bundles\/common\/images\/avatar_defaut.png',
+            isPremium: false,
+            isMentor: false
+            };
+
+    App.preferences = {
+        debug: false,
+        assetVersion: '547e8e1',
+        contactMail: 'hello\u0040openclassrooms.com',
+        contactPhone: '\u002B33\u00201\u002080\u002088\u002080\u002030',
+        phoneNumbersByCountry: {"uk":{"contact":"+44 16 1768 1880"},"ca":{"contact":"+1 929-376-0101"},"us":{"contact":"+1 929-376-0101"},"fr":{"contact":"+33 1 80 88 80 30","b2b_contact":"+33 1 80 88 80 40"},"es":{"contact":"+33 1 80 88 80 30"}},
+        adyenPublicKey: '10001\u007C889EBFD4D434B82683E21DCA26E77C3E20E0EE09A5ECE3830B0ED51F2FA721A2F7E9EC871C6AB9A1E12C4492F4717673047757E02C5256D8E265CD51E413E5EFCCFEAC41B39C662A424ADC13EE187C38C372A7FCCEC1EA5DF841989437D78B252A8EB51008E60BB55B1E55A7A80DE1A9D60D998C128A576BFAE1DDB97D514AF0A073AEDDE84CEE40D1F8F6ECE85D0FFA50C95C06DB274021C1371376C6EB16561FD65C5E2704B570A7504D617D0F3820F176A0609F6162BDF5890533289FDC3DA7DB03B50BB3BD60A613E1FF72060F22987627E8F1A29F0128A94EC4C8FF7CF6B7AB9558D8433BF86D7A388AB927641CD6C02689139CEE3AAC9ACBFFE83806CB',
+        cdnImage: true,
+        layer: {
+            appId: 'layer\u003A\/\/\/apps\/staging\/7757c53a\u002Db2ba\u002D11e5\u002Db2a6\u002D2584730b1501',
+            identityProviderUrl: '\/ajax\/conversations\/get\u002Didentity\u002Dtoken'
+        },
+        algolia: {
+            appId: 'JGRXRFVQM0',
+            apiKey: 'cd1e2696005d97e99dc7b882297b09cf',
+            indexName: 'prod_v2_COURSES_fr'
+        },
+        google: {
+            appId: '132418960718\u002Djdnmpug3g9e6ub2p41ergcci1492qh82.apps.googleusercontent.com',
+            maps: {
+                apiKey: 'AIzaSyDQKLz54HFMtUf9Yo8cWkgR8Af3eU2HAiE'
+            },
+        },
+        application: {
+            googleForm: {
+              funnelUrl: 'https\u003A\/\/docs.google.com\/forms\/d\/e\/1FAIpQLScBRRimATSOJGW9Af\u002DDifIkzpXwvGRZEnIdxH7dcSiadjYCxQ\/formResponse',
+              fields: {"firstname":"entry.336110006","lastname":"entry.994821149","email":"entry.944181070","path_id":"entry.207247512","path_category_id":"entry.2119822715","consent":"entry.1541801802","user_locale":"entry.2127604397","userId":"entry.29878360","gender":"entry.114162226","diploma_level":"entry.513429021","language_proficiency_fr":"entry.2112993571","language_proficiency_en":"entry.622935801","ha_google_place_id":"entry.1048707629","ha_addressline_1":"entry.694389504","ha_city":"entry.212574166","ha_zip_code":"entry.179816654","ha_state":"entry.175591718","ha_country":"entry.540542428","ha_longitude":"entry.1240719233","ha_latitude":"entry.1673918511","professional_status":"entry.1977816976","disabled_worker":"entry.1666989190","veteran":"entry.485570822","athlete":"entry.639827067","refugee":"entry.1506421983","rsa":"entry.1773932570","can_work_in_france":"entry.672900422","online_cv":"entry.1625514336","work_location":"entry.1064429460","career_motivation":"entry.453936061","has_computer":"entry.1607977565","has_mic_webcam":"entry.2077820102","has_fast_internet_connection":"entry.352837916","has_quiet_space":"entry.1717297539"}
+            },
+        },
+        facebook: {
+            appId: '277769842283905',
+        },
+        routes: {
+            COURSE_EVENT: '/components/courses/:courseId',
+            COURSE_PART_EVENT: '/components/courses/:courseId/parts/:partId',
+
+            ACCEPT_COOKIE: '\/ajax\/components\/user\u002Daccept\u002Dconsent\u002Dcookie'
+        },
+
+                    };
+
+    App.preferences.navigationPreference = {
+                                    consentCookieExpiredAt: 1593602161
+                        };
+
+    App.preferences.modules = {
+        'smiley': {
+            basePath: '/bundles/common/images/smiley/'
+        }
+    };
+
+    try {
+        App.api = JSON.parse("\u007B\u0022anonymous\u0022\u003A\u007B\u0022client_id\u0022\u003A\u0022807605274673228623802113\u0022,\u0022client_secret\u0022\u003A\u00221\u0022\u007D,\u0022logged\u0022\u003A\u007B\u0022client_id\u0022\u003A\u00227xPFDY3bB3ruX44z\u0022\u007D,\u0022urls\u0022\u003A\u007B\u0022authorize\u0022\u003A\u0022https\u003A\\\/\\\/openclassrooms.com\\\/oauth2\\\/authorize\u0022,\u0022root\u0022\u003A\u0022https\u003A\\\/\\\/api.openclassrooms.com\u0022\u007D\u007D");
+    } catch (e) {
+        App.api = {};
+    }
+
+    App.notifications = {};
+    App.scripts = [];
+
+    if (App.user.id) {
+        (function(){
+            var userData = { userId: App.user.id };
+
+            if (App.user.premiumType) {
+                userData.status = (App.user.premiumType === 'Premium Solo') ? 'premium solo student' : 'path student';
+            } else {
+                userData.status = 'free student';
+            }
+
+            if (App.user.isMentor) {
+                userData.status = App.user.premiumType ? (userData.status + '|mentor') : 'mentor';
+            }
+
+            window.dataLayer.push(userData);
+        })();
+    }
+</script>
+<script>    
+    App.preferences.modules['course/view/internalFolding'] = {
+        isBigCourse: true
+    };
+
+    App.data = App.data || {};
+App.data.currentCourse = {"partId":4435224,"partTitle":"Utilisez des mocks","partSlug":"utilisez-des-mocks","courseId":4425126,"courseTitle":"Testez votre projet avec Python","courseSlug":"testez-un-projet-python","courseLanguage":"fr","isIntroduction":false,"isCertifying":true};
+App.preferences.modules['view/currentCoursePage'] = App.data.currentCourse;
+
+window.dataLayer.push({
+  courseTitle: App.data.currentCourse.courseTitle
+});
+
+</script>
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Utilisez des mocks" />
+<meta property="og:url" content="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" />
+<meta property="og:site_name" content="OpenClassrooms" />
+<meta property="og:image" content="https://course.oc-static.com/courses/4425126/4425126_teaser_picture_1522246514.jpg" />
+<meta property="og:description" content="Comment tester un projet en Python ? Et à quoi cela sert-il de tester un projet ? Découvrez-le tout de suite !" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@OCFrance" />
+<meta name="twitter:title" content="Utilisez des mocks" />
+<meta name="twitter:image" content="https://course.oc-static.com/courses/4425126/4425126_teaser_picture_1522246514.jpg" />
+<meta name="twitter:description" content="Comment tester un projet en Python ? Et à quoi cela sert-il de tester un projet ? Découvrez-le tout de suite !" />
+<link rel="canonical" href="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" />
+</head>
+<body class="course oc-body is-connected  breadcrumbFluid breadcrumbOnContrasted">
+<ul class="skipLink">
+<li>
+<a class="skipLink__item" href="#mainContent">Aller au contenu</a>
+</li>
+<li>
+<a class="skipLink__item" href="#footerChangeLanguage">Choisir la langue</a>
+</li>
+<li>
+<a class="skipLink__item" href="#algolia-search-input">Aller à la recherche</a>
+</li>
+</ul>
+<script id="_EVENTS-IDENTIFY" type="application/json">
+            {
+            "type": "identify",
+            "userId": "319697",
+            "properties": {
+                "age":  "25",
+                "name": "Jeffrey Mvutu Mabilama",
+                "createdAt": "2011-07-20T02:14:47+02:00",
+                "email": "jeffrey.mvutu@gmail.com",
+                "gender":  "M",
+                "premium": false,
+                "premiumType": "",
+                "locale": "fr",
+                "language": "fr"
+            },
+            "integrations": {
+                "HubSpot": false
+            }
+        }
+        </script>
+<script id="_EVENTS-PAGE" type="application/json">
+        {"type":"page","integrations":{"HubSpot":false},"properties":{"pageCategory":"courses","courseTitle":"Testez votre projet avec Python"}}
+    </script>
+<div id="predictiveCrmTopBanner"></div>
+<script id="headerConfiguration" type="application/json">
+{
+    "user": {
+        "id": 319697,
+        "displayableName": "Jeffrey Mvutu mabilama",
+        "messageCount": 0,
+        "notificationCount": 0,
+        "profilePicture": "https://openclassrooms.com/bundles/common/images/avatar_defaut.png",
+        "premiumStatus": "none",
+        "link": {
+            "profile": "/fr/membres/jfreex-60970",
+            "parameter": "/fr/membres/jfreex-60970/parametres",
+            "logOut": "/logout?_csrf_token=Aw7fKTgFHVWLgtEqcEYeEEvpuVcttwXuVji_ETHr_mA"
+        }
+    },
+    "right": {
+        "canSeeMentorDashboard": false,
+        "canSeeAdminDashboard": false,
+        "canDisplayForumAlert": false
+    }
+}
+</script>
+<div class="formLogin hidden">
+</div>
+<div id="oc-header">
+<div class="oc-mainHeader oc-mainHeader--none oc-mainHeader--skeleton">
+<div class="grid-wrapper">
+<div class="grid-inner">
+<div style="display: flex;">
+<div class="oc-mainHeaderLogo oc-mainHeaderLogo--skeleton">
+<a href="/fr" class="oc-mainHeaderLogo__link">
+<svg fill="none" height="51" width="668" viewBox="0 0 668 51" xmlns="http://www.w3.org/2000/svg">
+<title>OpenClassrooms.com</title>
+<path d="M406.011 35.018c0 2.82-.71 5.641-2.368 7.991-1.659 2.35-3.79 4.23-6.87 5.64-3.079 1.41-6.869 2.116-11.37 2.116-3.79 0-7.343-.47-10.897-1.41-3.553-.94-6.395-2.35-8.527-3.996l7.106-8.46c1.421.705 2.843 1.175 4.501 1.88 2.842.94 5.448 1.41 8.054 1.41 4.974 0 7.58-1.41 7.58-3.995 0-1.41-.711-2.35-2.132-3.056-1.421-.705-3.79-1.41-6.87-2.115-3.553-.705-6.395-1.645-8.764-2.585s-4.264-2.35-6.159-4.23c-1.658-1.88-2.606-4.701-2.606-7.991 0-3.056.711-5.641 2.369-7.991 1.658-2.35 3.79-4.23 6.87-5.64 3.079-1.41 6.869-2.116 11.37-2.116 3.079 0 6.159.47 9.001 1.175 3.08.705 5.685 1.88 7.817 3.055l-7.343 8.696c-3.316-1.41-6.633-2.115-9.712-2.115-2.606 0-4.501.47-5.685 1.175-1.185.705-1.895 1.88-1.895 3.056 0 1.41.711 2.35 2.132 2.82 1.421.705 3.79 1.41 6.869 2.115a49.4 49.4 0 0 1 8.765 2.585c2.369.94 4.264 2.35 6.159 4.23 1.658 1.646 2.605 4.466 2.605 7.756zm261.989 0c0 2.82-.711 5.641-2.369 7.991s-3.79 4.23-6.869 5.64c-3.08 1.41-6.87 2.116-11.371 2.116-3.79 0-7.343-.47-10.896-1.41s-6.396-2.35-8.528-3.996l7.107-8.46c1.421.705 2.842 1.175 4.501 1.88 2.842.94 5.448 1.41 8.053 1.41 4.975 0 7.581-1.41 7.581-3.995 0-1.41-.711-2.35-2.132-3.056-1.422-.705-3.791-1.41-6.87-2.115a49.361 49.361 0 0 1-8.764-2.585c-2.369-.94-4.264-2.35-6.159-4.23-1.658-1.88-2.606-4.701-2.606-7.991 0-3.056.711-5.641 2.369-7.991 1.658-2.35 3.79-4.23 6.869-5.64 3.08-1.41 6.87-2.116 11.371-2.116 3.079 0 6.158.47 9.001 1.175 3.079.705 5.685 1.88 7.817 3.055l-7.343 8.696c-3.317-1.41-6.633-2.115-9.712-2.115-2.606 0-4.501.47-5.685 1.175-1.185.705-1.896 1.88-1.896 3.056 0 1.41.711 2.35 2.132 2.82 1.422.705 3.791 1.41 6.87 2.115a49.361 49.361 0 0 1 8.764 2.585c2.369.94 4.264 2.35 6.159 4.23 1.895 1.646 2.606 4.466 2.606 7.756zM87.882 19.037c0 3.76-.947 6.816-2.605 9.4-1.659 2.586-4.027 4.701-7.107 6.111s-6.87 2.116-10.896 2.116H59.22v12.69H45.955V.706h21.319c4.264 0 7.817.705 10.896 2.115 3.08 1.41 5.448 3.526 7.107 6.346 1.895 3.055 2.605 6.346 2.605 9.87zm-13.265 0c0-2.35-.71-3.995-2.132-5.17s-3.316-1.88-6.159-1.88h-7.343v14.336h7.343c2.606 0 4.738-.706 6.16-1.88s2.131-3.056 2.131-5.406zm55.904 20.212v10.576h-37.19V1.175h36.242v10.576h-23.214v8.226h18.476v10.341h-18.476v8.93zm50.218-38.074v48.65h-10.896l-20.609-25.853v25.853h-13.028V1.175h10.896l20.609 25.853V1.175zm84.092 37.604v10.81h-32.926V.94h13.265v37.604h19.661zm56.851 11.046h-13.739l-3.553-9.401h-19.661l-3.553 9.4h-13.502l20.608-48.649h13.029zM300.6 30.083l-5.922-15.512-5.922 15.512zm62.536 4.935c0 2.82-.71 5.641-2.369 7.991-1.658 2.35-3.79 4.23-6.869 5.64-3.08 1.41-6.87 2.116-11.37 2.116-3.79 0-7.344-.47-10.897-1.41s-6.396-2.35-8.527-3.996l7.106-8.46c1.421.705 2.842 1.175 4.501 1.88 2.842.94 5.448 1.41 8.054 1.41 4.974 0 7.58-1.41 7.58-3.995 0-1.41-.711-2.35-2.132-3.056-1.421-.705-3.79-1.41-6.87-2.115-3.553-.705-6.395-1.645-8.764-2.585s-4.264-2.35-6.159-4.23c-1.658-1.88-2.606-4.701-2.606-7.991 0-3.056.711-5.641 2.369-7.991 1.658-2.35 3.79-4.23 6.87-5.64 3.079-1.41 6.869-2.116 11.37-2.116 3.079 0 6.159.47 9.001 1.175 3.08.705 5.448 1.88 7.817 3.055l-7.343 8.696c-3.316-1.41-6.633-2.115-9.712-2.115-2.606 0-4.501.47-5.685 1.175-1.185.705-1.895 1.88-1.895 3.056 0 1.41.71 2.35 2.132 2.82 1.421.705 3.79 1.41 6.869 2.115a49.4 49.4 0 0 1 8.765 2.585c2.368.94 4.263 2.35 6.158 4.23 1.659 1.646 2.606 4.466 2.606 7.756zm-322.63-9.636c0 13.867-11.37 25.383-25.583 25.383-5.685 0-10.66-1.88-14.923-4.936l8.528-10.105c1.895 1.175 4.027 1.88 6.395 1.88 6.633 0 12.081-5.406 12.081-11.986 0-6.581-5.448-11.987-12.08-11.987-2.37 0-4.501.705-6.396 1.88L0 5.407C4.264 2.35 9.475.47 14.923.47 29.136.235 40.506 11.516 40.506 25.383zm177.66 10.341l8.528 10.107c-4.264 3.055-9.476 4.935-14.924 4.935-13.976 0-25.583-11.281-25.583-25.383C186.187 11.517 197.557 0 211.77 0c5.685 0 10.66 1.88 14.924 4.936l-8.528 10.105c-1.895-1.175-4.027-1.88-6.396-1.88-6.632 0-12.081 5.406-12.081 11.986 0 6.581 5.449 11.987 12.081 11.987 2.369.47 4.501-.235 6.396-1.41zm236.169 14.102l-10.423-15.042c3.079-1.41 5.211-3.525 6.87-6.11 1.658-2.585 2.605-5.876 2.605-9.401 0-3.76-.947-6.816-2.605-9.636-1.659-2.82-4.027-4.7-7.107-6.346-3.079-1.41-6.869-2.115-10.896-2.115H411.46v48.65h13.028V37.134h6.159l8.764 12.69zm-29.847-37.839h7.58c2.606 0 4.738.705 6.159 1.88s2.132 3.056 2.132 5.17c0 2.351-.711 3.996-2.132 5.171s-3.316 1.88-6.159 1.88h-7.58zM483.945.235c13.976 0 25.583 11.281 25.583 25.382S498.157 51 483.945 51c-13.976 0-25.583-11.281-25.583-25.383S469.732.235 483.945.235zm-13.029 25.147c0 7.051 5.685 12.692 12.792 12.692 7.106 0 12.791-5.64 12.791-12.692s-5.685-12.69-12.791-12.69c-6.87 0-12.792 5.64-12.792 12.69zM538.901.235c13.976 0 25.583 11.281 25.583 25.382S553.114 51 538.901 51c-13.976 0-25.583-11.281-25.583-25.383S524.925.235 538.901.235zm-12.792 25.147c0 7.051 5.685 12.692 12.792 12.692 7.106 0 12.791-5.64 12.791-12.692s-5.685-12.69-12.791-12.69c-7.107 0-12.792 5.64-12.792 12.69zm70.353 6.816L580.828 1.175h-10.896v48.65h11.607V28.438l11.607 21.387h6.87l11.607-21.387v21.387h11.607V1.175h-10.897z" />
+</svg>
+</a>
+</div>
+<nav class="oc-mainHeader__navWrapper" role="navigation" aria-label="Menu principal">
+<div class="oc-mainHeader__linksWrapper">
+<div class="oc-mainHeader__navLinkWrapper"><a class="oc-mainHeader__navLink" data-event="click|Header|Paths" href="/fr/paths">Parcours</a></div>
+<div class="oc-mainHeader__navLinkWrapper"><a class="oc-mainHeader__navLink" data-event="click|Header|Courses" href="/fr/courses">Cours</a></div>
+<div class="oc-mainHeader__navLinkWrapper"><a class="oc-mainHeader__navLink" data-event="click|Header|Apprenticeship" href="/fr/apprenticeship">Alternance</a></div>
+<div class="oc-mainHeader__navLinkWrapper"><a class="oc-mainHeader__navLink" data-event="click|Header|Employer" href="/fr/employers">Employeurs</a></div>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--[if lt IE 10]>
+<div class="alertMessage">
+    <span class="bullet bullet--small bullet--orange alertMessage__icon"> <i class="icon-exclamation"></i></span>
+    <p class="alertMessage__text">
+        Vous utilisez un navigateur obsolète, veuillez le <a href="https://browser-update.org/update.html">mettre à jour</a>.
+    </p>
+</div>
+<![endif]-->
+
+<div id="ie-ten-disclaimer" class="alertMessage" style="display:none">
+<span class="bullet bullet--small bullet--orange alertMessage__icon"> <i class="icon-exclamation"></i></span>
+<p class="alertMessage__text">
+Vous utilisez un navigateur obsolète, veuillez le <a href="https://browser-update.org/update.html">mettre à jour</a>.
+</p>
+</div>
+<script>
+  if (document.documentMode === 10) {
+    document.getElementById('ie-ten-disclaimer').style.display = 'block';
+  }
+</script>
+
+<noscript>
+    <div class="alertMessage">
+        <span class="bullet bullet--small bullet--orange alertMessage__icon"> <i class="icon-exclamation"></i></span>
+        <p class="alertMessage__text">
+            Veuillez utiliser un <a href="https://browser-update.org/update.html">navigateur internet moderne</a> avec JavaScript activé pour naviguer sur OpenClassrooms.com
+        </p>
+    </div>
+</noscript>
+<template class="hidden" id="cookies-banner-content">En poursuivant votre navigation sur le site, vous acceptez l’utilisation de cookies par OpenClassrooms pour vous proposer des services et offres adaptés à vos centres d’intérêt. <a href="/fr/privacy-policy#personal-data-gathering">Notre politique de cookies</a>.</template>
+<template class="hidden" id="cookies-banner-label">Accepter</template>
+<div id="mainSearchLegacy" class="mainSearch"></div>
+<div id="mainContentWithHeader">
+<section class="breadcrumb  inset no-padding">
+<div class="grid-wrapper">
+<div class="grid-inner">
+<nav class="breadcrumb__wrapper" role="navigation" aria-label="Fil d&#039;Ariane">
+<ul class="breadcrumb__trail">
+<li class="breadcrumb__item" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+<a class="breadcrumb__link" href="https://openclassrooms.com/fr/" itemprop="url">
+<span itemprop="title">Accueil</span
+                                    ></a>
+<span class="breadcrumb__separator"> > </span>
+</li>
+<li class="breadcrumb__item" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+<a class="breadcrumb__link" href="https://openclassrooms.com/fr/courses" itemprop="url">
+<span itemprop="title">Cours</span
+                                    ></a>
+<span class="breadcrumb__separator"> > </span>
+</li>
+<li class="breadcrumb__item" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+ <a class="breadcrumb__link" href="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python?status=published" itemprop="url">
+<span itemprop="title">Testez votre projet avec Python</span
+                                    ></a>
+<span class="breadcrumb__separator"> > </span>
+</li>
+<li class="breadcrumb__item" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+Utilisez des mocks
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</section>
+<div id="pre-main-part">
+</div>
+<main class="claire clearfix" role="main" id="mainContent">
+<article itemscope itemtype="http://schema.org/Article" lang="fr">
+<header id="course-header" class="courseHeader" xmlns="http://www.w3.org/1999/html">
+<div class="grid-wrapper"><div class="grid-inner"><div class="grid-inner-content"><div class="courseHeader__topPart"><a itemprop="url" href="/fr/courses/4425126-testez-votre-projet-avec-python"><h1 class="oc-typography-h2 typoColorOnContrastedBg  courseHeader__title" data-course-title="Testez votre projet avec Python">Testez votre projet avec Python</h1></a></div></div></div></div><div class="grid-wrapper"><div class="grid-inner"><div class="grid-inner-content"><div class="courseHeader__bottomPart"><div class="courseHeader__details"><div class="courseHeader__detailsGroup"><ul class="courseHeader__detailsList"><li class="courseHeader__detailsItem"><img class="courseHeader__icon js-tooltip" src="/images/icons/schedule.svg?547e8e1" width="16" title="Ce cours demande en moyenne 4 heures de travail pour être réussi." /><span class="courseHeader__label">4 heures</span></li><li class="courseHeader__detailsItem"><i class="icon-level courseHeader__icon"></i><span class="courseHeader__label">Moyenne</span></li></ul></div><div class="courseHeader__detailsGroup courseHeader--license"><a class="courseHeader__license" target="_blank" href="https://creativecommons.org/licenses/by-sa/2.0"><span class="courseHeader__label">Licence</span><ul class="courseHeader__detailsList"><li class="iconBar__item"><i class="icon-cc iconBar__icon" title="CC"></i></li><li class="iconBar__item"><i class="icon-ccby iconBar__icon" title="BY"></i></li><li class="iconBar__item"><i class="icon-ccsa iconBar__icon" title="SA"></i></li></ul></a></div></div></div></div></div></div>
+<div id="popin-formats-availables" class="popin popin--course-formats-availables">
+<i class="popin__close-button icon-close js-close-button"></i>
+<div class="course-types course-types--withSpace">
+<a class="course-types__item" href="/fr/courses/4425126-testez-votre-projet-avec-python">
+<i class="icon-desktop course-types__icon"></i>
+</a>
+<a class="course-types__item" href="/fr/courses?video=true">
+<i class="icon-video course-types__icon"></i>
+</a>
+<a class="course-types__item" href="/fr/courses/4425126/certificate_example" target="_blank">
+<i class="icon-badge course-types__icon js-close-button"></i>
+</a>
+</div>
+<p>Ce cours est visible <a href="/fr/courses/4425126-testez-votre-projet-avec-python">gratuitement en ligne</a>.</p>
+<p>course.header.alt.is_video</p>
+<p>
+course.header.alt.is_certifying
+</p>
+<a class="button button--primary js-close-button" href="#">J&#039;ai tout compris !</a>
+</div>
+</header>
+<div class="grid-wrapper">
+<div class="grid-inner">
+<div class="grid-inner-content">
+<p class="courseHeader__updatedTime">
+Mis à jour le 07/10/2017 </p>
+</div>
+</div>
+</div>
+<div class="grid-wrapper">
+<div class="grid-inner">
+<div class="grid-inner-content">
+<nav id="course-timeline" class="timeline">
+<div class="timeline__inner">
+<span class="timeline__iconContainer">
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python" title="Retour sur le sommaire du cours" class="roundIcon timeline__roundIcon">
+<i class="icon-home roundIcon__icon"></i>
+</a>
+</span>
+<div class="timeline__steps">
+<span class="timeline__splitChapter"></span>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4434876-tirez-parti-de-ce-cours" class="timeline__step timeline__step--completed" title="Tirez parti de ce cours">
+<span class="timeline__stepName">
+Tirez parti de ce cours
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests" class="timeline__step" title="Découvrez les tests">
+<span class="timeline__stepName">
+Découvrez les tests
+</span>
+</a>
+<span class="timeline__splitChapter"></span>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435045-decelez-les-elements-a-tester" class="timeline__step" title="Décelez les éléments à tester">
+<span class="timeline__stepName">
+Décelez les éléments à tester
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435081-codez-votre-premier-test" class="timeline__step" title="Codez votre premier test">
+<span class="timeline__stepName">
+Codez votre premier test
+</span>
+ </a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435144-ajoutez-des-tests-avec-pytest" class="timeline__step" title="Ajoutez des tests avec Pytest">
+<span class="timeline__stepName">
+Ajoutez des tests avec Pytest
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes" class="timeline__step" title="Organisez vos tests en classes">
+<span class="timeline__stepName">
+Organisez vos tests en classes
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" class="timeline__step js-current-timeline-step" title="Utilisez des mocks">
+<span class="timeline__stepName">
+Utilisez des mocks
+</span>
+<span class="timeline__progressMarker"></span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests" class="timeline__step" title="Finalisez les tests et améliorez votre couverture de tests">
+<span class="timeline__stepName">
+Finalisez les tests et améliorez votre couverture de tests
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1647" class="timeline__step" title="Quiz : Les tests unitaires">
+<span class="timeline__stepName">
+Quiz : Les tests unitaires
+</span>
+</a>
+<span class="timeline__splitChapter"></span>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435374-decouvrez-le-test-driven-development" class="timeline__step" title="Découvrez le Test-Driven Development">
+<span class="timeline__stepName">
+Découvrez le Test-Driven Development
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435400-ajoutez-une-fonctionnalite-en-tdd-red-green" class="timeline__step" title="🔴     ✅     Ajoutez une fonctionnalité en TDD : red / green">
+<span class="timeline__stepName">
+🔴 ✅ Ajoutez une fonctionnalité en TDD : red / green
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435414-ajoutez-une-fonctionnalite-en-tdd-refactorez" class="timeline__step" title="🛠  Ajoutez une fonctionnalité en TDD : refactorez !">
+<span class="timeline__stepName">
+🛠 Ajoutez une fonctionnalité en TDD : refactorez !
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435435-allez-plus-loin" class="timeline__step" title="Allez plus loin">
+<span class="timeline__stepName">
+Allez plus loin
+</span>
+</a>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1648" class="timeline__step" title="Quiz : Le test-driven development">
+<span class="timeline__stepName">
+Quiz : Le test-driven development
+</span>
+</a>
+<span class="timeline__splitChapter"></span>
+</div>
+<span class="timeline__iconContainer">
+<a href="/fr/courses/4425126/certificate_example" title="Certificat de réussite (voir un exemple)" class="roundIcon timeline__roundIcon">
+<i class="icon-trophy roundIcon__icon"></i>
+</a>
+</span>
+</div>
+</nav>
+</div>
+</div>
+</div>
+<div class="grid-wrapper">
+<div class="grid-inner">
+<div class="contentWithSidebar  spacer  js-contentWithSidebar  grid-inner-content">
+<div class="contentWithSidebar__content">
+<div class="relative js-sidebar-container">
+<div class="static">
+<h2 itemprop="name" data-part-title="Utilisez des mocks" class="part-title">Utilisez des mocks</h2>
+<section class="space-bottom js-desktop-sticky-container">
+<div itemprop="articleBody" data-page-indentifier="/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" class="js-isRestrictablePage js-course-container js-smilize js-userCanWatchVideo">
+<div class="userContent js-userContent">
+<p id="r-4436256" data-claire-element-id="7904381"> </p><video id="r-4452461" data-claire-element-id="7904382" src="https://vimeo.com/217633069"><a href="https://vimeo.com/217633069">https://vimeo.com/217633069</a></video><h3 id="r-4436258" data-claire-element-id="7871761">Imiter une réponse HTTP</h3><p id="r-4435170" data-claire-element-id="7871581">Nous avons presque terminé de tester le fichier  <code data-claire-semantic="text">world.py</code> . Mais notre programme en contient en fait deux, rappelez-vous ! Le premier,   <code data-claire-semantic="text">download_agents.py</code>  , récupère des agents de l'API et le second,  <code data-claire-semantic="text">world.py</code>,  les utilise pour afficher le graphique.</p><p id="r-4435171" data-claire-element-id="7861814">Nous allons créer un second fichier,  <code data-claire-semantic="text">test_download_agents.py</code>, pour écrire nos tests. Ceci nous permettra de créer une structure en miroir : nos tests sont organisés de la même manière que nos fichiers.</p><p id="r-4435172" data-claire-element-id="7861815">Que fait  <code data-claire-semantic="text">download_agents.py</code>  ? Ce script interroge l'API PPLAPI et inscrit les résultats dans un fichier JSON.</p><p id="r-4435173" data-claire-element-id="7859083">Nous sommes face à un souci. En effet, chaque lancement de ce script écrit dans le même fichier. Or nous ne voulons pas changer les données de ce fichier, fait pour héberger de vraies données, dans le but de faire nos tests. Normalement ce fichier ne doit se recharger que si l'utilisateur le veut et non si nous lançons nos tests.</p><p id="r-4435174" data-claire-element-id="7859084">De même, il nous faut pouvoir lancer nos tests sans avoir besoin d'internet. Cela vous paraît étrange ? Mais imaginez si vous travaillez dans le train ! De plus, lancer des tests doit être très rapide. Or chaque appel HTTP sera plus lent qu'un simple retour de l'ordinateur.</p><p id="r-4435175" data-claire-element-id="7861816">L'idéal serait de pouvoir tricher un peu en disant à Pytest : &quot;<em>Je veux que tu testes la fonction mais, plutôt que de lancer un appel 'pour de vrai', utilise plutôt ces données-là !</em>&quot;. Hé oui, vous allez apprendre à tricher !</p><p id="r-4435176" data-claire-element-id="7861817">Ceci s'appelle un <strong>mock</strong>.</p><aside id="r-4435178" data-claire-element-id="7871022" data-claire-semantic="information"><p id="r-4435177" data-claire-element-id="7871021">Un <a href="https://www.wordreference.com/enfr/mock">mock</a> veut dire &quot;imitation&quot; en anglais. Appliqué à l'informatique, ce concept désigne des <strong>fonctions qui ont comme objectif d'imiter le comportement d'autres objets</strong>.</p></aside><p id="r-4435179" data-claire-element-id="7871023">De manière générale, nous utilisons des mocks pour <strong>imiter le comportement</strong> de librairies ou de modules que nous ne souhaitons pas tester. Nous considérons que ces modules sont externes à notre code et fonctionnent. Nous n'avons donc pas à les tester !</p><p id="r-4435180" data-claire-element-id="7859090">Découvrons tout de suite comment utiliser ce nouveau concept pour imiter la réponse d'une requête.</p><p id="r-4435181" data-claire-element-id="7859091">Commençons déjà par imprimer le résultat d'une requête dans notre console afin de garder en tête le code à renvoyer.</p><p id="r-4435182" data-claire-element-id="7861820">Pour rappel, voici le code de notre fichier  <code data-claire-semantic="text">download_agents.py</code>  :</p><pre id="r-4435183" data-claire-element-id="7859093"><code data-claire-semantic="python">#! /usr/bin/env python
+import argparse
+import json
+import time
+import urllib.error
+import urllib.request
+
+def get_agents(count):
+    # le parse
+    agents = []
+    while len(agents) &lt; count:
+        if agents:
+            # Wait one second between every request
+            time.sleep(1)
+
+        request_count = min(count - len(agents), 500)
+        try:
+            response = urllib.request.urlopen(&quot;http://pplapi.com/batch/{}/sample.json&quot;.format(request_count))
+            print(response)
+            agents += json.loads(response.read().decode(&quot;utf8&quot;))
+        except urllib.error.HTTPError:
+            print(&quot;Too many requests, sleeping 10s ({} agents)&quot;.format(len(agents)))
+            time.sleep(10)
+    return agents
+
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(description=&quot;Download agents from pplapi.com&quot;)
+    parser.add_argument(&quot;-c&quot;, &quot;--count&quot;, type=int, default=10, help=&quot;Number of agents to download.&quot;)
+    parser.add_argument(&quot;-d&quot;, &quot;--dest&quot;, help=&quot;Destination file. If absent, will print to stdout&quot;)
+    return parser.parse_args(args)
+
+def main(command_line_arguments=None):
+    args = parse_args(command_line_arguments)
+
+    agents = get_agents(args.count)
+
+    result = json.dumps(agents, indent=2, sort_keys=True)
+    if args.dest:
+        pass
+        with open(args.dest, 'w') as out_f:
+            out_f.write(result)
+    else:
+        print(result)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre><p id="r-4435184" data-claire-element-id="7871041">Lançons la commande  <code data-claire-semantic="text">python download_agents.py --count 1</code></p><p id="r-4435185" data-claire-element-id="7859095">Voici ce qui est imprimé :</p><pre id="r-4435186" data-claire-element-id="7859096"><code data-claire-semantic="python">&lt;http.client.HTTPResponse object at 0x10636d3c8&gt;
+[
+  {
+    &quot;age&quot;: 27,
+    &quot;agreeableness&quot;: -1.330478164740173,
+    &quot;conscientiousness&quot;: -0.13936508775709072,
+    &quot;country_name&quot;: &quot;Belarus&quot;,
+    &quot;country_tld&quot;: &quot;by&quot;,
+    &quot;date_of_birth&quot;: &quot;1990-03-29&quot;,
+    &quot;extraversion&quot;: -0.7695016063711204,
+    &quot;id&quot;: 6864578729,
+    &quot;id_str&quot;: &quot;bSI-dKD&quot;,
+    &quot;income&quot;: 14798,
+    &quot;internet&quot;: true,
+    &quot;language&quot;: &quot;Belarusian&quot;,
+    &quot;latitude&quot;: 52.98282724600774,
+    &quot;longitude&quot;: 28.003545708677223,
+    &quot;neuroticism&quot;: 0.4034048869311393,
+    &quot;openness&quot;: 0.4024561283710326,
+    &quot;religion&quot;: &quot;other&quot;,
+    &quot;sex&quot;: &quot;Female&quot;
+  }
+]</code></pre><p id="r-4435187" data-claire-element-id="7861822">Comment allons-nous faire ? Retournons dans notre fichier  <code data-claire-semantic="text">test_download_agents.py</code>.</p><p id="r-4435188" data-claire-element-id="7859098">Créons une nouvelle fonction pour ce test et indiquons le retour souhaité :</p><pre id="r-4435189" data-claire-element-id="7859099"><code data-claire-semantic="python">def test_http_return():
+    results = [{
+            &quot;age&quot;: 84,
+            &quot;agreeableness&quot;: 0.74
+          }
+        ]</code></pre><div id="r-4435191" data-claire-element-id="7871053" data-claire-semantic="question"><p id="r-4435190" data-claire-element-id="7871051"><em>Pourquoi ne pas indiquer toutes les informations reçues ?</em></p><p id="r-4439646" data-claire-element-id="7871052">Il n'est pas nécessaire de tout indiquer car nous n'en aurons pas besoin par la suite. Nous souhaitons simplement tester que la fonction  <code data-claire-semantic="text">get_agents()</code>  renvoie bien une liste contenant du JSON. Dans ce cas, avoir moins de code peut être préférable car cela rend nos tests plus <strong>faciles</strong> à lire.</p></div><p id="r-4435192" data-claire-element-id="7871061">Utilisons à présent un <em>helper</em> de Pytest pour imiter le retour souhaité. En lisant la <a href="https://docs.pytest.org/en/latest/monkeypatch.html">documentation</a>, vous découvrirez trois points :</p><ul id="r-4435199" data-claire-element-id="7871068"><li id="r-4435194" data-claire-element-id="7871063"><p id="r-4435193" data-claire-element-id="7871062">notre fonction test doit <strong>utiliser le <em>helper</em></strong>   <code data-claire-semantic="text">monkeypatch</code></p></li><li id="r-4435196" data-claire-element-id="7871065"><p id="r-4435195" data-claire-element-id="7871064">nous devons <strong>définir une fonction</strong>  <code data-claire-semantic="text">mockreturn(obj)</code>  qui prendra en paramètre l'objet sur lequel nous allons appeler la méthode</p></li><li id="r-4435198" data-claire-element-id="7871067"><p id="r-4435197" data-claire-element-id="7871066">nous pouvons <strong>utiliser la méthode</strong>  <code data-claire-semantic="text">monkeypatch.setattr()</code>  pour changer la valeur renvoyée.</p></li></ul><p id="r-4435200" data-claire-element-id="7859110">Un exemple vaut mieux que mille mots ! Voyons comment cela se traduit dans notre projet :</p><pre id="r-4435201" data-claire-element-id="7859111"><code data-claire-semantic="python">import program.download_agents as script
+
+import urllib.request
+
+from io import BytesIO
+import json
+
+def test_http_return(monkeypatch):
+    results = [{
+            &quot;age&quot;: 84,
+            &quot;agreeableness&quot;: 0.74
+          }
+        ]
+
+    def mockreturn(request):
+        return results
+
+    monkeypatch.setattr(urllib.request, 'urlopen', mockreturn)
+    assert script.get_agents(1) == results</code></pre><p id="r-4435202" data-claire-element-id="7859112">Cela paraît plutôt bien !</p><p id="r-4435203" data-claire-element-id="7871081">Mais si nous lançons le test... Il échoue ! Pourquoi ? Car  <code data-claire-semantic="text">results</code>  est de type  <code data-claire-semantic="text">list</code>  et que nous ne pouvons pas exécuter la méthode  <code data-claire-semantic="text">read()</code>  sur un objet de ce type.</p><p id="r-4435204" data-claire-element-id="7871082">Utilisons la classe  <code data-claire-semantic="text">BytesIO</code>  pour créer un objet sur lequel nous pourrons appeler la méthode  <code data-claire-semantic="text">read()</code>.</p><p id="r-4435205" data-claire-element-id="7859115">Enfin, puisque la requête renvoie du json encodé et que nous le décodons, il nous faut imiter une réponse en json et encodée !</p><p id="r-4435206" data-claire-element-id="7859116">Changeons tout de suite le retour :</p><pre id="r-4435207" data-claire-element-id="7859117"><code data-claire-semantic="python">import program.download_agents as script
+
+import urllib.request
+
+from io import BytesIO
+import json
+
+def test_http_return(monkeypatch):
+    results = [{
+            &quot;age&quot;: 84,
+            &quot;agreeableness&quot;: 0.74
+          }
+        ]
+
+    def mockreturn(request):
+        return BytesIO(json.dumps(results).encode())
+
+    monkeypatch.setattr(urllib.request, 'urlopen', mockreturn)
+    assert script.get_agents(1) == results</code></pre><p id="r-4435208" data-claire-element-id="7859118">Bravo ! Cela fonctionne !</p><h3 id="r-4435223" data-claire-element-id="7871094">Imiter l'écriture dans un fichier</h3><p id="r-4435209" data-claire-element-id="7861835">Nous allons ensuite tester que notre fonction  <code data-claire-semantic="text">main()</code>  écrit bien les données souhaitées dans un fichier.</p><p id="r-4435210" data-claire-element-id="7861836">Afin de ne pas créer et supprimer des fichiers à chaque lancement de test dans notre dossier de travail, nous allons utiliser le helper  <code data-claire-semantic="text">tmpdir</code>  de Pytest. Celui-ci nous permet de créer un nouveau fichier dans un répertoire temporaire. A la fin du test, Pytest le supprimera pour nous.</p><pre id="r-4435211" data-claire-element-id="7859121"><code data-claire-semantic="python">p = tmpdir.mkdir(&quot;program&quot;).join(&quot;agents.json&quot;)</code></pre><p id="r-4435212" data-claire-element-id="7871091">Cette instruction crée un dossier  <code data-claire-semantic="text">program</code>  et un fichier  <code data-claire-semantic="text">agents.json</code>  à l'intérieur.</p><p id="r-4435213" data-claire-element-id="7861837">Puis nous exécutons notre fonction  <code data-claire-semantic="text">main()</code>  en passant le répertoire en argument :</p><pre id="r-4435214" data-claire-element-id="7859124"><code data-claire-semantic="python">script.main([&quot;--dest&quot;, str(p), &quot;--count&quot;, &quot;1&quot;])</code></pre><p id="r-4435215" data-claire-element-id="7861838">Enfin, nous testons que le contenu du répertoire correspond bien au résultat de la fonction  <code data-claire-semantic="text">get_agents()</code>:</p><pre id="r-4435216" data-claire-element-id="7859126"><code data-claire-semantic="python">local_res = json.load(open(p))
+assert local_res == script.get_agents(1)</code></pre><p id="r-4435217" data-claire-element-id="7871092"> </p><p id="r-4439651" data-claire-element-id="7871093">Notre test final ressemble donc à ceci :</p><pre id="r-4435218" data-claire-element-id="7859128"><code data-claire-semantic="python">def test_http_return(tmpdir, monkeypatch):
+    results = [{
+            &quot;age&quot;: 84,
+            &quot;agreeableness&quot;: 0.74
+          }
+        ]
+
+    def mockreturn(request):
+        return BytesIO(json.dumps(results).encode())
+
+    monkeypatch.setattr(urllib.request, 'urlopen', mockreturn)
+
+    p = tmpdir.mkdir(&quot;program&quot;).join(&quot;agents.json&quot;)
+
+    # run script
+    script.main([&quot;--dest&quot;, str(p), &quot;--count&quot;, &quot;1&quot;])
+
+    local_res = json.load(open(p))
+    assert local_res == script.get_agents(1)</code></pre><p id="r-4435219" data-claire-element-id="7859129">Pytest propose d'autres fonctionnalités très intéressantes ! Découvrez-les dans sa <a href="https://docs.pytest.org/en/latest/builtin.html#builtinfixtures">documentation sur les Fixtures</a>.</p><aside id="r-4436259" data-claire-element-id="7861840" data-claire-semantic="information"><p id="r-4435220" data-claire-element-id="7861839">Une <strong>fixture</strong> est une fonctionnalité d'une librairie de test qui vous permet d'être plus efficace dans vos tests. Cela peut être la création d'un répertoire temporaire, les mocks, mais également la création de nouveaux items dans une base de données.</p></aside><h3 id="r-4436266" data-claire-element-id="7870643">Code du chapitre</h3><p id="r-4435221" data-claire-element-id="7861841"><a href="https://github.com/celine-m-s/le_monde_est_petit/tree/P2C5">Retrouvez l'intégralité du code de ce chapitre sur Github ! </a></p><p id="r-4436261" data-claire-element-id="7870642"><img id="r-4439536" data-claire-element-id="7870641" src="https://user.oc-static.com/upload/2017/05/04/14939097968461_Capture%20d%E2%80%99e%CC%81cran%202017-05-04%20a%CC%80%2016.56.17.png" alt="" /> </p>
+</div>
+<div class="js-courseSelementActions sideActions">
+<ul class="sideActions__container">
+<li>
+<a class="sideActions__item  js-courseElementActions-copyUrl  js-tooltip" href="#" data-tooltip="Copier le lien" data-tooltip-done="Lien copié !">
+#
+</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="text-center space-top">
+<form name="form" method="post" action="/fr/courses/4425126/parts/4435224/mark-as-complete" class=" oc-form">
+<button type="submit" id="form_submit" name="form[submit]" class="button button--primary button"><i class='icon-to_do'></i> J'ai terminé ce chapitre et je passe au suivant</button>
+<input type="hidden" id="form__token" name="form[_token]" class=" textInput textInput--hidden" value="Wt8XCfpx31VZ3hhxs4PFNBjgTnFYB_8vDNlU9txRgX8" /></form>
+</div>
+<nav id="course-pagination" class="course-pagination    clearfix">
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes" class="button button--secondary  course-pagination__btn course-pagination__btn--previous">
+<i class="icon-previous"></i>
+<span>Organisez vos tests en classes</span>
+</a>
+<span class="course-pagination__separator"></span>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests" class="button button--secondary  course-pagination__btn course-pagination__btn--next">
+<span>Finalisez les tests et améliorez votre couverture de tests</span>
+<i class="icon-next"></i>
+</a>
+</nav>
+<div tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="popin-view-restriction_popin_title" class="popin popin--illustrated  js-popin" id="popin-view-restriction">
+<button class="popin__close-button  js-close-button" title="Fermer" aria-label="Fermer">
+<i class="icon-close" aria-hidden="true"></i>
+</button>
+<div class="popin__inner">
+<div class="popin__illustrationWrapper">
+<div class="popin__illustration illustration--balloon"></div>
+</div>
+<div class="popin__mainContainer">
+<div class="popin__gigTitleContainer js-popin-title">
+<div class="gigWorkersPopin__timeline">
+<div class="gigWorkersPopin__dot">1</div>
+<div class="gigWorkersPopin__line"></div>
+<div class="gigWorkersPopin__dot gigWorkersPopin__dot--disabled">2</div>
+</div>
+<h2 id="popin-view-restriction_popin_title" class="popin__title">Créez un compte <br /> OpenClassrooms</h2>
+</div>
+<h3 id="popin-view-restriction_popin_title" class="popin__title  js-popin-title">Waouh !</h3>
+<div class="popin__content  js-popin-content">
+<div class="popin__contentWrapper">
+<p>
+Très heureux de voir que nos cours vous plaisent, déjà 5 pages lues aujourd&#039;hui ! Vous pouvez continuer la lecture de nos cours en devenant un membre de la communauté d&#039;OpenClassrooms. C&#039;est gratuit !
+</p>
+<p>
+Vous pourrez aussi suivre votre avancement dans le cours, faire les exercices et discuter avec les autres membres.
+</p>
+</div>
+</div>
+<div class="popin__actions  js-popin-actions">
+<span class="u--inlineBlock">
+<a class="button button--primary " href="/fr/register">S'inscrire</a>
+</span>
+<span class="u--inlineBlock">
+<a class="button button--secondary " href="/fr/login">Se connecter</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<script type="text/template" class="js-single-video-download-info">
+            <div class="videoDownload js-download-video-popin-link">
+                <a href="#popin-download-video" class="js-popin-activator">
+                    <i class="icon-download videoDownload__icon"></i> Télécharger la vidéo
+                </a>
+            </div>
+        </script>
+<script type="text/template" class="js-all-video-download-info">
+            <div class="videoDownload js-download-video-popin-link">
+                <a href="#popin-download-all-videos" class="js-popin-activator">
+                    <i class="icon-download videoDownload__icon"></i> Télécharger toutes les vidéos de ce cours
+                </a>
+            </div>
+        </script>
+<div id="popin-not-certifying-yet_674070" class="popin" data-popin-title="Vous ne pouvez pas encore obtenir de certificat de réussite à l&#039;issue de ce cours.
+                            <a href='/fr/premium'><i class='icon-star'></i> Devenez Premium</a>
+                    ">
+<img alt="Exemple de certificat de réussite" src="//static.oc-static.com/prod/images/courses/certif.jpg" />
+</div>
+<div tabindex="-1" role="dialog" aria-hidden="true" class="popin popin--small  js-popin" id="popin-download-video">
+<button class="popin__close-button  js-close-button" title="Fermer" aria-label="Fermer">
+<i class="icon-close" aria-hidden="true"></i>
+</button>
+<div class="popin__inner">
+<div class="popin__mainContainer">
+<div class="popin__gigTitleContainer js-popin-title">
+<div class="gigWorkersPopin__timeline">
+<div class="gigWorkersPopin__dot">1</div>
+<div class="gigWorkersPopin__line"></div>
+<div class="gigWorkersPopin__dot gigWorkersPopin__dot--disabled">2</div>
+</div>
+<h2 id="popin-download-video_popin_title" class="popin__title">Créez un compte <br /> OpenClassrooms</h2>
+</div>
+<i class="icon-video popin__icon  js-popin-icon"></i>
+<div class="popin__content  js-popin-content">
+<div class="popin__contentWrapper">
+<p>
+Le téléchargement des vidéos de nos cours est accessible pour les membres <a href="/fr/premium">Premium</a>. Vous pouvez toutefois les visionner en streaming gratuitement.
+</p>
+</div>
+</div>
+<div class="popin__actions  js-popin-actions">
+<a class="button button--primary js-close-button" target="_blank" href="/fr/premium">Devenez Premium</a>
+</div>
+</div>
+</div>
+</div>
+<div id="popin-not-certifying-yet_225530" class="popin" data-popin-title="Vous ne pouvez pas encore obtenir de certificat de réussite à l&#039;issue de ce cours.
+                            <a href='/fr/premium'><i class='icon-star'></i> Devenez Premium</a>
+                    ">
+<img alt="Exemple de certificat de réussite" src="//static.oc-static.com/prod/images/courses/certif.jpg" />
+</div>
+<div tabindex="-1" role="dialog" aria-hidden="true" class="popin popin--small  js-popin" id="popin-download-video">
+<button class="popin__close-button  js-close-button" title="Fermer" aria-label="Fermer">
+<i class="icon-close" aria-hidden="true"></i>
+</button>
+<div class="popin__inner">
+<div class="popin__mainContainer">
+<div class="popin__gigTitleContainer js-popin-title">
+<div class="gigWorkersPopin__timeline">
+<div class="gigWorkersPopin__dot">1</div>
+<div class="gigWorkersPopin__line"></div>
+<div class="gigWorkersPopin__dot gigWorkersPopin__dot--disabled">2</div>
+</div>
+<h2 id="popin-download-video_popin_title" class="popin__title">Créez un compte <br /> OpenClassrooms</h2>
+</div>
+<i class="icon-video popin__icon  js-popin-icon"></i>
+<div class="popin__content  js-popin-content">
+<div class="popin__contentWrapper">
+<p>
+ Le téléchargement des vidéos de nos cours est accessible pour les membres <a href="/fr/premium">Premium</a>. Vous pouvez toutefois les visionner en streaming gratuitement.
+</p>
+</div>
+</div>
+<div class="popin__actions  js-popin-actions">
+<a class="button button--primary js-close-button" target="_blank" href="/fr/premium">Devenez Premium</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<aside id="content-with-sidebar" class="contentWithSidebar__sidebar  js-contentWithSidebar-slidingElement">
+<nav class="col-nav">
+<div id="tab-courseMenu" class="col-nav__inner js-sidebar-inner">
+<div class="col-nav__block  col-nav__block--summary">
+<div class="side-paginate">
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes" class="side-paginate__previous" title="Chapitre précédent">
+<i class="icon-previous"></i>
+</a>
+<span class="side-paginate__separator"></span>
+<h6 class="side-paginate__title">
+Partie 2 : Les tests unitaires
+</h6>
+<span class="side-paginate__separator"></span>
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests" class="side-paginate__next" title="Chapitre suivant">
+<i class="icon-next"></i>
+</a>
+</div>
+<div class="col-nav__block--summary-list">
+<ol class="col-nav__chapters">
+<li class="">
+<a class="col-nav__chapterTitle" href="/fr/courses/4425126-testez-votre-projet-avec-python/4435045-decelez-les-elements-a-tester">Décelez les éléments à tester</a>
+</li>
+<li class="">
+<a class="col-nav__chapterTitle" href="/fr/courses/4425126-testez-votre-projet-avec-python/4435081-codez-votre-premier-test">Codez votre premier test</a>
+</li>
+<li class="">
+<a class="col-nav__chapterTitle" href="/fr/courses/4425126-testez-votre-projet-avec-python/4435144-ajoutez-des-tests-avec-pytest">Ajoutez des tests avec Pytest</a>
+</li>
+<li class="">
+<a class="col-nav__chapterTitle" href="/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes">Organisez vos tests en classes</a>
+</li>
+<li class="selected">
+<span class="col-nav__chapterTitle">Utilisez des mocks</span>
+</li>
+<li class="">
+<a class="col-nav__chapterTitle" href="/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests">Finalisez les tests et améliorez votre couverture de tests</a>
+</li>
+</ol>
+<div class="tocExercise"><ul class="tocExercise__list"><li class="tocExercise__item "><a class="tocExercise__link " href="/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1647"><i class="tocExercise__icon icon-test"></i><span class="tocExercise__text">Quiz : Les tests unitaires</span></a></li></ul></div> </div>
+</div>
+<div class="col-nav__block col-nav__block--button">
+<a href="/forum/categorie/langage-python" class="button button--secondary">
+Accéder au forum
+</a>
+</div>
+<div class="col-nav__block col-nav__block--institution">
+<h2>Créé par</h2>
+<a href="/fr/partners/openclassrooms" target="_blank">
+<span data-image-cdn-attr-src="https://course.oc-static.com/partners/19/15433053814225_short-200x200.png" data-image-cdn-attr-alt="logo OpenClassrooms" data-image-cdn-width="165" data-image-cdn-attr-class="col-nav__institutionLogo"><img class="col-nav__institutionLogo" width="165" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /></span>
+<p class="col-nav__block--institutionDescription">
+OpenClassrooms, Leading <span class='nowrap'>E-Learning<span> Platform in Europe
+</p>
+</a>
+</div>
+<div class="socialNetwork col-nav__block">
+<ul class="socialButtons  js-socialButtons" data-options="
+                title: 'Utilisez des mocks @OCFrance',
+        mailTitle: 'Cours &quot;Utilisez des mocks&quot; sur OpenClassrooms',
+        mailContent: 'Découvrez le cours &quot;Utilisez des mocks&quot; sur OpenClassrooms.'">
+<li>
+<a class="roundIcon  roundIcon--twitter addthis_button_twitter  js-socialButtons-btn" data-tooltip="Partagez sur Twitter">
+<i class="roundIcon__icon  icon-twitter"></i>
+</a>
+</li>
+<li>
+<a class="roundIcon  roundIcon--facebook  addthis_button_facebook  js-socialButtons-btn" data-tooltip="Partagez sur Facebook">
+<i class="roundIcon__icon  icon-facebook"></i>
+</a>
+</li>
+<li>
+<a class="roundIcon  addthis_button_email  js-socialButtons-btn  js-socialButtons-email" data-tooltip="Partagez par e-mail">
+<i class="roundIcon__icon  icon-letter"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+</aside>
+</div>
+</div>
+</div>
+<footer id="course-footer" class="alt-section noMarginBottom">
+<div class="grid-wrapper">
+<div class="grid-inner">
+<div class="grid-inner-content  courseFooter">
+<div class="courseFooter__authorsOnly course-bottom__category">
+<h2>
+Le professeur
+</h2>
+<div>
+<a itemprop="author" itemscope itemtype="http://schema.org/Person" href="/fr/membres/celinemartinet" class="no-underlined" rel="nofollow">
+<div class="course-bottom__text-illustrated">
+<span data-author="Céline Martinet Sanchez" data-image-cdn-background-image="https://user.oc-static.com/users/avatars/15058367148057_cms_carree.jpeg" data-image-cdn-width="120"></span>
+<h4 itemprop="name">Céline Martinet Sanchez</h4>
+<p itemprop="description">
+Développeuse freelance, entrepreneure et formatrice. Diplômée du Master Grande École d&#039;Audencia.
+</p>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</article>
+</main>
+</div>
+<div id="footerWrapper">
+<footer id="footer" class="oc-footerSkeleton">
+<hr style="margin-bottom: 8px" />
+<div class="grid-wrapper">
+<div class="grid-inner">
+<div class="oc-footerSkeleton__container">
+<div class="oc-footerSkeleton__item">
+<div class="oc-footerSkeleton__itemTitle"><span class="skeleton" style="height: 20px; width: 80%"></span></div>
+<ul class="oc-footerSkeleton__linksList">
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 70%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 60%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 65%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 40%"></span></a></p>
+</li>
+</ul>
+</div>
+<div class="oc-footerSkeleton__item">
+<div class="oc-footerSkeleton__itemTitle"><span class="skeleton" style="height: 20px; width: 85%"></span></div>
+<ul class="oc-footerSkeleton__linksList">
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 40%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 60%"></span></a></p>
+</li>
+</ul>
+</div>
+<div class="oc-footerSkeleton__item">
+<div class="oc-footerSkeleton__itemTitle"><span class="skeleton" style="height: 20px; width: 75%"></span></div>
+<ul class="oc-footerSkeleton__linksList">
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 65%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 40%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 50%"></span></a></p>
+</li>
+<li class="oc-footerSkeleton__linksListItem">
+<p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 40%"></span></a></p>
+</li>
+</ul>
+ </div>
+<div class="oc-footerSkeleton__item">
+<span class="skeleton" style="height: 25px; width: 65%"></span>
+<div class="oc-footerSkeleton__socialButtonWrapper">
+<div><span class="skeleton skeleton--round" style="width: 40px; height: 40px"></span></div>
+<div><span class="skeleton skeleton--round" style="width: 40px; height: 40px;"></span></div>
+<div><span class="skeleton skeleton--round" style="width: 40px; height: 40px;"></span></div>
+<div><span class="skeleton skeleton--round" style="width: 40px; height: 40px;"></span></div>
+<div><span class="skeleton skeleton--round" style="width: 40px; height: 40px;"></span></div>
+</div>
+<div><span class="skeleton skeleton--width50" style="height: 40px;"></span></div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div id="showDisclaimer" class="cookiesDisclaimer"></div>
+<script type="text/javascript">
+        window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9",
+        window.loadAnalytics = function () { window.analytics.load('mou95e6tdn') };
+    </script>
+<script>
+  var isPrerender = !!navigator.userAgent.match(/github\.com\/prerender\/prerender/);
+  var preRenderBrowserFakeUa = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163 Safari/537.36";
+  var polyfillUrl = "https://cdn.polyfill.io/v3/polyfill.min.js?unknown=polyfill&features=default,es6,IntersectionObserver,Object.values,Array.prototype.includes,Array.prototype.findIndex,Promise.prototype.finally,fetch,Intl.~locale.fr";
+
+    if (isPrerender) {
+    polyfillUrl+= "&ua=" + encodeURIComponent(preRenderBrowserFakeUa);
+  }
+
+  App.scripts.push(polyfillUrl);
+
+  App.script = {
+    SHOP: 'shop',
+    PROJECTS: 'projects',
+    TEAM: 'team',
+    HOME: 'home',
+    COURSE_EDIT: 'course_edit',
+    COURSE_VIEW: 'course_view',
+    ADMIN: 'admin',
+    ADMIN_STUDENT_CREDENTIAL_CREATE: 'adminStudentCredentialCreate',
+    BUSINESS: 'business',
+    GIG_WORKERS: 'gigWorkers',
+    JOB_GUARANTEE: 'jobGuarantee',
+    JOB_SURVEY: 'jobSurvey',
+    MCQ_EDIT: 'mcqEdit',
+    MCQ_VIEW: 'mcqView',
+    MENTOR_EDIT: 'mentorEdit',
+    MENTORSHIP_DASHBOARD: 'mentorshipDashboard',
+    MENTORSHIP_SESSION_CREATE: 'mentorshipSessionCreate',
+      MENTORSHIP_SESSION_NON_ASSESSOR_CREATE: 'mentorshipSessionNonAssessorCreate',
+    P2P_EDIT: 'p2pEdit',
+    P2P_VIEW: 'p2pView',
+    PATHS: 'paths',
+    PRIVATE_CONVERSATIONS: 'privateConversations',
+    USER_PROFILE: 'userProfile',
+    WELCOME: 'welcome',
+    APPRENTICESHIP: 'apprenticeship',
+    WEBAPP: 'webapp',
+  };
+</script>
+<script>App.scripts.push("/js/runtime.35a1e4ca2053cd7fa96b.js");</script>
+<script>App.scripts.push("/js/vendors.192bdc9cf4911b936e21.js");</script>
+<script>App.scripts.push("/js/oc/packages/main.b747a3b255499e7560e3.js");</script>
+
+<script>App.scriptToLoad = App.script.COURSE_VIEW</script>
+ 
+<script>
+    (function () {
+        function loadScripts(cb) {
+            App.scripts.forEach(function (src, index) {
+                var script = document.createElement('script');
+                script.src = src;
+                script.async = false;
+                document.body.appendChild(script);
+
+                if (cb && index === App.scripts.length - 1) {
+                    script.onload = cb;
+                }
+            });
+        }
+
+        function boot() {
+            loadScripts(function () {
+                if (App.modules) {
+                    App.modules.startAll();
+                }
+            });
+        }
+
+        if (window.addEventListener) {
+            window.addEventListener('load', boot, false);
+        } else if (window.attachEvent) {
+            window.attachEvent('onload', boot);
+        } else {
+            window.onload = boot;
+        }
+    }());
+</script>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"90dc06697a","applicationID":"20302107","transactionName":"NANaYkJXC0ICAhdYVw1Je0NDQgpcTA4AblsPB1FEVWkGXhYTEFRnEwdKQm9GBEMXPhVYXRQ=","queueTime":0,"applicationTime":271,"atts":"GERZFApNGEw=","errorBeacon":"bam.nr-data.net","agent":""}</script></body>
+</html>

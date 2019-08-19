@@ -1,0 +1,100 @@
+[
+  [
+    1,
+    1,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4434876-tirez-parti-de-ce-cours",
+    "Tirez parti de ce cours",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4434876-tirez-parti-de-ce-cours"
+  ],
+  [
+    1,
+    2,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests",
+    "D\u00e9couvrez les tests",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests"
+  ],
+  [
+    2,
+    1,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435045-decelez-les-elements-a-tester",
+    "D\u00e9celez les \u00e9l\u00e9ments \u00e0 tester",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435045-decelez-les-elements-a-tester"
+  ],
+  [
+    2,
+    2,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435081-codez-votre-premier-test",
+    "Codez votre premier test",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435081-codez-votre-premier-test"
+  ],
+  [
+    2,
+    3,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435144-ajoutez-des-tests-avec-pytest",
+    "Ajoutez des tests avec Pytest",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435144-ajoutez-des-tests-avec-pytest"
+  ],
+  [
+    2,
+    4,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes",
+    "Organisez vos tests en classes",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes"
+  ],
+  [
+    2,
+    5,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks",
+    "Utilisez des mocks",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks"
+  ],
+  [
+    2,
+    6,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests",
+    "Finalisez les tests et am\u00e9liorez votre couverture de tests",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests"
+  ],
+  [
+    2,
+    7,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1647",
+    "Quiz : Les tests unitaires",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1647"
+  ],
+  [
+    3,
+    1,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435374-decouvrez-le-test-driven-development",
+    "D\u00e9couvrez le Test-Driven Development",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435374-decouvrez-le-test-driven-development"
+  ],
+  [
+    3,
+    2,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435400-ajoutez-une-fonctionnalite-en-tdd-red-green",
+    "\ud83d\udd34     \u2705     Ajoutez une fonctionnalit\u00e9 en TDD : red / green",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435400-ajoutez-une-fonctionnalite-en-tdd-red-green"
+  ],
+  [
+    3,
+    3,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435414-ajoutez-une-fonctionnalite-en-tdd-refactorez",
+    "\ud83d\udee0  Ajoutez une fonctionnalit\u00e9 en TDD : refactorez !",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435414-ajoutez-une-fonctionnalite-en-tdd-refactorez"
+  ],
+  [
+    3,
+    4,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/4435435-allez-plus-loin",
+    "Allez plus loin",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435435-allez-plus-loin"
+  ],
+  [
+    3,
+    5,
+    "/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1648",
+    "Quiz : Le test-driven development",
+    "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1648"
+  ]
+]

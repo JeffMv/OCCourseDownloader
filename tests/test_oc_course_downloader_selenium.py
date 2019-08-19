@@ -33,3 +33,17 @@ def test_helper_course_page_url():
 	expected_url_part = 'openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning/4011858-identifez-les-differentes-etapes-de-modelisation'
 	assert script.helper_course_page_url(course_id, course_page, lang).find(expected_url_part) >= 0
 
+
+def test_extract_course_chapters_as_json():
+	base_test_data_path = "./tests/test_data/course-pages/test-project-with-python/"
+	fname_raw = "Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html"
+	fname_json = "Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html.chapters.json"
+	
+	with open(os.path.join(base_test_data_path, fname_json)) as fh:
+		expected_json_str = json.dumps(json.load(fh))
+	
+	with open(os.path.join(base_test_data_path, fname_raw)) as fh:
+		chapters = script.extract_course_chapters(fh.read())
+		chapters_json_str = json.dumps(chapters)
+
+	assert expected_json_str == chapters_json_str
