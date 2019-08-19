@@ -116,7 +116,7 @@ def extract_course_chapters(html_page):
             pass
         else:
             print('OcCourseFetcherSpider.start_requests() :: unrecognized node "%s"' % (chapter_timeline_soup))
-            pass                
+            pass
     
     return chapters
 
@@ -140,9 +140,10 @@ def parse_course_page_content(html_page, driver=None, verbose=1):
         page_url = "/".join([lang, course_id, course_page])
         if verbose >= 1:
             print("fetching image %i / %i from course page %s" % (i+1, len(image_tags), page_url))
-        image_data = requests.get(url).content
         
-        image_infos.append((url, description, caption, image_data, i))
+        # image_data = requests.get(url).content
+        # image_infos.append((url, description, caption, image_data, i))
+        image_infos.append((url, description, caption, i))
         # image_infos.append((url, description, caption))
     
     

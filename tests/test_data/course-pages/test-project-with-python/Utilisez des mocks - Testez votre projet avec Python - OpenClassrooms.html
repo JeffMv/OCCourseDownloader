@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-iphone-retina-display.png?v=3" />
 <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-ipad-retina-display.png?v=3" />
 <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png?v=3" />
-<link rel="shortcut icon" href="/favicon.ico?547e8e1" />
+<link rel="shortcut icon" href="/favicon.ico?INF" />
 <style>.async-hide { opacity: 0 !important} </style>
 <script>
           window.dataLayer = window.dataLayer || [];
@@ -54,29 +54,20 @@
 <script type="text/javascript">
     var App = {
         startTime: (new Date()).getTime(),
-        pageGenerationDate: 1566171196000
+        pageGenerationDate: 1566230240000
     };
 
     App.user = {
-                    id: 319697,
-            age: '25',
-            createdAt: '2011\u002D07\u002D20T02\u003A14\u003A47\u002B02\u003A00',
-            gender: 'M',
-            premiumType: '',
-            locale: 'fr',
+                    locale: 'fr',
             language: 'fr',
-            displayableName: 'Jeffrey\u0020Mvutu\u0020Mabilama',
-            email: 'jeffrey.mvutu\u0040gmail.com',
-            country: 'CH',
-            phoneNumber: '',
-            avatar: 'https\u003A\/\/openclassrooms.com\/bundles\/common\/images\/avatar_defaut.png',
-            isPremium: false,
-            isMentor: false
+            isPremium: 'false',
+            isMentor: 'false',
+            anonymous: 'true'
             };
 
     App.preferences = {
         debug: false,
-        assetVersion: '547e8e1',
+        assetVersion: 'INF',
         contactMail: 'hello\u0040openclassrooms.com',
         contactPhone: '\u002B33\u00201\u002080\u002088\u002080\u002030',
         phoneNumbersByCountry: {"uk":{"contact":"+44 16 1768 1880"},"ca":{"contact":"+1 929-376-0101"},"us":{"contact":"+1 929-376-0101"},"fr":{"contact":"+33 1 80 88 80 30","b2b_contact":"+33 1 80 88 80 40"},"es":{"contact":"+33 1 80 88 80 30"}},
@@ -116,8 +107,7 @@
                     };
 
     App.preferences.navigationPreference = {
-                                    consentCookieExpiredAt: 1593602161
-                        };
+            };
 
     App.preferences.modules = {
         'smiley': {
@@ -179,7 +169,7 @@ window.dataLayer.push({
 <meta name="twitter:description" content="Comment tester un projet en Python ? Et à quoi cela sert-il de tester un projet ? Découvrez-le tout de suite !" />
 <link rel="canonical" href="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" />
 </head>
-<body class="course oc-body is-connected  breadcrumbFluid breadcrumbOnContrasted">
+<body class="course oc-body   breadcrumbFluid breadcrumbOnContrasted">
 <ul class="skipLink">
 <li>
 <a class="skipLink__item" href="#mainContent">Aller au contenu</a>
@@ -192,55 +182,64 @@ window.dataLayer.push({
 </li>
 </ul>
 <script id="_EVENTS-IDENTIFY" type="application/json">
-            {
-            "type": "identify",
-            "userId": "319697",
-            "properties": {
-                "age":  "25",
-                "name": "Jeffrey Mvutu Mabilama",
-                "createdAt": "2011-07-20T02:14:47+02:00",
-                "email": "jeffrey.mvutu@gmail.com",
-                "gender":  "M",
-                "premium": false,
-                "premiumType": "",
-                "locale": "fr",
-                "language": "fr"
-            },
-            "integrations": {
-                "HubSpot": false
-            }
-        }
         </script>
 <script id="_EVENTS-PAGE" type="application/json">
-        {"type":"page","integrations":{"HubSpot":false},"properties":{"pageCategory":"courses","courseTitle":"Testez votre projet avec Python"}}
+        {"type":"page","integrations":{"Blueshift":false,"HubSpot":false},"properties":{"pageCategory":"courses","courseTitle":"Testez votre projet avec Python"}}
     </script>
 <div id="predictiveCrmTopBanner"></div>
-<script id="headerConfiguration" type="application/json">
-{
-    "user": {
-        "id": 319697,
-        "displayableName": "Jeffrey Mvutu mabilama",
-        "messageCount": 0,
-        "notificationCount": 0,
-        "profilePicture": "https://openclassrooms.com/bundles/common/images/avatar_defaut.png",
-        "premiumStatus": "none",
-        "link": {
-            "profile": "/fr/membres/jfreex-60970",
-            "parameter": "/fr/membres/jfreex-60970/parametres",
-            "logOut": "/logout?_csrf_token=Aw7fKTgFHVWLgtEqcEYeEEvpuVcttwXuVji_ETHr_mA"
-        }
-    },
-    "right": {
-        "canSeeMentorDashboard": false,
-        "canSeeAdminDashboard": false,
-        "canDisplayForumAlert": false
-    }
-}
-</script>
 <div class="formLogin hidden">
+<div class="formLogin__wrapper">
+<div class="formLogin__connectContainer">
+<a class="button button--secondaryFacebook formLogin__facebook" href="https://www.facebook.com/v2.12/dialog/oauth?client_id=277769842283905&amp;state=41df65f903c252d8aacd71154be497a0&amp;response_type=code&amp;sdk=php-sdk-5.7.0&amp;redirect_uri=https%3A%2F%2Fopenclassrooms.com%2Flogin_check_facebook&amp;scope=public_profile%2Cemail%2Cuser_birthday">
+<i aria-hidden="true">
+<img src=/images/icons/facebook-icon.svg?INF alt="" />
+</i>
+Facebook
+</a>
+<a class="button button--secondaryGoogleLogin formLogin__google" href="https://accounts.google.com/o/oauth2/auth?response_type=code&amp;access_type=online&amp;client_id=132418960718-jdnmpug3g9e6ub2p41ergcci1492qh82.apps.googleusercontent.com&amp;redirect_uri=https%3A%2F%2Fopenclassrooms.com%2Flogin_check_google&amp;state&amp;scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&amp;approval_prompt=auto">
+<i aria-hidden="true">
+<img src=/images/icons/google-icon.svg?INF alt="" />
+</i>
+Google
+</a>
+</div>
+<div class="formLogin__column">
+<div class="formLogin__separator">ou</div>
+<form name="" method="post" action="/login_check" class=" oc-form">
+<div class="oc-form__group oc-form--requiredHidden">
+<label class="oc-form__row    "><span class="oc-form__label-text ">
+Adresse email ou nom d'utilisateur&nbsp;
+<abbr class="oc-form__required js-form-required _username " title="requis"><span>*</span></abbr></span><span class="oc-form__widget formWidget "><input type="text" id="_username" name="_username" required="required" autofocus="autofocus" class=" textInput textInput--text" /></span></label>
+</div>
+<div class="oc-form__group oc-form--requiredHidden">
+<label class="oc-form__row    "><span class="oc-form__label-text ">
+Mot de passe&nbsp;
+<abbr class="oc-form__required js-form-required _password " title="requis"><span>*</span></abbr></span><span class="oc-form__widget formWidget "><input type="password" id="_password" name="_password" required="required" class=" textInput textInput--password" /></span></label>
+</div>
+<div class="oc-form__group">
+<label class="oc-form__row  oc-form__row--reversed  "><span class="oc-form__widget"><span class="ocCheckbox"><input type="checkbox" id="_remember_me" name="_remember_me" class="" value="1" checked="checked" /><span class="ocCheckbox__check"></span></span></span><span class="oc-form__label-text"><span class="oc-form__label-text ">
+Se souvenir de moi&nbsp;
+<abbr class="oc-form__required js-form-required _remember_me oc-form__required-hidden" title="requis"><span>*</span></abbr></span></span></label>
+</div>
+<div class="oc-form__group">
+<a href="/fr/set-new-password">Mot de passe oublié</a>
+</div>
+<div class="oc-form__group  center-text">
+<div>
+<button type="submit" id="login" name="login" class="button button--primary t button"> Se connecter</button></div>
+</div>
+<div class="oc-form__group  center-text">
+<input type="hidden" id="_target_path" name="_target_path" class=" textInput textInput--hidden" value="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" /><input type="hidden" id="_csrf_token" name="_csrf_token" class=" textInput textInput--hidden" value="0K5C7cj-v4i2clZDo0M2dSXFcwhvzqMy92HmCBzHa48" />
+</div>
+</form>
+</div>
+</div>
+<p class="text-center space-top">
+Pas encore membre ? <a href="/fr/register">Inscrivez-vous gratuitement</a> en 30s.
+</p>
 </div>
 <div id="oc-header">
-<div class="oc-mainHeader oc-mainHeader--none oc-mainHeader--skeleton">
+<div class="oc-mainHeader oc-mainHeader--notLogged oc-mainHeader--skeleton">
 <div class="grid-wrapper">
 <div class="grid-inner">
 <div style="display: flex;">
@@ -316,7 +315,7 @@ Vous utilisez un navigateur obsolète, veuillez le <a href="https://browser-upda
 <span class="breadcrumb__separator"> > </span>
 </li>
 <li class="breadcrumb__item" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
- <a class="breadcrumb__link" href="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python?status=published" itemprop="url">
+<a class="breadcrumb__link" href="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python?status=published" itemprop="url">
 <span itemprop="title">Testez votre projet avec Python</span
                                     ></a>
 <span class="breadcrumb__separator"> > </span>
@@ -334,7 +333,7 @@ Utilisez des mocks
 <main class="claire clearfix" role="main" id="mainContent">
 <article itemscope itemtype="http://schema.org/Article" lang="fr">
 <header id="course-header" class="courseHeader" xmlns="http://www.w3.org/1999/html">
-<div class="grid-wrapper"><div class="grid-inner"><div class="grid-inner-content"><div class="courseHeader__topPart"><a itemprop="url" href="/fr/courses/4425126-testez-votre-projet-avec-python"><h1 class="oc-typography-h2 typoColorOnContrastedBg  courseHeader__title" data-course-title="Testez votre projet avec Python">Testez votre projet avec Python</h1></a></div></div></div></div><div class="grid-wrapper"><div class="grid-inner"><div class="grid-inner-content"><div class="courseHeader__bottomPart"><div class="courseHeader__details"><div class="courseHeader__detailsGroup"><ul class="courseHeader__detailsList"><li class="courseHeader__detailsItem"><img class="courseHeader__icon js-tooltip" src="/images/icons/schedule.svg?547e8e1" width="16" title="Ce cours demande en moyenne 4 heures de travail pour être réussi." /><span class="courseHeader__label">4 heures</span></li><li class="courseHeader__detailsItem"><i class="icon-level courseHeader__icon"></i><span class="courseHeader__label">Moyenne</span></li></ul></div><div class="courseHeader__detailsGroup courseHeader--license"><a class="courseHeader__license" target="_blank" href="https://creativecommons.org/licenses/by-sa/2.0"><span class="courseHeader__label">Licence</span><ul class="courseHeader__detailsList"><li class="iconBar__item"><i class="icon-cc iconBar__icon" title="CC"></i></li><li class="iconBar__item"><i class="icon-ccby iconBar__icon" title="BY"></i></li><li class="iconBar__item"><i class="icon-ccsa iconBar__icon" title="SA"></i></li></ul></a></div></div></div></div></div></div>
+<div class="grid-wrapper"><div class="grid-inner"><div class="grid-inner-content"><div class="courseHeader__topPart"><a itemprop="url" href="/fr/courses/4425126-testez-votre-projet-avec-python"><h1 class="oc-typography-h2 typoColorOnContrastedBg  courseHeader__title" data-course-title="Testez votre projet avec Python">Testez votre projet avec Python</h1></a></div></div></div></div><div class="grid-wrapper"><div class="grid-inner"><div class="grid-inner-content"><div class="courseHeader__bottomPart"><div class="courseHeader__details"><div class="courseHeader__detailsGroup"><ul class="courseHeader__detailsList"><li class="courseHeader__detailsItem"><img class="courseHeader__icon js-tooltip" src="/images/icons/schedule.svg?INF" width="16" title="Ce cours demande en moyenne 4 heures de travail pour être réussi." /><span class="courseHeader__label">4 heures</span></li><li class="courseHeader__detailsItem"><i class="icon-level courseHeader__icon"></i><span class="courseHeader__label">Moyenne</span></li></ul></div><div class="courseHeader__detailsGroup courseHeader--license"><a class="courseHeader__license" target="_blank" href="https://creativecommons.org/licenses/by-sa/2.0"><span class="courseHeader__label">Licence</span><ul class="courseHeader__detailsList"><li class="iconBar__item"><i class="icon-cc iconBar__icon" title="CC"></i></li><li class="iconBar__item"><i class="icon-ccby iconBar__icon" title="BY"></i></li><li class="iconBar__item"><i class="icon-ccsa iconBar__icon" title="SA"></i></li></ul></a></div></div></div></div></div></div>
 <div id="popin-formats-availables" class="popin popin--course-formats-availables">
 <i class="popin__close-button icon-close js-close-button"></i>
 <div class="course-types course-types--withSpace">
@@ -376,10 +375,10 @@ Mis à jour le 07/10/2017 </p>
 </span>
 <div class="timeline__steps">
 <span class="timeline__splitChapter"></span>
-<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4434876-tirez-parti-de-ce-cours" class="timeline__step timeline__step--completed" title="Tirez parti de ce cours">
+<a href="/fr/courses/4425126-testez-votre-projet-avec-python/4434876-tirez-parti-de-ce-cours" class="timeline__step" title="Tirez parti de ce cours">
 <span class="timeline__stepName">
 Tirez parti de ce cours
-</span>
+ </span>
 </a>
 <a href="/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests" class="timeline__step" title="Découvrez les tests">
 <span class="timeline__stepName">
@@ -396,7 +395,7 @@ Décelez les éléments à tester
 <span class="timeline__stepName">
 Codez votre premier test
 </span>
- </a>
+</a>
 <a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435144-ajoutez-des-tests-avec-pytest" class="timeline__step" title="Ajoutez des tests avec Pytest">
 <span class="timeline__stepName">
 Ajoutez des tests avec Pytest
@@ -410,7 +409,7 @@ Organisez vos tests en classes
 <a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" class="timeline__step js-current-timeline-step" title="Utilisez des mocks">
 <span class="timeline__stepName">
 Utilisez des mocks
-</span>
+ </span>
 <span class="timeline__progressMarker"></span>
 </a>
 <a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests" class="timeline__step" title="Finalisez les tests et améliorez votre couverture de tests">
@@ -469,7 +468,11 @@ Quiz : Le test-driven development
 <div class="static">
 <h2 itemprop="name" data-part-title="Utilisez des mocks" class="part-title">Utilisez des mocks</h2>
 <section class="space-bottom js-desktop-sticky-container">
-<div itemprop="articleBody" data-page-indentifier="/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" class="js-isRestrictablePage js-course-container js-smilize js-userCanWatchVideo">
+<div class="tooltipMessage tooltipMessage--noArrow">
+<i class="tooltipMessage__icon  icon-lock"></i>
+<a href="/fr/login">Connectez-vous</a> ou <a href="/fr/register">inscrivez-vous</a> gratuitement pour bénéficier de toutes les fonctionnalités de ce cours !
+</div>
+<div itemprop="articleBody" data-page-indentifier="/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" class="js-isRestrictablePage js-course-container js-smilize " data-video-blocked-wrapper="<a href='/fr/login#popin-log-in' class='js-popin-activator'>">
 <div class="userContent js-userContent">
 <p id="r-4436256" data-claire-element-id="7904381"> </p><video id="r-4452461" data-claire-element-id="7904382" src="https://vimeo.com/217633069"><a href="https://vimeo.com/217633069">https://vimeo.com/217633069</a></video><h3 id="r-4436258" data-claire-element-id="7871761">Imiter une réponse HTTP</h3><p id="r-4435170" data-claire-element-id="7871581">Nous avons presque terminé de tester le fichier  <code data-claire-semantic="text">world.py</code> . Mais notre programme en contient en fait deux, rappelez-vous ! Le premier,   <code data-claire-semantic="text">download_agents.py</code>  , récupère des agents de l'API et le second,  <code data-claire-semantic="text">world.py</code>,  les utilise pour afficher le graphique.</p><p id="r-4435171" data-claire-element-id="7861814">Nous allons créer un second fichier,  <code data-claire-semantic="text">test_download_agents.py</code>, pour écrire nos tests. Ceci nous permettra de créer une structure en miroir : nos tests sont organisés de la même manière que nos fichiers.</p><p id="r-4435172" data-claire-element-id="7861815">Que fait  <code data-claire-semantic="text">download_agents.py</code>  ? Ce script interroge l'API PPLAPI et inscrit les résultats dans un fichier JSON.</p><p id="r-4435173" data-claire-element-id="7859083">Nous sommes face à un souci. En effet, chaque lancement de ce script écrit dans le même fichier. Or nous ne voulons pas changer les données de ce fichier, fait pour héberger de vraies données, dans le but de faire nos tests. Normalement ce fichier ne doit se recharger que si l'utilisateur le veut et non si nous lançons nos tests.</p><p id="r-4435174" data-claire-element-id="7859084">De même, il nous faut pouvoir lancer nos tests sans avoir besoin d'internet. Cela vous paraît étrange ? Mais imaginez si vous travaillez dans le train ! De plus, lancer des tests doit être très rapide. Or chaque appel HTTP sera plus lent qu'un simple retour de l'ordinateur.</p><p id="r-4435175" data-claire-element-id="7861816">L'idéal serait de pouvoir tricher un peu en disant à Pytest : &quot;<em>Je veux que tu testes la fonction mais, plutôt que de lancer un appel 'pour de vrai', utilise plutôt ces données-là !</em>&quot;. Hé oui, vous allez apprendre à tricher !</p><p id="r-4435176" data-claire-element-id="7861817">Ceci s'appelle un <strong>mock</strong>.</p><aside id="r-4435178" data-claire-element-id="7871022" data-claire-semantic="information"><p id="r-4435177" data-claire-element-id="7871021">Un <a href="https://www.wordreference.com/enfr/mock">mock</a> veut dire &quot;imitation&quot; en anglais. Appliqué à l'informatique, ce concept désigne des <strong>fonctions qui ont comme objectif d'imiter le comportement d'autres objets</strong>.</p></aside><p id="r-4435179" data-claire-element-id="7871023">De manière générale, nous utilisons des mocks pour <strong>imiter le comportement</strong> de librairies ou de modules que nous ne souhaitons pas tester. Nous considérons que ces modules sont externes à notre code et fonctionnent. Nous n'avons donc pas à les tester !</p><p id="r-4435180" data-claire-element-id="7859090">Découvrons tout de suite comment utiliser ce nouveau concept pour imiter la réponse d'une requête.</p><p id="r-4435181" data-claire-element-id="7859091">Commençons déjà par imprimer le résultat d'une requête dans notre console afin de garder en tête le code à renvoyer.</p><p id="r-4435182" data-claire-element-id="7861820">Pour rappel, voici le code de notre fichier  <code data-claire-semantic="text">download_agents.py</code>  :</p><pre id="r-4435183" data-claire-element-id="7859093"><code data-claire-semantic="python">#! /usr/bin/env python
 import argparse
@@ -611,11 +614,6 @@ assert local_res == script.get_agents(1)</code></pre><p id="r-4435217" data-clai
 </ul>
 </div>
 </div>
-<div class="text-center space-top">
-<form name="form" method="post" action="/fr/courses/4425126/parts/4435224/mark-as-complete" class=" oc-form">
-<button type="submit" id="form_submit" name="form[submit]" class="button button--primary button"><i class='icon-to_do'></i> J'ai terminé ce chapitre et je passe au suivant</button>
-<input type="hidden" id="form__token" name="form[_token]" class=" textInput textInput--hidden" value="Wt8XCfpx31VZ3hhxs4PFNBjgTnFYB_8vDNlU9txRgX8" /></form>
-</div>
 <nav id="course-pagination" class="course-pagination    clearfix">
 <a href="/fr/courses/4425126-testez-votre-projet-avec-python/4435169-organisez-vos-tests-en-classes" class="button button--secondary  course-pagination__btn course-pagination__btn--previous">
 <i class="icon-previous"></i>
@@ -647,7 +645,7 @@ assert local_res == script.get_agents(1)</code></pre><p id="r-4435217" data-clai
 <h3 id="popin-view-restriction_popin_title" class="popin__title  js-popin-title">Waouh !</h3>
 <div class="popin__content  js-popin-content">
 <div class="popin__contentWrapper">
-<p>
+ <p>
 Très heureux de voir que nos cours vous plaisent, déjà 5 pages lues aujourd&#039;hui ! Vous pouvez continuer la lecture de nos cours en devenant un membre de la communauté d&#039;OpenClassrooms. C&#039;est gratuit !
 </p>
 <p>
@@ -683,7 +681,7 @@ Vous pourrez aussi suivre votre avancement dans le cours, faire les exercices et
                 </a>
             </div>
         </script>
-<div id="popin-not-certifying-yet_674070" class="popin" data-popin-title="Vous ne pouvez pas encore obtenir de certificat de réussite à l&#039;issue de ce cours.
+<div id="popin-not-certifying-yet_652914" class="popin" data-popin-title="Vous ne pouvez pas encore obtenir de certificat de réussite à l&#039;issue de ce cours.
                             <a href='/fr/premium'><i class='icon-star'></i> Devenez Premium</a>
                     ">
 <img alt="Exemple de certificat de réussite" src="//static.oc-static.com/prod/images/courses/certif.jpg" />
@@ -716,7 +714,7 @@ Le téléchargement des vidéos de nos cours est accessible pour les membres <a 
 </div>
 </div>
 </div>
-<div id="popin-not-certifying-yet_225530" class="popin" data-popin-title="Vous ne pouvez pas encore obtenir de certificat de réussite à l&#039;issue de ce cours.
+<div id="popin-not-certifying-yet_149668" class="popin" data-popin-title="Vous ne pouvez pas encore obtenir de certificat de réussite à l&#039;issue de ce cours.
                             <a href='/fr/premium'><i class='icon-star'></i> Devenez Premium</a>
                     ">
 <img alt="Exemple de certificat de réussite" src="//static.oc-static.com/prod/images/courses/certif.jpg" />
@@ -739,7 +737,7 @@ Le téléchargement des vidéos de nos cours est accessible pour les membres <a 
 <div class="popin__content  js-popin-content">
 <div class="popin__contentWrapper">
 <p>
- Le téléchargement des vidéos de nos cours est accessible pour les membres <a href="/fr/premium">Premium</a>. Vous pouvez toutefois les visionner en streaming gratuitement.
+Le téléchargement des vidéos de nos cours est accessible pour les membres <a href="/fr/premium">Premium</a>. Vous pouvez toutefois les visionner en streaming gratuitement.
 </p>
 </div>
 </div>
@@ -788,7 +786,7 @@ Partie 2 : Les tests unitaires
 <a class="col-nav__chapterTitle" href="/fr/courses/4425126-testez-votre-projet-avec-python/4435316-finalisez-les-tests-et-ameliorez-votre-couverture-de-tests">Finalisez les tests et améliorez votre couverture de tests</a>
 </li>
 </ol>
-<div class="tocExercise"><ul class="tocExercise__list"><li class="tocExercise__item "><a class="tocExercise__link " href="/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1647"><i class="tocExercise__icon icon-test"></i><span class="tocExercise__text">Quiz : Les tests unitaires</span></a></li></ul></div> </div>
+<div class="tocExercise"><ul class="tocExercise__list"><li class="tocExercise__item "><a class="tocExercise__link " href="/fr/courses/4425126-testez-votre-projet-avec-python/exercises/1647"><i class="tocExercise__icon icon-lock"></i><span class="tocExercise__text">Quiz : Les tests unitaires</span></a></li></ul></div> </div>
 </div>
 <div class="col-nav__block col-nav__block--button">
 <a href="/forum/categorie/langage-python" class="button button--secondary">
@@ -883,7 +881,7 @@ Développeuse freelance, entrepreneure et formatrice. Diplômée du Master Grand
 </ul>
 </div>
 <div class="oc-footerSkeleton__item">
-<div class="oc-footerSkeleton__itemTitle"><span class="skeleton" style="height: 20px; width: 85%"></span></div>
+ <div class="oc-footerSkeleton__itemTitle"><span class="skeleton" style="height: 20px; width: 85%"></span></div>
 <ul class="oc-footerSkeleton__linksList">
 <li class="oc-footerSkeleton__linksListItem">
 <p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 40%"></span></a></p>
@@ -909,7 +907,7 @@ Développeuse freelance, entrepreneure et formatrice. Diplômée du Master Grand
 <p><a tabindex="inherit"><span class="skeleton" style="height: 14px; width: 40%"></span></a></p>
 </li>
 </ul>
- </div>
+</div>
 <div class="oc-footerSkeleton__item">
 <span class="skeleton" style="height: 25px; width: 65%"></span>
 <div class="oc-footerSkeleton__socialButtonWrapper">
@@ -971,12 +969,12 @@ Développeuse freelance, entrepreneure et formatrice. Diplômée du Master Grand
     WEBAPP: 'webapp',
   };
 </script>
-<script>App.scripts.push("/js/runtime.35a1e4ca2053cd7fa96b.js");</script>
+<script>App.scripts.push("/js/runtime.16a3ae65a74c02f5b00b.js");</script>
 <script>App.scripts.push("/js/vendors.192bdc9cf4911b936e21.js");</script>
-<script>App.scripts.push("/js/oc/packages/main.b747a3b255499e7560e3.js");</script>
+<script>App.scripts.push("/js/oc/packages/main.dec63010c73f92310b08.js");</script>
 
 <script>App.scriptToLoad = App.script.COURSE_VIEW</script>
- 
+
 <script>
     (function () {
         function loadScripts(cb) {
@@ -1009,5 +1007,5 @@ Développeuse freelance, entrepreneure et formatrice. Diplômée du Master Grand
         }
     }());
 </script>
-<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"90dc06697a","applicationID":"20302107","transactionName":"NANaYkJXC0ICAhdYVw1Je0NDQgpcTA4AblsPB1FEVWkGXhYTEFRnEwdKQm9GBEMXPhVYXRQ=","queueTime":0,"applicationTime":271,"atts":"GERZFApNGEw=","errorBeacon":"bam.nr-data.net","agent":""}</script></body>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"90dc06697a","applicationID":"20302107","transactionName":"NANaYkJXC0ICAhdYVw1Je0NDQgpcTA4AblsPB1FEVWkGXhYTEFRnEwdKQm9GBEMXPhVYXRQ=","queueTime":0,"applicationTime":164,"atts":"GERZFApNGEw=","errorBeacon":"bam.nr-data.net","agent":""}</script></body>
 </html>
