@@ -3,6 +3,7 @@
 
 import os
 import argparse
+import getpass
 
 import requests
 
@@ -148,20 +149,26 @@ def argParser():
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
     
     parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (generally Vimeo offers "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
+    parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
     return parser
 
 
 def extract_course_page_main_text_as_markdown(html_page):
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    return html_to_markdown(str(page_content_tag))
+    title = page_content_tag.h2.get_text().strip()  # chapter title
+    content = page_content_tag.find('div', {'class': 'static'}).section.find('div', {'itemprop': "articleBody"})
+    markdown_text = html_to_markdown(str(content)).strip()
+    # print("markdown_text: ", markdown_text)
+    markdown_text = """## %s\n\n%s\n""" % (title, markdown_text)
+    return markdown_text, title
 
 def extract_course_page_images(html_page):
     hostname = "https://openclassrooms.com"
     
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    # infos = {'main': html_to_markdown(str(page_content_tag))}
+    # infos = {'markdown_text': html_to_markdown(str(page_content_tag))}
     
     images_to_fetch = []
     
@@ -184,7 +191,11 @@ def extract_course_page_images(html_page):
     
     return images_to_fetch
 
-def fetch_course_page_video_informations(html_page):
+def fetch_course_page_video_informations(html_page, video_pages_html=None):
+    """
+    :param list<str> video_pages_html: instead of fetching, the parser will use an html content out of it
+                each time it encounters a video it needs to fetch
+    """
     hostname = "https://openclassrooms.com"
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
@@ -202,14 +213,17 @@ def fetch_course_page_video_informations(html_page):
         video_frame_tags = [[j, None, vimeo_video_url_to_player_url(video_tag['src'])] for j, video_tag in enumerate(page_content_tag('video')) 
                             if 'src' in video_tag.attrs and video_tag.get('src').find('//vimeo.com/') >= 0]
     
-    # iframes_elements = driver.find_elements_by_tag_name("iframe")
+    assert video_pages_html is None or len(video_pages_html) >= len(video_frame_tags)    
     for k, tag_details in enumerate(video_frame_tags):
         # j, iframe_tag, video_src = tag_details
         _, _, video_src = tag_details
         
-        # iframes that have 
-        resp = requests.get(video_src)
-        iframe_source = resp.content.decode(encoding=resp.encoding)
+        # video/iframe tags of the course's videos
+        if video_pages_html:
+            iframe_source = video_pages_html[k]
+        else:
+            resp = requests.get(video_src)
+            iframe_source = resp.content.decode(encoding=resp.encoding)
         vimeo_page_soup = soupify_html(iframe_source)
         script_tags_content = [tag.get_text() for tag in vimeo_page_soup.find_all('script') 
                                if tag.get_text().find('''"mime":"video/mp4"''') >= 0]
@@ -226,12 +240,13 @@ def fetch_course_page_video_informations(html_page):
     return videos_to_fetch
 
 
-def extract_course_page_main_content(html_page):
-    content = extract_course_page_main_text_as_markdown(html_page)
+def extract_course_page_main_content(html_page, video_pages_html=None):
+    content, chapter_title = extract_course_page_main_text_as_markdown(html_page)
     images_to_fetch = extract_course_page_images(html_page)
-    videos_to_fetch = fetch_course_page_video_informations(html_page)
+    videos_to_fetch = fetch_course_page_video_informations(html_page, video_pages_html=video_pages_html)
     page_infos = {
-        'main': content,
+        'title': chapter_title,
+        'markdown_text': content,
         'to_fetch': {
             'images': images_to_fetch,
             'videos': videos_to_fetch
@@ -240,60 +255,11 @@ def extract_course_page_main_content(html_page):
     return page_infos
 
 
-def extract_course_page_content(driver):
-    driver.switch_to.default_content()
-    hostname = "https://openclassrooms.com"
-    
-    soup = soupify_html(driver.page_source)
-    page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    infos = {'main': html_to_markdown(str(page_content_tag))}
-    
-    images_to_fetch = []
-    videos_to_fetch = []
-    
-    image_tags = page_content_tag('img')
-    for i, tag in enumerate(image_tags):
-        image_desc = tag.get('alt')
-        image_src = tag['src']
-        # get full URL (absolute) for `<img src="/path/to/img.jpg">`
-        image_src = (hostname + "/" + image_src) if image_src.find('/') == 0 else image_src
-        image_file_basename = image_src.split('/')[-1].split('?')[0].split('#')[0]
-        image_info = (i + 1, image_src, image_desc, image_file_basename)    
-        
-        images_to_fetch.append(image_info)
-    
-    video_frame_tags = [[j, iframe, ("https:" + iframe['src'])] for j, iframe in enumerate(page_content_tag('iframe')) 
-                        if 'src' in iframe.attrs and iframe.get('src').find('player.vimeo') >= 0]
-    iframes_elements = driver.find_elements_by_tag_name("iframe")
-    for k, tag_details in enumerate(video_frame_tags):
-        j, tag, video_src = tag_details
-        frame_index = j
-        frame = iframes_elements[frame_index]
-        # iframes that have 
-        driver.switch_to.frame(frame)
-        iframe_source = driver.page_source
-        driver.switch_to.default_content()
-        
-        vimeo_page_soup = soupify_html(iframe_source)
-        script_tags_content = [tag.get_text() for tag in vimeo_page_soup.find_all('script') 
-                               if tag.get_text().find('''"mime":"video/mp4"''') >= 0]
-        
-        assert len(script_tags_content) == 1
-        content = script_tags_content[0]
-        video_formats_infos_summary, video_formats_infos = vimeo_video_infos(content)
-        
-        video_title = vimeo_page_soup.title.get_text().strip()
-        
-        video_info = (k + 1, video_title, video_formats_infos_summary, video_formats_infos)
-        videos_to_fetch.append(video_info)
-    
-    infos.update({'to_fetch': {'images': images_to_fetch, 'videos': videos_to_fetch}})
-    
-    return infos
-
-
 def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
-    base_chapter_path = '%i-%i' % (part_nbr, chapter_nbr)
+    ### fetching the chapter's page
+    base_chapter_path = os.path.join(prefix, '%i-%i' % (part_nbr, chapter_nbr))
+    
+    text_infos = (0, os.path.join(base_chapter_path, chapter_infos['title'] + ".md"), chapter_infos['markdown_text'])
     
     ### fetching the images
     base_media_path = 'medias'
@@ -307,18 +273,24 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     
     
     ### fetching the videos
+    get_at_index_or_default = lambda x, k, default_value: x[k] if x is not None and k < len(x) else default_value
     first_element = lambda arr: arr[0] if len(arr) > 0 else None
-    video_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
+    video_infos_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
+    video_for_quality = lambda video_infos_tuple, quality: get_at_index_or_default(first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)]), 2, None)
     videos = chapter_infos.get('to_fetch').get('videos')
-    video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
-                            video_for_quality(video_info, video_quality),
-                            video_info[1]
-                            )
-                            # video_info: (k+1, video_title, video_formats_infos_summary, video_formats_infos)
-                            #       video_formats_infos_summary: (video quality (ex. '540p'), width (int), height (int), video url)
-                            for video_info in videos]
     
-    return images_download_infos, video_download_infos
+    video_download_infos = []
+    for i, video_info in enumerate(videos):
+        # video_info: (k+1, video_title, video_formats_infos_summary, video_formats_infos, video_extension)
+        #       video_formats_infos_summary: (video quality (ex. '540p'), *tuple*(width (int), height (int))*/tuple*, video url, file extension)
+        extension = video_infos_for_quality(video_info, video_quality)[3]
+        
+        dest_path = os.path.join(base_chapter_path, base_media_path, (video_info[1] + "." + extension))
+        url = video_for_quality(video_info, video_quality)
+        title = video_info[1]
+        video_download_infos.append((dest_path, url, title))
+    
+    return text_infos, images_download_infos, video_download_infos
 
 
 def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
@@ -328,38 +300,19 @@ def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, vi
     :param video_quality:
                 Also accepts 'low', 'medium', 'hd', 'full'
     """
-    ### fetching the chapter's page
-    base_chapter_path = '%i-%i' % (part_nbr, chapter_nbr)
+    text_infos, images_download_infos, video_download_infos = paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix)
     
     ### fetching the images
-    base_media_path = 'medias'
+    with open(text_infos[1], 'w') as fh:
+        fh.write(text_infos[2])
     
-    images = chapter_infos.get('to_fetch').get('images')
-    # download_infos: [(path to save to,  url, image description), ...]
-    images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
-                       image_info[1],  # url
-                       image_info[2])  # image description
-                      for image_info in images]
-    
-    
-    ### fetching the videos
-    first_element = lambda arr: arr[0] if len(arr) > 0 else None
-    video_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
-    videos = chapter_infos.get('to_fetch').get('videos')
-    video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
-                            video_for_quality(video_info, video_quality),
-                            video_info[1]
-                            )
-                            # video_info: (k+1, video_title, video_formats_infos_summary, video_formats_infos)
-                            #       video_formats_infos_summary: (video quality (ex. '540p'), width (int), height (int), video url)
-                            for video_info in videos]
     
     download_infos = images_download_infos + video_download_infos
     for i, media_infos in enumerate(download_infos):
-        path, url, description = media_infos
+        path, url, description, *_ = media_infos
         if url is not None:
             print("%i/%i) Fetching '%s' to %s ..." % (i+1, len(download_infos), description, path))
-            utils.download_with_progress_indicator(url, path)
+            utils.download_with_progress_indicator(url, path, True)
         else:
             print("Did not find quality '%s' for the video %s" % (description))
     
@@ -396,7 +349,10 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
     pass
 
 
-def fetch_course(browser, course_url, video_quality):
+def fetch_course(browser, course_url, video_quality, directory=None):
+    """
+    :param str directory: where to download the course
+    """
     course_id, course_page, lang = helper_parse_course_page_url(course_url)
     course_home_page_url = helper_course_page_url(course_id, None, lang)
     
@@ -409,25 +365,20 @@ def fetch_course(browser, course_url, video_quality):
     home_page_chapter = (0, 1, course_home_page_url, course_title, course_home_page_url)
     chapters = [home_page_chapter] + chapters
     
+    prefix = os.path.join(directory, course_title)
+    os.makedirs(prefix, exist_ok=True)
+    
     ### cycle through the URLs and pages
     for chapter in chapters:
-        ### save page to disk
         part_nbr, chapter_nbr, chap_path, chap_title, chap_url = chapter
     
         ### go to a page
         reach_page(browser, chap_url)
         
-        # chapter_infos = extract_course_page_content(browser.driver)
         chapter_infos = extract_course_page_main_content(browser.driver.page_source)
         
-        prefix = os.path.abspath("destination_test")
-        os.makedirs(prefix, exist_ok=True)
-        print("Prefix: %s" % (prefix))
-        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_qualit, prefixy)
-        
-        ### get page source and content ()
-        ## function
-        ## reads HTML
+        ### save page to disk
+        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix)
         
     
     pass
@@ -454,7 +405,8 @@ def main_selenium():
         print("Fetching course for %s" % url)
         
         # ...
-        fetch_course(nav, url, args.videoQuality)
+        directory = os.path.abspath(args.destination)
+        fetch_course(nav, url, args.videoQuality, directory)
 
 
 if __name__ == '__main__':
