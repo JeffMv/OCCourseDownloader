@@ -54,9 +54,11 @@ def vimeo_video_infos(script_tag_content):
     page_infos_json = json.loads(js_txt)
     video_formats = page_infos_json['request']['files']['progressive']
     
-    summary = [(vid['quality'], (vid['width'], vid['height']), vid['url']) for vid in video_formats]
+    get_file_extension = lambda mime_text: mime_text.split('/')[-1]
+    summary = [(vid['quality'], (vid['width'], vid['height']), vid['url'], get_file_extension(vid['mime'])) for vid in video_formats]
     
     return summary, video_formats
+
 
 def vimeo_video_infos_from_video_page(html_content):
     """

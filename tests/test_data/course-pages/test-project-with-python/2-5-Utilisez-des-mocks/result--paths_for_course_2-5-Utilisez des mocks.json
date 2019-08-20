@@ -1,0 +1,22 @@
+[
+  [
+    "tests/result_data/2-5-Utilisez-des-mocks/2-5/medias/14939097968461_Capture%20d%E2%80%99e%CC%81cran%202017-05-04%20a%CC%80%2016.56.17.png",
+    "https://user.oc-static.com/upload/2017/05/04/14939097968461_Capture%20d%E2%80%99e%CC%81cran%202017-05-04%20a%CC%80%2016.56.17.png",
+    ""
+  ],
+  [
+    "tests/result_data/2-5-Utilisez-des-mocks/2-5/medias/certif.jpg",
+    "https://static.oc-static.com/prod/images/courses/certif.jpg",
+    "Exemple de certificat de r\u00e9ussite"
+  ],
+  [
+    "tests/result_data/2-5-Utilisez-des-mocks/2-5/medias/certif.jpg",
+    "https://static.oc-static.com/prod/images/courses/certif.jpg",
+    "Exemple de certificat de r\u00e9ussite"
+  ],
+  [
+    "tests/result_data/2-5-Utilisez-des-mocks/2-5/medias/FR_4425126_testez-un-projet-python_P2C5 de OpenClassrooms on Vimeo.mp4",
+    "https://gcs-vimeo.akamaized.net/exp=1566234414~acl=%2A%2F753898728.mp4%2A~hmac=0554051e7fa3ebb6ceb9373d04bf40c5d62e8f909c6469e37956e766a3064294/vimeo-prod-skyfire-std-us/01/3526/8/217633069/753898728.mp4",
+    "FR_4425126_testez-un-projet-python_P2C5 de OpenClassrooms on Vimeo"
+  ]
+]
