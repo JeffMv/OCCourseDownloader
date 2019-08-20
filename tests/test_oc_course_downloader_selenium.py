@@ -46,7 +46,7 @@ def test_helper_course_page_url():
 
 
 def test_extract_course_chapters_as_json():
-    base_test_data_path = "./tests/test_data/course-pages/test-project-with-python/"
+    base_test_data_path = os.path.join("tests", "test_data", "course-pages", "test-project-with-python")
     fname_raw = os.path.join("2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html")
     fname_json = os.path.join("2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html.chapters.json")
     
@@ -60,21 +60,74 @@ def test_extract_course_chapters_as_json():
     assert expected_json_str == chapters_json_str
 
 
-def test_extract_course_page_content():
-    _ = script.extract_course_page_content
-    assert False
-
+def test_extracts_of_course_page():
+    base_test_data_path = os.path.join("tests", "test_data", "course-pages", "test-project-with-python")
+    chapter_test_directory = os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks")
+    filepath_html = os.path.join(chapter_test_directory, "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html")
+    filepath_vimeo_page_html = os.path.join(chapter_test_directory, "2-5-Utilisez des mocks--vimeo-page.html")
+    filepath_videos = os.path.join(chapter_test_directory, "result--fetch_course_page_video_informations_2-5-Utilisez des mocks.json")
+    
+    html_page = _content_of_file(filepath_html, 'r')
+    
+    expected_images = [
+      (1, 'https://user.oc-static.com/upload/2017/05/04/14939097968461_Capture%20d%E2%80%99e%CC%81cran%202017-05-04%20a%CC%80%2016.56.17.png', '', '14939097968461_Capture%20d%E2%80%99e%CC%81cran%202017-05-04%20a%CC%80%2016.56.17.png'),
+      (2, 'https://static.oc-static.com/prod/images/courses/certif.jpg', 'Exemple de certificat de réussite', 'certif.jpg'),
+      (3, 'https://static.oc-static.com/prod/images/courses/certif.jpg', 'Exemple de certificat de réussite', 'certif.jpg')
+    ]
+    expected_videos = json.loads(_content_of_file(filepath_videos, 'r'))
+    vimeo_page_mock_responses = [_content_of_file(filepath_vimeo_page_html, 'r')]
+    
+    content, chapter_title = script.extract_course_page_main_text_as_markdown(html_page)
+    images_to_fetch = script.extract_course_page_images(html_page)
+    videos_to_fetch = script.fetch_course_page_video_informations(html_page, vimeo_page_mock_responses)
+    
+    assert chapter_title.lower() == "utilisez des mocks"
+    assert json.dumps(expected_images) == json.dumps(images_to_fetch)
+    assert json.dumps(expected_videos) == json.dumps(videos_to_fetch)
+    
+    result = script.extract_course_page_main_content(html_page, video_pages_html=vimeo_page_mock_responses)
+    assert json.dumps(result['to_fetch']) == json.dumps({'images': expected_images, 'videos': expected_videos})
+    
 
 def test_paths_for_course():
-    assert False
+    base_test_data_path = os.path.join("tests", "test_data", "course-pages", "test-project-with-python")
+    chapter_test_directory = os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks")
+    result_directory = os.path.join("tests", "result_data", "2-5-Utilisez-des-mocks")
+    
+    filepath = os.path.join(chapter_test_directory, "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html")
+    filepath_vimeo_page_html = os.path.join(chapter_test_directory, "2-5-Utilisez des mocks--vimeo-page.html")
+    
+    html_page = _content_of_file(filepath, 'r')
+    vimeo_page_mock_responses = [_content_of_file(filepath_vimeo_page_html, 'r')]
+    chapter_infos = script.extract_course_page_main_content(html_page, video_pages_html=vimeo_page_mock_responses)
+    
+    video_quality = '360p'
+    prefix = result_directory
+    
+    chapter_2_5 = chapter_infos
+    # print("chapter_2_5:", chapter_2_5)
+    result_page_text, images_to_fetch, videos_to_fetch = script.paths_for_course(chapter_2_5, 2, 5, video_quality, prefix)
+    download_infos = images_to_fetch + videos_to_fetch
+    
+    print("download_infos:\n%s" % json.dumps(download_infos, indent=2))
+    # print("download_infos[...]:", json.dumps(download_infos[0], indent=2))
+    
+    expectation_filepath = os.path.join(chapter_test_directory, 'result--paths_for_course_2-5-Utilisez des mocks.json')
+    expected_result = json.loads(_content_of_file(expectation_filepath))
+    
+    assert json.dumps(expected_result) == json.dumps(download_infos)
 
 
-def test_fetch_and_save_course_chapter_infos():
-    assert False
+# TODO : this test
+# def test_fetch_and_save_course_chapter_infos():
+#     base_test_data_path = os.path.join("tests", "test_data", "course-pages", "test-project-with-python")
+#     filepath = os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html.chapters.json")
+#     course_chapters = _content_of_file(filepath, 'r')
+#     assert False
 
 
 def test_video_players__vimeo_video_infos_from_video_page():
-    base_test_data_path = "./tests/test_data/course-pages/test-project-with-python/"
+    base_test_data_path = os.path.join("tests", "test_data", "course-pages", "test-project-with-python")
     
     ### We will test the same video description with the two different functions
     expected_result = json.loads(_content_of_file(os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks--video-script.extracted-infos.js"), 'r'))
