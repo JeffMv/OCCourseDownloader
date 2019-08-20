@@ -151,6 +151,95 @@ def argParser():
     return parser
 
 
+def extract_course_page_main_text_as_markdown(html_page):
+    soup = soupify_html(html_page)
+    page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    return html_to_markdown(str(page_content_tag))
+
+def extract_course_page_images(html_page):
+    hostname = "https://openclassrooms.com"
+    
+    soup = soupify_html(html_page)
+    page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    # infos = {'main': html_to_markdown(str(page_content_tag))}
+    
+    images_to_fetch = []
+    
+    image_tags = page_content_tag('img')
+    for i, tag in enumerate(image_tags):
+        image_desc = tag.get('alt')
+        image_src = tag['src']
+        if image_src.find('/') == 0:
+            if image_src.find('//') == 0:
+                # get full URL (absolute) for `<img src="//static.oc-static.com/prod/images/courses/certif.jpg">`
+                image_src = ("https:" + image_src)
+            else:
+                # get full URL (absolute) for `<img src="/path/to/img.jpg">`
+                image_src = (hostname + "/" + image_src) if image_src.find('/') == 0 else image_src
+        
+        image_file_basename = image_src.split('/')[-1].split('?')[0].split('#')[0]
+        image_info = (i + 1, image_src, image_desc, image_file_basename)    
+        
+        images_to_fetch.append(image_info)
+    
+    return images_to_fetch
+
+def fetch_course_page_video_informations(html_page):
+    hostname = "https://openclassrooms.com"
+    soup = soupify_html(html_page)
+    page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    
+    videos_to_fetch = []
+    video_frame_tags = [[j, iframe_tag, ("https:" + iframe_tag['src'])] for j, iframe_tag in enumerate(page_content_tag('iframe')) 
+                        if 'src' in iframe_tag.attrs and iframe_tag.get('src').find('player.vimeo') >= 0]
+    
+    if len(video_frame_tags) == 0:
+        # in case we fetch without javascript, Vimeo videos are in the following form
+        # <video id="r-4452461" data-claire-element-id="7904382" src="https://vimeo.com/217633069"><a href="https://vimeo.com/217633069">https://vimeo.com/217633069</a></video>
+        # "https://vimeo.com/217633069" -> "https://player.vimeo.com/video/217633069?color=7451eb"
+        []
+        vimeo_video_url_to_player_url = lambda url: "https://player.vimeo.com/video/%s?color=7451eb" % (url.split('?')[0].split('/')[-1])
+        video_frame_tags = [[j, None, vimeo_video_url_to_player_url(video_tag['src'])] for j, video_tag in enumerate(page_content_tag('video')) 
+                            if 'src' in video_tag.attrs and video_tag.get('src').find('//vimeo.com/') >= 0]
+    
+    # iframes_elements = driver.find_elements_by_tag_name("iframe")
+    for k, tag_details in enumerate(video_frame_tags):
+        # j, iframe_tag, video_src = tag_details
+        _, _, video_src = tag_details
+        
+        # iframes that have 
+        resp = requests.get(video_src)
+        iframe_source = resp.content.decode(encoding=resp.encoding)
+        vimeo_page_soup = soupify_html(iframe_source)
+        script_tags_content = [tag.get_text() for tag in vimeo_page_soup.find_all('script') 
+                               if tag.get_text().find('''"mime":"video/mp4"''') >= 0]
+        
+        assert len(script_tags_content) == 1
+        content = script_tags_content[0]
+        video_formats_infos_summary, video_formats_infos = vimeo_video_infos(content)
+        
+        video_title = vimeo_page_soup.title.get_text().strip()
+        
+        video_info = (k + 1, video_title, video_formats_infos_summary, video_formats_infos)
+        videos_to_fetch.append(video_info)
+    
+    return videos_to_fetch
+
+
+def extract_course_page_main_content(html_page):
+    content = extract_course_page_main_text_as_markdown(html_page)
+    images_to_fetch = extract_course_page_images(html_page)
+    videos_to_fetch = fetch_course_page_video_informations(html_page)
+    page_infos = {
+        'main': content,
+        'to_fetch': {
+            'images': images_to_fetch,
+            'videos': videos_to_fetch
+        }
+    }
+    return page_infos
+
+
 def extract_course_page_content(driver):
     driver.switch_to.default_content()
     hostname = "https://openclassrooms.com"
@@ -173,11 +262,12 @@ def extract_course_page_content(driver):
         
         images_to_fetch.append(image_info)
     
-    video_frame_tags = [[j, iframe, iframe['src']] for j, iframe in enumerate(page_content_tag('iframe')) 
+    video_frame_tags = [[j, iframe, ("https:" + iframe['src'])] for j, iframe in enumerate(page_content_tag('iframe')) 
                         if 'src' in iframe.attrs and iframe.get('src').find('player.vimeo') >= 0]
     iframes_elements = driver.find_elements_by_tag_name("iframe")
-    for k, tag in enumerate(video_frame_tags):
-        frame_index = tag[0]
+    for k, tag_details in enumerate(video_frame_tags):
+        j, tag, video_src = tag_details
+        frame_index = j
         frame = iframes_elements[frame_index]
         # iframes that have 
         driver.switch_to.frame(frame)
@@ -218,7 +308,7 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     
     ### fetching the videos
     first_element = lambda arr: arr[0] if len(arr) > 0 else None
-    video_for_quality = lambda arr, quality: first_element([video_infos for video_infos in arr if str(video_infos[2][0]) == str(quality)])
+    video_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
     videos = chapter_infos.get('to_fetch').get('videos')
     video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
                             video_for_quality(video_info, video_quality),
@@ -233,6 +323,8 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
 
 def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
     """Fetches and writes following the architecture pattern.
+    :param infos:
+                ...
     :param video_quality:
                 Also accepts 'low', 'medium', 'hd', 'full'
     """
@@ -242,7 +334,7 @@ def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, vi
     ### fetching the images
     base_media_path = 'medias'
     
-    images = infos.get('to_fetch').get('images')
+    images = chapter_infos.get('to_fetch').get('images')
     # download_infos: [(path to save to,  url, image description), ...]
     images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
                        image_info[1],  # url
@@ -252,8 +344,8 @@ def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, vi
     
     ### fetching the videos
     first_element = lambda arr: arr[0] if len(arr) > 0 else None
-    video_for_quality = lambda arr, quality: first_element([video_infos for video_infos in arr if str(video_infos[2][0]) == str(quality)])
-    videos = infos.get('to_fetch').get('videos')
+    video_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
+    videos = chapter_infos.get('to_fetch').get('videos')
     video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
                             video_for_quality(video_info, video_quality),
                             video_info[1]
@@ -325,7 +417,8 @@ def fetch_course(browser, course_url, video_quality):
         ### go to a page
         reach_page(browser, chap_url)
         
-        chapter_infos = extract_course_page_content(browser.driver)
+        # chapter_infos = extract_course_page_content(browser.driver)
+        chapter_infos = extract_course_page_main_content(browser.driver.page_source)
         
         prefix = os.path.abspath("destination_test")
         os.makedirs(prefix, exist_ok=True)

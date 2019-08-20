@@ -35,6 +35,9 @@ class UIProgressTracker(TrackerBase):
 # download('https://github.com/takluyver/requests_download/archive/master.zip',
 #          'requests_download.zip', trackers=[progress])
 
-def download_with_progress_indicator(url, path):
+def download_with_progress_indicator(url, path, create_dirs=True):
+    if create_dirs:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+    
     progress = UIProgressTracker(progressbar.ProgressBar())
     download(url, path, trackers=[progress])
