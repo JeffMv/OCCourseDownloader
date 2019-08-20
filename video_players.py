@@ -24,7 +24,7 @@ def vimeo_video_infos(script_tag_content):
     :rtyoe: dict
     :returns: summary, video_formats
                 summary: tuple summary of video infos returned by the API
-                    (video quality (ex. '540p'), width (int), height (int), video url, video fps)
+                    (video quality (ex. '540p'), width (int), height (int), video url)
                 video_formats: exactly what vimeo returns (array of video infos):
                     [
                         {
@@ -54,7 +54,7 @@ def vimeo_video_infos(script_tag_content):
     page_infos_json = json.loads(js_txt)
     video_formats = page_infos_json['request']['files']['progressive']
     
-    summary = [(vid['quality'], (vid['width'], vid['height']), vid['url'], vid['fps']) for vid in video_formats]
+    summary = [(vid['quality'], (vid['width'], vid['height']), vid['url']) for vid in video_formats]
     
     return summary, video_formats
 

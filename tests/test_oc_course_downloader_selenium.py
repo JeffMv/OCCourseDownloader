@@ -47,8 +47,8 @@ def test_helper_course_page_url():
 
 def test_extract_course_chapters_as_json():
     base_test_data_path = "./tests/test_data/course-pages/test-project-with-python/"
-    fname_raw = "Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html"
-    fname_json = "Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html.chapters.json"
+    fname_raw = os.path.join("2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html")
+    fname_json = os.path.join("2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html.chapters.json")
     
     with open(os.path.join(base_test_data_path, fname_json)) as fh:
         expected_json_str = json.dumps(json.load(fh))
@@ -60,21 +60,34 @@ def test_extract_course_chapters_as_json():
     assert expected_json_str == chapters_json_str
 
 
+def test_extract_course_page_content():
+    _ = script.extract_course_page_content
+    assert False
+
+
+def test_paths_for_course():
+    assert False
+
+
+def test_fetch_and_save_course_chapter_infos():
+    assert False
+
+
 def test_video_players__vimeo_video_infos_from_video_page():
     base_test_data_path = "./tests/test_data/course-pages/test-project-with-python/"
     
     ### We will test the same video description with the two different functions
-    expected_result = json.loads(_content_of_file(os.path.join(base_test_data_path, "Utilisez des mocks--video-script.extracted-infos.js"), 'r'))
+    expected_result = json.loads(_content_of_file(os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks--video-script.extracted-infos.js"), 'r'))
     expected_result_as_json = json.dumps(expected_result)
     
-    filepath = os.path.join(base_test_data_path, "Utilisez des mocks--video-script.js")
+    filepath = os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks--video-script.js")
     script_tag_content = _content_of_file(filepath, 'r')
     result = video_players_module.vimeo_video_infos(script_tag_content)
     # print(json.dumps(result, indent=2))
     assert json.dumps(result[0]) == json.dumps(expected_result[0])
     assert json.dumps(result[1]) == json.dumps(expected_result[1])
     
-    filepath = os.path.join(base_test_data_path, "Utilisez des mocks--vimeo-page.html")
+    filepath = os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks--vimeo-page.html")
     video_page_source = _content_of_file(filepath, 'r')
     assert json.dumps(video_players_module.vimeo_video_infos_from_video_page(video_page_source)) == expected_result_as_json
     

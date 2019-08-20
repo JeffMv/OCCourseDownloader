@@ -98,7 +98,11 @@ def extract_course_chapters(html_page):
     curr_part_nbr = 1
     curr_chap = 0
     
-    chapters = []
+    course_page_url_path = course_description_page_soup.find('div', {'class': 'timeline__inner'}).find('a', {"class": 'timeline__roundIcon'}).get('href')
+    course_title = course_description_page_soup.find('h1', 'courseHeader__title').get_text().strip()
+    intro_chapter = (0, 1, course_page_url_path, course_title, (hostname + course_page_url_path))
+    
+    chapters = [intro_chapter]
     for chapter_timeline_soup in timeline_elmts:
         node_classes = chapter_timeline_soup.attrs.get('class', [])
         if 'timeline__splitChapter' in node_classes:
@@ -198,8 +202,36 @@ def extract_course_page_content(driver):
     return infos
 
 
-def fetch_and_save_course_chapter_infos(infos, prefix, part_nbr, chapter_nbr, video_quality):
-# def fetch_and_save_course_chapter_infos(infos, prefix, video_quality):
+def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
+    base_chapter_path = '%i-%i' % (part_nbr, chapter_nbr)
+    
+    ### fetching the images
+    base_media_path = 'medias'
+    # base_media_path = '.'
+    images = chapter_infos.get('to_fetch').get('images')
+    # download_infos: [(path to save to,  url, image description), ...]
+    images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
+                       image_info[1],  # url
+                       image_info[2])  # image description
+                      for image_info in images]
+    
+    
+    ### fetching the videos
+    first_element = lambda arr: arr[0] if len(arr) > 0 else None
+    video_for_quality = lambda arr, quality: first_element([video_infos for video_infos in arr if str(video_infos[2][0]) == str(quality)])
+    videos = chapter_infos.get('to_fetch').get('videos')
+    video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
+                            video_for_quality(video_info, video_quality),
+                            video_info[1]
+                            )
+                            # video_info: (k+1, video_title, video_formats_infos_summary, video_formats_infos)
+                            #       video_formats_infos_summary: (video quality (ex. '540p'), width (int), height (int), video url)
+                            for video_info in videos]
+    
+    return images_download_infos, video_download_infos
+
+
+def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
     """Fetches and writes following the architecture pattern.
     :param video_quality:
                 Also accepts 'low', 'medium', 'hd', 'full'
@@ -209,7 +241,7 @@ def fetch_and_save_course_chapter_infos(infos, prefix, part_nbr, chapter_nbr, vi
     
     ### fetching the images
     base_media_path = 'medias'
-    # base_media_path = '.'
+    
     images = infos.get('to_fetch').get('images')
     # download_infos: [(path to save to,  url, image description), ...]
     images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
@@ -220,12 +252,14 @@ def fetch_and_save_course_chapter_infos(infos, prefix, part_nbr, chapter_nbr, vi
     
     ### fetching the videos
     first_element = lambda arr: arr[0] if len(arr) > 0 else None
-    video_for_quality = lambda arr, quality: first_element([infos for infos in arr if str(infos[2][0]) == str(quality)])
+    video_for_quality = lambda arr, quality: first_element([video_infos for video_infos in arr if str(video_infos[2][0]) == str(quality)])
     videos = infos.get('to_fetch').get('videos')
     video_download_infos = [(os.path.join(base_chapter_path, base_media_path, video_info[1]),
                             video_for_quality(video_info, video_quality),
                             video_info[1]
                             )
+                            # video_info: (k+1, video_title, video_formats_infos_summary, video_formats_infos)
+                            #       video_formats_infos_summary: (video quality (ex. '540p'), width (int), height (int), video url)
                             for video_info in videos]
     
     download_infos = images_download_infos + video_download_infos
@@ -291,7 +325,12 @@ def fetch_course(browser, course_url, video_quality):
         ### go to a page
         reach_page(browser, chap_url)
         
-        infos = extract_course_page_content(browser.driver)
+        chapter_infos = extract_course_page_content(browser.driver)
+        
+        prefix = os.path.abspath("destination_test")
+        os.makedirs(prefix, exist_ok=True)
+        print("Prefix: %s" % (prefix))
+        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_qualit, prefixy)
         
         ### get page source and content ()
         ## function
