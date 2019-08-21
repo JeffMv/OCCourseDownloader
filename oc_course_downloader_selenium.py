@@ -31,10 +31,10 @@ def reach_page(browser, url, time_to_wait='default'):
     :returns: source code of the target page.
     """
     time_to_wait = 5 if time_to_wait == 'default' else time_to_wait
+    print("reaching page @ '%s'" % (url))
     browser.driver.get(url)
     # wait until finished loading
     # print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
-    print("reaching page @ '%s'" % (url))
     browser.waitTime(time_to_wait)
     return browser.driver.page_source
 
@@ -150,25 +150,64 @@ def argParser():
     
     parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (generally Vimeo offers "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
+    parser.add_argument('--overwrite', '-o', action="store_true", help="""Overwrite images and videos (will fetch again even if there is already an existing file)""")
+    parser.add_argument('--ignoreChapters', '-x', nargs="*", help="""Ignored chapters (in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3""")
     return parser
+
+
+###############################################################################
+
+
+def extract_course_quiz_page_as_markdown(html_page):
+    soup = soupify_html(html_page)
+    page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    # page_content_tag = soup.find('div', {'class': "contentWithSidebar"})
+    title = page_content_tag.h1.get_text().strip()  # chapter title
+    markdown_text = html_to_markdown(str(page_content_tag)).strip()
+    return markdown_text, title
+
+
+def extract_course_activity_page(browser):
+    """
+    :param browser: navigator helper
+    """
+    html_page = browser.driver.page_source if getattr(browser, 'driver', None) else browser
+    browser = browser if getattr(browser, 'driver', None) else None
+    if browser:
+        ## TODO
+        browser.click_element('.p2p__stepBoxAction > button')
+        browser.waitTime(5)
+        html_page = browser.driver.page_source
+    
+    if html_page:
+        soup = soupify_html(html_page)
+        page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+        title = page_content_tag.h2.get_text().strip()  # chapter title
+        markdown_text = html_to_markdown(str(page_content_tag)).strip()
+        return markdown_text, title, html_page
 
 
 def extract_course_page_main_text_as_markdown(html_page):
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    title = page_content_tag.h2.get_text().strip()  # chapter title
-    content = page_content_tag.find('div', {'class': 'static'}).section.find('div', {'itemprop': "articleBody"})
-    markdown_text = html_to_markdown(str(content)).strip()
-    # print("markdown_text: ", markdown_text)
-    markdown_text = """## %s\n\n%s\n""" % (title, markdown_text)
-    return markdown_text, title
+    title_tag = page_content_tag.h2
+    if title_tag is None:
+        # it is probably a Quiz page
+        # title_tag = page_content_tag.h1.get_text.strip()
+        return extract_course_quiz_page_as_markdown(html_page)
+    else:
+        title = title_tag.get_text().strip()  # chapter title
+        content = page_content_tag.find('div', {'class': 'static'}).section.find('div', {'itemprop': "articleBody"})
+        markdown_text = html_to_markdown(str(content)).strip()
+        markdown_text = """## %s\n\n%s\n""" % (title, markdown_text)
+        return markdown_text, title
+
 
 def extract_course_page_images(html_page):
     hostname = "https://openclassrooms.com"
     
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    # infos = {'markdown_text': html_to_markdown(str(page_content_tag))}
     
     images_to_fetch = []
     
@@ -190,6 +229,7 @@ def extract_course_page_images(html_page):
         images_to_fetch.append(image_info)
     
     return images_to_fetch
+
 
 def fetch_course_page_video_informations(html_page, video_pages_html=None):
     """
@@ -250,7 +290,8 @@ def extract_course_page_main_content(html_page, video_pages_html=None):
         'to_fetch': {
             'images': images_to_fetch,
             'videos': videos_to_fetch
-        }
+        },
+        'html': html_page
     }
     return page_infos
 
@@ -260,11 +301,12 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     base_chapter_path = os.path.join(prefix, '%i-%i' % (part_nbr, chapter_nbr))
     
     text_infos = (0, os.path.join(base_chapter_path, chapter_infos['title'] + ".md"), chapter_infos['markdown_text'])
+    html_infos = (0, os.path.join(base_chapter_path, chapter_infos['title'] + ".html"), chapter_infos['html'])
     
     ### fetching the images
     base_media_path = 'medias'
     # base_media_path = '.'
-    images = chapter_infos.get('to_fetch').get('images')
+    images = chapter_infos.get('to_fetch').get('images') if chapter_infos.get('to_fetch') is not None and chapter_infos['to_fetch'].get('images') else []
     # download_infos: [(path to save to,  url, image description), ...]
     images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
                        image_info[1],  # url
@@ -277,7 +319,7 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     first_element = lambda arr: arr[0] if len(arr) > 0 else None
     video_infos_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
     video_for_quality = lambda video_infos_tuple, quality: get_at_index_or_default(first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)]), 2, None)
-    videos = chapter_infos.get('to_fetch').get('videos')
+    videos = chapter_infos['to_fetch']['videos'] if chapter_infos.get('to_fetch') is not None and chapter_infos['to_fetch'].get('videos') else []
     
     video_download_infos = []
     for i, video_info in enumerate(videos):
@@ -290,29 +332,43 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
         title = video_info[1]
         video_download_infos.append((dest_path, url, title))
     
-    return text_infos, images_download_infos, video_download_infos
+    return text_infos, html_infos, images_download_infos, video_download_infos
 
 
-def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
+def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite):
     """Fetches and writes following the architecture pattern.
     :param infos:
                 ...
     :param video_quality:
                 Also accepts 'low', 'medium', 'hd', 'full'
     """
-    text_infos, images_download_infos, video_download_infos = paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix)
+    text_infos, html_infos, images_download_infos, video_download_infos = paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix)
     
-    ### fetching the images
-    with open(text_infos[1], 'w') as fh:
-        fh.write(text_infos[2])
+    ### Saving the text and HTML
+    filepath = text_infos[1]
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    if not os.path.exists(filepath) or overwrite:
+        with open(filepath, 'w') as fh:
+            fh.write(text_infos[2])
     
+    filepath = html_infos[1]
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    if not os.path.exists(filepath) or overwrite:
+        with open(filepath, 'w') as fh:
+            fh.write(html_infos[2])
     
+    ### fetching the images and videos
     download_infos = images_download_infos + video_download_infos
     for i, media_infos in enumerate(download_infos):
-        path, url, description, *_ = media_infos
+        filepath, url, description, *_ = media_infos
         if url is not None:
-            print("%i/%i) Fetching '%s' to %s ..." % (i+1, len(download_infos), description, path))
-            utils.download_with_progress_indicator(url, path, True)
+            relative = os.path.relpath(filepath)
+            descriptive_filepath = filepath if relative.find('..') == 0 else relative
+            if not os.path.exists(filepath) or overwrite:
+                print("""%i/%i) Fetching "%s" to "%s" ...""" % (i+1, len(download_infos), description, descriptive_filepath))
+                utils.download_with_progress_indicator(url, filepath, True)
+            else:
+                print("%i/%i) Found already fetched content %s" % (i+1, len(download_infos), descriptive_filepath))
         else:
             print("Did not find quality '%s' for the video %s" % (description))
     
@@ -349,10 +405,12 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
     pass
 
 
-def fetch_course(browser, course_url, video_quality, directory=None):
+def fetch_course(browser, course_url, video_quality, overwrite=False, directory=None, ignored_chapters=None):
     """
     :param str directory: where to download the course
     """
+    ignored_chapters = [] if ignored_chapters is None else ignored_chapters
+    
     course_id, course_page, lang = helper_parse_course_page_url(course_url)
     course_home_page_url = helper_course_page_url(course_id, None, lang)
     
@@ -371,16 +429,33 @@ def fetch_course(browser, course_url, video_quality, directory=None):
     ### cycle through the URLs and pages
     for chapter in chapters:
         part_nbr, chapter_nbr, chap_path, chap_title, chap_url = chapter
-    
+        
+        if (part_nbr, chapter_nbr) in ignored_chapters:
+            print("Ignored chapter %i-%i" % (part_nbr, chapter_nbr))
+            continue
+        
         ### go to a page
         reach_page(browser, chap_url)
         
-        chapter_infos = extract_course_page_main_content(browser.driver.page_source)
+        is_quiz_chapter = chap_title.strip().lower().find('Quiz') == 0
+        is_exercise_chapter = chap_title.strip().lower().find('Activité') == 0
+        
+        if is_quiz_chapter or is_exercise_chapter:
+            if is_exercise_chapter:
+                markdown_text, title = extract_course_quiz_page_as_markdown(html_page)
+            else:
+                markdown_text, title, html_page = extract_course_activity_page(browser)
+            chapter_infos = {
+                'title': chap_title,
+                'markdown_text': markdown_text,
+                'html': html_page
+            }
+        else:
+            chapter_infos = extract_course_page_main_content(browser.driver.page_source)
         
         ### save page to disk
-        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix)
-        
-    
+        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite)
+        print()
     pass
 
 
@@ -405,8 +480,9 @@ def main_selenium():
         print("Fetching course for %s" % url)
         
         # ...
-        directory = os.path.abspath(args.destination)
-        fetch_course(nav, url, args.videoQuality, directory)
+        directory = os.path.abspath(os.path.expanduser(args.destination))
+        ignored_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.ignoreChapters]
+        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, ignored_chapters=ignored_chapters)
 
 
 if __name__ == '__main__':

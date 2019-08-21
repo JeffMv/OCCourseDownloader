@@ -32,7 +32,8 @@ def test_helper_parse_course_page_url():
     
     course_url = "https://openclassrooms.com/fr/courses/4011851-initiez-vous-au-machine-learning"
     assert (expected_course_id, expected_chapter_id, expected_lang) == script.helper_parse_course_page_url(course_url)
-    
+
+
 def test_helper_course_page_url():
     course_id = "4011851-initiez-vous-au-machine-learning"
     lang = "fr"
@@ -106,7 +107,7 @@ def test_paths_for_course():
     
     chapter_2_5 = chapter_infos
     # print("chapter_2_5:", chapter_2_5)
-    result_page_text, images_to_fetch, videos_to_fetch = script.paths_for_course(chapter_2_5, 2, 5, video_quality, prefix)
+    result_page_text, result_page_html, images_to_fetch, videos_to_fetch = script.paths_for_course(chapter_2_5, 2, 5, video_quality, prefix)
     download_infos = images_to_fetch + videos_to_fetch
     
     print("download_infos:\n%s" % json.dumps(download_infos, indent=2))
@@ -124,6 +125,10 @@ def test_paths_for_course():
 #     filepath = os.path.join(base_test_data_path, "2-5-Utilisez-des-mocks", "2-5-Utilisez des mocks - Testez votre projet avec Python - OpenClassrooms.html.chapters.json")
 #     course_chapters = _content_of_file(filepath, 'r')
 #     assert False
+
+def test_result_page_written_content():
+    # testing the html/markdown
+    assert False
 
 
 def test_video_players__vimeo_video_infos_from_video_page():
