@@ -137,7 +137,8 @@ def argParser():
     to see how to implement one-level subcommands.
     """
     parser = argparse.ArgumentParser(
-        description="""Data fetching"""
+        description="""OpenClassrooms.com course downloader.
+        """
         )
     
     parser.add_argument('--courseUrls', '-c', nargs="+", required=True, help="Course urls of the courses to fetch")

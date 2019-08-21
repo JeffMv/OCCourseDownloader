@@ -1,4 +1,5 @@
-# OC Course Downloader
+# OpenClassrooms Course Downloader
+###### 
 
 
 
@@ -22,10 +23,33 @@ On top of that, it allows you to bypass the maximum number of videos you can vie
 
 You will need to have the following dependencies installed:
 
-- `BeautifulSoup` and `lxml`
-- `Selenium` 
-- `tomd` for transforming HTML into Markdown.
+- `Selenium`  (installation instructions can be found [here](https://selenium-python.readthedocs.io/installation.html))
+
+
+
+**Python dependencies**
+
+You can install python dependencies with one command: `pip install requests bs4 lxml tomd`.
+
+Otherwise, you can do it one by one.
+
+- `requests` : install with `pip install requests`
+- `BeautifulSoup` and `lxml` : install with `pip install bs4 lxml`
+- `tomd` for transforming HTML to Markdown files. (`pip install tomd`)
   You can also use another Markdown converter by tampering with the `markdown.py` file.
+
+
+
+
+
+```bash
+git clone https://github.com/JeffMv/OCCourseDownloader.git
+cd OCCourseDownloader
+
+# using it
+python oc_course_downloader_selenium.py --help
+```
+
 
 
 
@@ -42,6 +66,11 @@ python ./oc_course_downloader_selenium.py --courseUrls course_url [course_url ..
 python oc_course_downloader_selenium.py --courseUrls "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" -d "/volumes/my-usb-key/Downloads" -u myusername
 # this will prompt you to enter your password without showing it in the console.
 
+```
+
+
+
+
 
 
 
@@ -49,7 +78,9 @@ python oc_course_downloader_selenium.py --courseUrls "https://openclassrooms.com
 
 After you have successfully downloaded a course, you might want to browse the course either as HTML or as Markdown.
 
-I'd personnally recommend [Typora](http://typora.io) as a Markdown editor/reader <3. At the time of writting, it is still *free* in beta version, so you might just hop on the occasion.
+**Markdown editors**
+
+-  [Typora](http://typora.io) : At the time of writting, it is still *free* in beta version, so you might just hop on the occasion.
 
 
 
