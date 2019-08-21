@@ -1,4 +1,5 @@
 # OpenClassrooms Course Downloader
+
 ###### 
 
 
@@ -29,7 +30,7 @@ You will need to have the following dependencies installed:
 
 **Python dependencies**
 
-You can install python dependencies with one command: `pip install requests bs4 lxml tomd`.
+You can install python dependencies with one command: `pip install requests bs4 lxml tomd requests_download progressbar`.
 
 Otherwise, you can do it one by one.
 
@@ -40,13 +41,21 @@ Otherwise, you can do it one by one.
 
 
 
+**Optional Python dependencies**
 
+- `requests_download` and `progressbar` in order to have a neat progress bar when downloading the course's video files. If not, a message will simply be written in the command line when the download starts.
+
+
+
+
+
+**Getting the code from the repo**
 
 ```bash
 git clone https://github.com/JeffMv/OCCourseDownloader.git
 cd OCCourseDownloader
 
-# using it
+# use it
 python oc_course_downloader_selenium.py --help
 ```
 
@@ -64,7 +73,8 @@ python ./oc_course_downloader_selenium.py --courseUrls course_url [course_url ..
 
 # Example command to download the course "Testez votre projet avec Python"
 python oc_course_downloader_selenium.py --courseUrls "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" -d "/volumes/my-usb-key/Downloads" -u myusername
-# this will prompt you to enter your password without showing it in the console.
+
+# Not specifying the -p argument will prompt you to enter your password without showing it in the console.
 
 ```
 

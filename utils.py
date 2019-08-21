@@ -6,9 +6,13 @@ import requests
 
 from bs4 import BeautifulSoup
 
-# progressbar is provided by progressbar2 on PYPI.
-import progressbar
-from requests_download import download, TrackerBase
+try:
+    # progressbar is provided by progressbar2 on PYPI.
+    import progressbar
+    from requests_download import download, TrackerBase
+except:
+    progressbar = None
+    download, TrackerBase = None, None
 
 
 class UIProgressTracker(TrackerBase):
@@ -44,8 +48,15 @@ def download_with_progress_indicator(url, path, create_dirs=True):
     if create_dirs:
         os.makedirs(os.path.dirname(path), exist_ok=True)
     
-    progress = UIProgressTracker(progressbar.ProgressBar())
-    download(url, path, trackers=[progress])
+    if progress is not None and download is not None:
+        progress = UIProgressTracker(progressbar.ProgressBar())
+        download(url, path, trackers=[progress])
+    else:
+        print("""Downloading "%s" to "%s" ... please wait.""" % (url, path))
+        with open(path, 'wb') as fh:
+            response = requests.get(url)
+            fh.write(response.content)
+        print("""\tFinished downloading the file "%s" """ % (path))
 
 
 def soupify_html(content):
