@@ -9,14 +9,13 @@ import requests
 
 from bs4 import BeautifulSoup
 
-#
 import jmm.browsers
-from jmm.soups import soupifyContent as soupify_html
 
 import utils
 
 from markdown import html_to_markdown
 from video_players import vimeo_video_infos
+from utils import soupify_html
 
 # class OcCourseFetcherSpider(scrapy.Spider):
 # class OcCourseFetcher(object):
@@ -463,6 +462,9 @@ def main_selenium():
     parser = argParser()
     args = parser.parse_args()
     
+    if args.username is None:
+        args.username = input("Please input your OpenClassrooms.com username: ")
+    
     if args.password is None:
         args.password = getpass.getpass("Openclassrooms.com password: ")
     
@@ -478,11 +480,10 @@ def main_selenium():
     
     for url in args.courseUrls:
         print("Fetching course for %s" % url)
-        
-        # ...
         directory = os.path.abspath(os.path.expanduser(args.destination))
         ignored_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.ignoreChapters]
         fetch_course(nav, url, args.videoQuality, args.overwrite, directory, ignored_chapters=ignored_chapters)
+        print("---- Finished fetching the course %s ----\n" % (url))
 
 
 if __name__ == '__main__':

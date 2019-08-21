@@ -4,6 +4,8 @@ import os
 
 import requests
 
+from bs4 import BeautifulSoup
+
 # progressbar is provided by progressbar2 on PYPI.
 import progressbar
 from requests_download import download, TrackerBase
@@ -44,3 +46,7 @@ def download_with_progress_indicator(url, path, create_dirs=True):
     
     progress = UIProgressTracker(progressbar.ProgressBar())
     download(url, path, trackers=[progress])
+
+
+def soupify_html(content):
+    return BeautifulSoup(content, 'lxml')
