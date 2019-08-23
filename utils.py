@@ -48,9 +48,9 @@ def download_with_progress_indicator(url, path, create_dirs=True):
     if create_dirs:
         os.makedirs(os.path.dirname(path), exist_ok=True)
     
-    if progress is not None and download is not None:
-        progress = UIProgressTracker(progressbar.ProgressBar())
-        download(url, path, trackers=[progress])
+    if progressbar is not None and download is not None:
+        progress_tracker = UIProgressTracker(progressbar.ProgressBar())
+        download(url, path, trackers=[progress_tracker])
     else:
         print("""Downloading "%s" to "%s" ... please wait.""" % (url, path))
         with open(path, 'wb') as fh:

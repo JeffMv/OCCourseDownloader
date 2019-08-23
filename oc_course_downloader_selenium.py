@@ -141,7 +141,6 @@ def argParser():
         """
         )
     
-    parser.add_argument('--courseUrls', '-c', nargs="+", required=True, help="Course urls of the courses to fetch")
     # parser.add_argument('--startUrls', '-u', nargs="+", required=True, help="Start urls of the crawler")
     # parser.add_argument('--allowedDomains', '-d', nargs="+", required=False, help="Allowed domains of the crawler")
     
@@ -151,7 +150,9 @@ def argParser():
     parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (generally Vimeo offers "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
     parser.add_argument('--overwrite', '-o', action="store_true", help="""Overwrite images and videos (will fetch again even if there is already an existing file)""")
-    parser.add_argument('--ignoreChapters', '-x', nargs="*", help="""Ignored chapters (in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3""")
+    parser.add_argument('--ignoreChapters', '-x', nargs="*", default=[], help="""Ignored chapters (in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3""")
+    
+    parser.add_argument('courseUrls', nargs="+", help="Course urls of the courses to fetch. Example: https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/")
     return parser
 
 

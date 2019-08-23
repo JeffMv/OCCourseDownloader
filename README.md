@@ -68,13 +68,13 @@ python oc_course_downloader_selenium.py --help
 
 
 ```bash
-python ./oc_course_downloader_selenium.py --courseUrls course_url [course_url ...] -d <destination_folder> --username <username>
+python ./oc_course_downloader_selenium.py -d <destination_folder> --username <username> course_url [course_url ...]
 
 
 # Example command to download the course "Testez votre projet avec Python"
-python oc_course_downloader_selenium.py --courseUrls "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4435224-utilisez-des-mocks" -d "/volumes/my-usb-key/Downloads" -u myusername
+python oc_course_downloader_selenium.py -d "/volumes/my-usb-key/Downloads" -u myusername "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/"
 
-# Not specifying the -p argument will prompt you to enter your password without showing it in the console.
+# Not specifying the -p argument will prompt you to enter your password securely without showing it in the console.
 
 ```
 

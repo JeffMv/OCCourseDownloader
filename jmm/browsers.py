@@ -23,7 +23,7 @@ import selenium.webdriver.support.ui as ui
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as ExpectedConditions
-import selenium.common.exceptions.WebDriverException
+from selenium.common.exceptions import WebDriverException
 
 ## doc at: https://pyautogui.readthedocs.io/en/latest/
 # import pyautogui
