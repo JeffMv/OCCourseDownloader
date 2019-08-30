@@ -182,7 +182,7 @@ def extract_course_activity_page(browser):
         browser.waitTime(5)
         html_page = browser.driver.page_source
     
-    markdown_text, title, html_page = None, None, None
+    markdown_text, title = None, None
     if html_page:
         try:
             soup = soupify_html(html_page)
@@ -191,8 +191,8 @@ def extract_course_activity_page(browser):
             markdown_text = html_to_markdown(str(page_content_tag)).strip()
         except:
             # in case the source page format change beyond recognition
-            markdown_text = html_to_markdown(str(soup.body))
             title = soup.title if soup.title is not None else ""
+            markdown_text = html_to_markdown(str(soup.body))
 
     return markdown_text, title, html_page
         
