@@ -172,7 +172,9 @@ def extract_course_activity_page(browser):
     """
     :param browser: navigator helper
     """
+    # this func accepts an argument that can be <str> (HTML source code) or browser
     html_page = browser.driver.page_source if getattr(browser, 'driver', None) else browser
+    
     browser = browser if getattr(browser, 'driver', None) else None
     if browser:
         ## TODO
@@ -180,27 +182,42 @@ def extract_course_activity_page(browser):
         browser.waitTime(5)
         html_page = browser.driver.page_source
     
+    markdown_text, title, html_page = None, None, None
     if html_page:
-        soup = soupify_html(html_page)
-        page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-        title = page_content_tag.h2.get_text().strip()  # chapter title
-        markdown_text = html_to_markdown(str(page_content_tag)).strip()
-        return markdown_text, title, html_page
+        try:
+            soup = soupify_html(html_page)
+            page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+            title = page_content_tag.h2.get_text().strip()  # chapter title
+            markdown_text = html_to_markdown(str(page_content_tag)).strip()
+        except:
+            # in case the source page format change beyond recognition
+            markdown_text = html_to_markdown(str(soup.body))
+            title = soup.title if soup.title is not None else ""
+
+    return markdown_text, title, html_page
+        
 
 
 def extract_course_page_main_text_as_markdown(html_page):
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
     title_tag = page_content_tag.h2
-    if title_tag is None:
-        # it is probably a Quiz page
-        # title_tag = page_content_tag.h1.get_text.strip()
-        return extract_course_quiz_page_as_markdown(html_page)
-    else:
-        title = title_tag.get_text().strip()  # chapter title
-        content = page_content_tag.find('div', {'class': 'static'}).section.find('div', {'itemprop': "articleBody"})
-        markdown_text = html_to_markdown(str(content)).strip()
-        markdown_text = """## %s\n\n%s\n""" % (title, markdown_text)
+    try:
+        if title_tag is None:
+            # it is probably a Quiz page
+            # title_tag = page_content_tag.h1.get_text.strip()
+            return extract_course_quiz_page_as_markdown(html_page)
+        else:
+            title = title_tag.get_text().strip()  # chapter title
+            content = page_content_tag.find('div', {'class': 'static'}).section.find('div', {'itemprop': "articleBody"})
+            markdown_text = html_to_markdown(str(content)).strip()
+            markdown_text = """## %s\n\n%s\n""" % (title, markdown_text)
+            return markdown_text, title
+    except:
+        ### In case we encounter an unexpected page or if the page source
+        ### format were to change in the future, we just markdown everything
+        markdown_text = html_to_markdown(str(soup.body)).strip()
+        title = soup.title if soup.title is not None else ""
         return markdown_text, title
 
 
