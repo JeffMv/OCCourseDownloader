@@ -201,8 +201,8 @@ def extract_course_activity_page(browser):
 def extract_course_page_main_text_as_markdown(html_page):
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    title_tag = page_content_tag.h2
     try:
+        title_tag = page_content_tag.h2
         if title_tag is None:
             # it is probably a Quiz page
             # title_tag = page_content_tag.h1.get_text.strip()
