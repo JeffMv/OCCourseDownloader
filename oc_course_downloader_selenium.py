@@ -138,7 +138,13 @@ def argParser():
     to see how to implement one-level subcommands.
     """
     parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawTextHelpFormatter,
         description="""OpenClassrooms.com course downloader.
+        """,
+        epilog="""Usage examples:
+        # Example command: this will download the course with videos at 720p resolution
+        # to the current directory. It will ask you your username and password inline.
+        python oc_course_downloader_selenium.py -q 720p https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests
         """
         )
     
@@ -511,4 +517,7 @@ def main_selenium():
 
 
 if __name__ == '__main__':
-    main_selenium()
+    try:
+        main_selenium()
+    except KeyboardInterrupt:
+        print("\n...User keyboard interruption")

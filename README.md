@@ -71,8 +71,8 @@ python oc_course_downloader_selenium.py --help
 python ./oc_course_downloader_selenium.py -d <destination_folder> --username <username> course_url [course_url ...]
 
 
-# Example command to download the course "Testez votre projet avec Python"
-python oc_course_downloader_selenium.py -d "/volumes/my-usb-key/Downloads" -u myusername "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/"
+# Example command to download the course "Testez votre projet avec Python" in the current directory
+python oc_course_downloader_selenium.py -u myusername "https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/"
 
 # Not specifying the -p argument will prompt you to enter your password securely without showing it in the console.
 
