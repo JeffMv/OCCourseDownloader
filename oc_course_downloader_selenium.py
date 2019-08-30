@@ -26,6 +26,7 @@ from utils import soupify_html
 def reach_page(browser, url, time_to_wait='default'):
     """Navigates to a page and ensures the page has finished loading properly
     before returning its source code.
+    :param time_to_wait: time to wait before the page is considered fully loaded
     :rtype: str
     :returns: source code of the target page.
     """
@@ -162,8 +163,10 @@ def argParser():
 def extract_course_quiz_page_as_markdown(html_page):
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
-    # page_content_tag = soup.find('div', {'class': "contentWithSidebar"})
-    title = page_content_tag.h1.get_text().strip()  # chapter title
+    page_content_tag = page_content_tag if page_content_tag else soup.body
+    # chapter title tag
+    title_tag = page_content_tag.h1 if page_content_tag.h1 else soup.body.title
+    title = title_tag.get_text().strip()
     markdown_text = html_to_markdown(str(page_content_tag)).strip()
     return markdown_text, title
 
@@ -191,11 +194,11 @@ def extract_course_activity_page(browser):
             markdown_text = html_to_markdown(str(page_content_tag)).strip()
         except:
             # in case the source page format change beyond recognition
-            title = soup.title if soup.title is not None else ""
+            title = soup.title.get_text().strip() if soup.title is not None else ""
             markdown_text = html_to_markdown(str(soup.body))
 
     return markdown_text, title, html_page
-        
+
 
 
 def extract_course_page_main_text_as_markdown(html_page):
@@ -217,7 +220,7 @@ def extract_course_page_main_text_as_markdown(html_page):
         ### In case we encounter an unexpected page or if the page source
         ### format were to change in the future, we just markdown everything
         markdown_text = html_to_markdown(str(soup.body)).strip()
-        title = soup.title if soup.title is not None else ""
+        title = soup.title.get_text() if soup.title is not None else ""
         return markdown_text, title
 
 
@@ -226,6 +229,7 @@ def extract_course_page_images(html_page):
     
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    page_content_tag = page_content_tag if page_content_tag else soup.body
     
     images_to_fetch = []
     
@@ -257,6 +261,7 @@ def fetch_course_page_video_informations(html_page, video_pages_html=None):
     hostname = "https://openclassrooms.com"
     soup = soupify_html(html_page)
     page_content_tag = soup.find('div', {'class': "contentWithSidebar__content"})
+    page_content_tag = page_content_tag if page_content_tag else soup.body
     
     videos_to_fetch = []
     video_frame_tags = [[j, iframe_tag, ("https:" + iframe_tag['src'])] for j, iframe_tag in enumerate(page_content_tag('iframe')) 

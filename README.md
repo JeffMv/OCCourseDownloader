@@ -82,6 +82,13 @@ python oc_course_downloader_selenium.py -d "/volumes/my-usb-key/Downloads" -u my
 
 
 
+## More Features ?
+
+Maybe some people might be interested by some new features. PR if you want these or more features:
+
+- replacing `<img>` and `<iframe>` tags' references with the actual downloaded files.
+  With video iframes, it would mean replacing them with `<video>` tags.
+
 
 
 ## Enjoy
@@ -95,3 +102,4 @@ After you have successfully downloaded a course, you might want to browse the co
 
 
 If you found this script useful, drop a star or a comment ;)
+
