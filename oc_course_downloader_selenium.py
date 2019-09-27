@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+"""
+
+
+__author__ = "Jeffrey Mvutu Mabilama"
+__version__ = "0.1.0.2"
+__license__ = "CC-BY"
+
 
 import os
 import argparse
@@ -16,11 +24,6 @@ import utils
 from markdown import html_to_markdown
 from video_players import vimeo_video_infos
 from utils import soupify_html
-
-# class OcCourseFetcherSpider(scrapy.Spider):
-# class OcCourseFetcher(object):
-#     """
-#     """
 
 
 def reach_page(browser, url, time_to_wait='default'):
@@ -144,13 +147,15 @@ def argParser():
         epilog="""Usage examples:
         # Example command: this will download the course with videos at 720p resolution
         # to the current directory. It will ask you your username and password inline.
-        python oc_course_downloader_selenium.py -q 720p https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests
+        url="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests"
+        python oc_course_downloader_selenium.py -q 720p $url
+        
+        # In order to download only the chapter 3-4 of the course with videos at 540p definition.
+        python oc_course_downloader_selenium.py --onlyChapters 3-4 -q 540p $url
+        
         """
         )
-    
-    # parser.add_argument('--startUrls', '-u', nargs="+", required=True, help="Start urls of the crawler")
-    # parser.add_argument('--allowedDomains', '-d', nargs="+", required=False, help="Allowed domains of the crawler")
-    
+        
     parser.add_argument('--username', '-u', help="username or email of the service")
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
     
@@ -158,6 +163,8 @@ def argParser():
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
     parser.add_argument('--overwrite', '-o', action="store_true", help="""Overwrite images and videos (will fetch again even if there is already an existing file)""")
     parser.add_argument('--ignoreChapters', '-x', nargs="*", default=[], help="""Ignored chapters (in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3""")
+    parser.add_argument('--onlyChapters', '--only', nargs="+", default=[], help="""The only chapters to fetch. in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3.
+    If --ignoreChapters is also specified, the ignored chapters will filter this list.""")
     
     parser.add_argument('courseUrls', nargs="+", help="Course urls of the courses to fetch. Example: https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/")
     return parser
@@ -434,7 +441,7 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
     pass
 
 
-def fetch_course(browser, course_url, video_quality, overwrite=False, directory=None, ignored_chapters=None):
+def fetch_course(browser, course_url, video_quality, overwrite=False, directory=None, only_chapters=None, ignored_chapters=None):
     """
     :param str directory: where to download the course
     """
@@ -459,7 +466,11 @@ def fetch_course(browser, course_url, video_quality, overwrite=False, directory=
     for chapter in chapters:
         part_nbr, chapter_nbr, chap_path, chap_title, chap_url = chapter
         
-        if (part_nbr, chapter_nbr) in ignored_chapters:
+        should_ignore = (part_nbr, chapter_nbr) in ignored_chapters
+        if only_chapters:
+            should_ignore = should_ignore or (part_nbr, chapter_nbr) not in only_chapters
+        
+        if should_ignore:
             print("Ignored chapter %i-%i" % (part_nbr, chapter_nbr))
             continue
         
@@ -511,8 +522,9 @@ def main_selenium():
     for url in args.courseUrls:
         print("Fetching course for %s" % url)
         directory = os.path.abspath(os.path.expanduser(args.destination))
+        only_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.onlyChapters]
         ignored_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.ignoreChapters]
-        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, ignored_chapters=ignored_chapters)
+        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, only_chapters=only_chapters, ignored_chapters=ignored_chapters)
         print("---- Finished fetching the course %s ----\n" % (url))
 
 
