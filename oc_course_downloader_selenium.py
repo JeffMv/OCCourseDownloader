@@ -34,7 +34,9 @@ def reach_page(browser, url, time_to_wait='default'):
     :returns: source code of the target page.
     """
     time_to_wait = 5 if time_to_wait == 'default' else time_to_wait
-    print("reaching page @ '%s'" % (url))
+    
+    helper_print_func = lambda s, i: (".../" if i > 0 else "") + "/".join(s.split('/')[i:])
+    print("reaching page @ '%s'" % (helper_print_func(url, 3)))
     browser.driver.get(url)
     # wait until finished loading
     # print("... did we wait until finished loading ? ...\n\t (url: '%s')" % (url))
@@ -365,6 +367,11 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
         
         dest_path = os.path.join(base_chapter_path, base_media_path, (video_info[1] + "." + extension))
         url = video_for_quality(video_info, video_quality)
+        url_parts = url.split('?')
+        assert len(url_parts) in (1, 2), "Malformed URL. Perhaps the URL extraction has a flaw or the "
+        if len(url_parts) == 2 and url_parts[-1].find("source=1") >= 0:
+            url = url_parts[0] + '?' + url_parts[-1].replace("source=1", "")  # or source=0
+        
         title = video_info[1]
         video_download_infos.append((dest_path, url, title))
     
