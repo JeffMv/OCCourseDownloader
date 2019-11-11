@@ -12,6 +12,7 @@ __license__ = "CC-BY"
 import os
 import argparse
 import getpass
+import netrc
 
 import requests
 
@@ -150,16 +151,17 @@ def argParser():
         # Example command: this will download the course with videos at 720p resolution
         # to the current directory. It will ask you your username and password inline.
         url="https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/4434934-decouvrez-les-tests"
-        python oc_course_downloader_selenium.py -q 720p $url
+        python oc_course_downloader_selenium.py [-n] -q 720p $url
         
         # In order to download only the chapter 3-4 of the course with videos at 540p definition.
-        python oc_course_downloader_selenium.py --onlyChapters 3-4 -q 540p $url
+        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url
         
         """
         )
         
     parser.add_argument('--username', '-u', help="username or email of the service")
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
+    parser.add_argument('--netrc', '-n', action="store_true", help="Reads the credentials from a netrc file")
     
     parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (generally Vimeo offers "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
@@ -170,6 +172,15 @@ def argParser():
     
     parser.add_argument('courseUrls', nargs="+", help="Course urls of the courses to fetch. Example: https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/")
     return parser
+
+
+def credentials_from_netrc(filepath=None):
+    # import netrc
+    netrc_reader = netrc.netrc(filepath)
+    auth_infos = netrc_reader.authenticators("openclassrooms.com")
+    username, password = (auth_infos[0], auth_infos[2]) if auth_infos is not None else (None, None)
+    return username, password
+
 
 
 ###############################################################################
@@ -468,6 +479,7 @@ def fetch_course(browser, course_url, video_quality, overwrite=False, directory=
     
     prefix = os.path.join(directory, course_title)
     os.makedirs(prefix, exist_ok=True)
+    print("Will download course corresponding to url: \n\t'{}' \n\tto \n\t'{}'\n".format(course_url, prefix))
     
     ### cycle through the URLs and pages
     for chapter in chapters:
@@ -510,11 +522,16 @@ def main_selenium():
     parser = argParser()
     args = parser.parse_args()
     
-    if args.username is None:
-        args.username = input("Please input your OpenClassrooms.com username: ")
-    
-    if args.password is None:
-        args.password = getpass.getpass("Openclassrooms.com password: ")
+    # automatically 
+    # if args.netrc or (args.username is None and args.password is None):
+    if args.netrc:
+        args.username, args.password = credentials_from_netrc()
+    else:
+        if args.username is None:
+            args.username = input("Please input your OpenClassrooms.com username: ")
+        
+        if args.password is None:
+            args.password = getpass.getpass("Openclassrooms.com password: ")
     
     nav = jmm.browsers.SeleniumHelper()
     
@@ -529,6 +546,7 @@ def main_selenium():
     for url in args.courseUrls:
         print("Fetching course for %s" % url)
         directory = os.path.abspath(os.path.expanduser(args.destination))
+        # print("Parent destination directory: %s" % directory)
         only_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.onlyChapters]
         ignored_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.ignoreChapters]
         fetch_course(nav, url, args.videoQuality, args.overwrite, directory, only_chapters=only_chapters, ignored_chapters=ignored_chapters)
