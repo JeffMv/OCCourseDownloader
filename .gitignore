@@ -1,2 +1,4 @@
 *.pyc
+run-my-script.sh
+tmp/
 .cache/v/cache/lastfailed
