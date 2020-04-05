@@ -126,6 +126,8 @@ def test_paths_for_course():
 #     course_chapters = _content_of_file(filepath, 'r')
 #     assert False
 
+
+@pytest.mark.skip(reason="YAGNI.")
 def test_result_page_written_content():
     # testing the html/markdown
     assert False
