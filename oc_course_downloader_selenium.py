@@ -156,6 +156,8 @@ def argParser():
         # In order to download only the chapter 3-4 of the course with videos at 540p definition.
         python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url
         
+        # Skip video files
+        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 0p
         """
         )
         
@@ -163,7 +165,7 @@ def argParser():
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
     parser.add_argument('--netrc', '-n', action="store_true", help="Reads the credentials from a netrc file")
     
-    parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (generally Vimeo offers "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
+    parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (available video formats are often "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
     parser.add_argument('--overwrite', '-o', action="store_true", help="""Overwrite images and videos (will fetch again even if there is already an existing file)""")
     parser.add_argument('--ignoreChapters', '-x', nargs="*", default=[], help="""Ignored chapters (in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3""")
@@ -364,27 +366,31 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     
     
     ### fetching the videos
-    get_at_index_or_default = lambda x, k, default_value: x[k] if x is not None and k < len(x) else default_value
+    get_at_index_or_default = lambda x, k, default_value: x[k] if (x is not None and k < len(x)) else default_value
     first_element = lambda arr: arr[0] if len(arr) > 0 else None
     video_infos_for_quality = lambda video_infos_tuple, quality: first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)])
     video_for_quality = lambda video_infos_tuple, quality: get_at_index_or_default(first_element([video_infos for video_infos in video_infos_tuple[2] if str(video_infos[0]) == str(quality)]), 2, None)
     videos = chapter_infos['to_fetch']['videos'] if chapter_infos.get('to_fetch') is not None and chapter_infos['to_fetch'].get('videos') else []
     
+    ## Passing an invalid quality like 0 px should mean that we do NOT download videos
     video_download_infos = []
     for i, video_info in enumerate(videos):
         # video_info: (k+1, video_title, video_formats_infos_summary, video_formats_infos, video_extension)
         #       video_formats_infos_summary: (video quality (ex. '540p'), *tuple*(width (int), height (int))*/tuple*, video url, file extension)
-        extension = video_infos_for_quality(video_info, video_quality)[3]
+        extension = get_at_index_or_default(video_infos_for_quality(video_info, video_quality), 3, None)
         
-        dest_path = os.path.join(base_chapter_path, base_media_path, (video_info[1] + "." + extension))
         url = video_for_quality(video_info, video_quality)
-        url_parts = url.split('?')
-        assert len(url_parts) in (1, 2), "Malformed URL. Perhaps the URL extraction has a flaw or the "
-        if len(url_parts) == 2 and url_parts[-1].find("source=1") >= 0:
-            url = url_parts[0] + '?' + url_parts[-1].replace("source=1", "")  # or source=0
         
-        title = video_info[1]
-        video_download_infos.append((dest_path, url, title))
+        if url is not None:
+            dest_path = os.path.join(base_chapter_path, base_media_path, (video_info[1] + "." + extension))
+            url_parts = url.split('?')
+            
+            assert len(url_parts) in (1, 2), "Malformed URL. Perhaps the URL extraction has a flaw or the "
+            if len(url_parts) == 2 and url_parts[-1].find("source=1") >= 0:
+                url = url_parts[0] + '?' + url_parts[-1].replace("source=1", "")  # or source=0
+            
+            title = video_info[1]
+            video_download_infos.append((dest_path, url, title))
     
     return text_infos, html_infos, images_download_infos, video_download_infos
 
