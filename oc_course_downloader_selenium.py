@@ -5,7 +5,7 @@
 
 
 __author__ = "Jeffrey Mvutu Mabilama"
-__version__ = "0.1.0.2"
+__version__ = "0.1.1.0"
 __license__ = "CC-BY"
 
 
@@ -154,7 +154,7 @@ def argParser():
         python oc_course_downloader_selenium.py [-n] -q 720p $url
         
         # In order to download only the chapter 3-4 of the course with videos at 540p definition.
-        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url
+        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url [–-dispatchMedias]
         
         # Skip video files
         python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 0p
@@ -165,6 +165,8 @@ def argParser():
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
     parser.add_argument('--netrc', '-n', action="store_true", help="Reads the credentials from a netrc file")
     
+    parser.add_argument('--dispatchMedias', action="store_false", help="""Dispatches media files and downloads them to their respective chapters.""")
+    # parser.add_argument('--groupMedias', '-g', action="store_true", help="""Groups media files and downloads them to the same location.""")
     parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (available video formats are often "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
     parser.add_argument('--overwrite', '-o', action="store_true", help="""Overwrite images and videos (will fetch again even if there is already an existing file)""")
@@ -347,7 +349,10 @@ def extract_course_page_main_content(html_page, video_pages_html=None):
     return page_infos
 
 
-def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix):
+def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, all_videos_in_same_folder):
+    """Returns the target text and media infos, especially including the 
+    target filepath
+    """
     ### fetching the chapter's page
     base_chapter_path = os.path.join(prefix, '%i-%i' % (part_nbr, chapter_nbr))
     
@@ -382,27 +387,31 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
         url = video_for_quality(video_info, video_quality)
         
         if url is not None:
-            dest_path = os.path.join(base_chapter_path, base_media_path, (video_info[1] + "." + extension))
+            video_title = video_info[1]
+            if all_videos_in_same_folder:
+                dest_path = os.path.join(base_media_path, "{}_{}.{}".format(base_chapter_path, video_title, extension))
+            else:
+                dest_path = os.path.join(base_chapter_path, base_media_path, "{}_{}.{}".format(base_chapter_path, video_title, extension))
             url_parts = url.split('?')
             
             assert len(url_parts) in (1, 2), "Malformed URL. Perhaps the URL extraction has a flaw or the "
             if len(url_parts) == 2 and url_parts[-1].find("source=1") >= 0:
                 url = url_parts[0] + '?' + url_parts[-1].replace("source=1", "")  # or source=0
             
-            title = video_info[1]
+            title = video_title
             video_download_infos.append((dest_path, url, title))
     
     return text_infos, html_infos, images_download_infos, video_download_infos
 
 
-def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite):
+def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite, all_videos_in_same_folder):
     """Fetches and writes following the architecture pattern.
     :param infos:
                 ...
     :param video_quality:
                 Also accepts 'low', 'medium', 'hd', 'full'
     """
-    text_infos, html_infos, images_download_infos, video_download_infos = paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix)
+    text_infos, html_infos, images_download_infos, video_download_infos = paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, all_videos_in_same_folder)
     
     ### Saving the text and HTML
     filepath = text_infos[1]
@@ -465,7 +474,7 @@ def fetch_page_and_contents(driver, url, directory, content_prefix, image_prefix
     pass
 
 
-def fetch_course(browser, course_url, video_quality, overwrite=False, directory=None, only_chapters=None, ignored_chapters=None):
+def fetch_course(browser, course_url, video_quality, overwrite=False, directory=None, only_chapters=None, ignored_chapters=None, all_videos_in_same_folder=True):
     """
     :param str directory: where to download the course
     """
@@ -519,7 +528,7 @@ def fetch_course(browser, course_url, video_quality, overwrite=False, directory=
             chapter_infos = extract_course_page_main_content(browser.driver.page_source)
         
         ### save page to disk
-        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite)
+        fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite, all_videos_in_same_folder)
         print()
     pass
 
@@ -555,7 +564,7 @@ def main_selenium():
         # print("Parent destination directory: %s" % directory)
         only_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.onlyChapters]
         ignored_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.ignoreChapters]
-        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, only_chapters=only_chapters, ignored_chapters=ignored_chapters)
+        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, only_chapters=only_chapters, ignored_chapters=ignored_chapters, all_videos_in_same_folder=not args.dispatchMedias)
         print("---- Finished fetching the course %s ----\n" % (url))
 
 
