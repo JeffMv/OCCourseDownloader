@@ -5,7 +5,7 @@
 
 
 __author__ = "Jeffrey Mvutu Mabilama"
-__version__ = "0.1.1.0"
+__version__ = "0.1.2.1"
 __license__ = "CC-BY"
 
 
@@ -22,7 +22,8 @@ import jmm.browsers
 
 import utils
 
-from markdown import html_to_markdown
+
+from util_markdown import html_to_markdown
 from video_players import vimeo_video_infos
 from utils import soupify_html
 
@@ -154,7 +155,7 @@ def argParser():
         python oc_course_downloader_selenium.py [-n] -q 720p $url
         
         # In order to download only the chapter 3-4 of the course with videos at 540p definition.
-        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url [–-dispatchMedias]
+        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url [–-dispatchVideoFiles]
         
         # Skip video files
         python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 0p
@@ -165,7 +166,7 @@ def argParser():
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
     parser.add_argument('--netrc', '-n', action="store_true", help="Reads the credentials from a netrc file")
     
-    parser.add_argument('--dispatchMedias', action="store_false", help="""Dispatches media files and downloads them to their respective chapters.""")
+    parser.add_argument('--dispatchVideoFiles', action="store_false", help="""Dispatches videos files and downloads them to their respective chapters.""")
     # parser.add_argument('--groupMedias', '-g', action="store_true", help="""Groups media files and downloads them to the same location.""")
     parser.add_argument('--videoQuality', '--quality', '-q', default='360p', help="""The video quality you want to download for videos (available video formats are often "360p", "540p", "720p", or "1080p"). Pass in 0 or an invalid quality to ignore video files. Default is '360p', which the lowest quality normally""")
     parser.add_argument('--destination', '-d', default='.', help="""The directory to download the course to. Default will download in the current directory.""")
@@ -354,17 +355,22 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     target filepath
     """
     ### fetching the chapter's page
+    # base_chapter_path: "/path/to/course/directory/1-3"
     base_chapter_path = os.path.join(prefix, '%i-%i' % (part_nbr, chapter_nbr))
+    # base_chapter_name: "1-3"
+    base_chapter_name = os.path.basename(base_chapter_path)
+    # course_root_path: "/path/to/course/directory"
+    course_root_path = os.path.dirname(base_chapter_path)
     
     text_infos = (0, os.path.join(base_chapter_path, chapter_infos['title'] + ".md"), chapter_infos['markdown_text'])
     html_infos = (0, os.path.join(base_chapter_path, chapter_infos['title'] + ".html"), chapter_infos['html'])
     
     ### fetching the images
-    base_media_path = 'medias'
     # base_media_path = '.'
+    base_media_path = 'medias'
     images = chapter_infos.get('to_fetch').get('images') if chapter_infos.get('to_fetch') is not None and chapter_infos['to_fetch'].get('images') else []
     # download_infos: [(path to save to,  url, image description), ...]
-    images_download_infos = [(os.path.join(base_chapter_path, base_media_path, image_info[3]),  # destination path
+    images_download_infos = [(os.path.join(base_chapter_path, base_media_path, "{}_{}".format(base_chapter_name, image_info[3])),  # destination path
                        image_info[1],  # url
                        image_info[2])  # image description
                       for image_info in images]
@@ -388,10 +394,11 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
         
         if url is not None:
             video_title = video_info[1]
+            filename = "{}_{}.{}".format(base_chapter_name, video_title, extension)
             if all_videos_in_same_folder:
-                dest_path = os.path.join(base_media_path, "{}_{}.{}".format(base_chapter_path, video_title, extension))
+                dest_path = os.path.join(course_root_path, base_media_path, filename)
             else:
-                dest_path = os.path.join(base_chapter_path, base_media_path, "{}_{}.{}".format(base_chapter_path, video_title, extension))
+                dest_path = os.path.join(base_chapter_path, base_media_path, filename)
             url_parts = url.split('?')
             
             assert len(url_parts) in (1, 2), "Malformed URL. Perhaps the URL extraction has a flaw or the "
@@ -431,16 +438,15 @@ def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, vi
     for i, media_infos in enumerate(download_infos):
         filepath, url, description, *_ = media_infos
         if url is not None:
-            relative = os.path.relpath(filepath)
-            descriptive_filepath = filepath if relative.find('..') == 0 else relative
+            _descriptive_filepath = filepath  # os.path.relpath(filepath)
             if not os.path.exists(filepath) or overwrite:
-                print("""%i/%i) Fetching "%s" to "%s" ...""" % (i+1, len(download_infos), description, descriptive_filepath))
+                print("""%i/%i) Fetching "%s" \n    to "%s" ...""" % (i+1, len(download_infos), description, _descriptive_filepath))
                 utils.download_with_progress_indicator(url, filepath, True)
             else:
-                print("%i/%i) Found already fetched content %s" % (i+1, len(download_infos), descriptive_filepath))
+                print("%i/%i) Found already fetched content %s" % (i+1, len(download_infos), _descriptive_filepath))
         else:
             print("Did not find quality '%s' for the video %s" % (description))
-    
+        print()
     pass
 
 
@@ -478,6 +484,7 @@ def fetch_course(browser, course_url, video_quality, overwrite=False, directory=
     """
     :param str directory: where to download the course
     """
+    print("Configuration:\n  video_quality: {}\n  directory: {}\n  all_videos_in_same_folder: {}\n\n".format(video_quality, directory, all_videos_in_same_folder))
     ignored_chapters = [] if ignored_chapters is None else ignored_chapters
     
     course_id, course_page, lang = helper_parse_course_page_url(course_url)
@@ -516,7 +523,14 @@ def fetch_course(browser, course_url, video_quality, overwrite=False, directory=
         
         if is_quiz_chapter or is_exercise_chapter:
             if is_exercise_chapter:
-                markdown_text, title = extract_course_quiz_page_as_markdown(html_page)
+                try:
+                    markdown_text, title = extract_course_quiz_page_as_markdown(html_page)
+                except Exception as err:
+                    # added try-except after after months because I saw html_page potentially undefined. (did not test)
+                    print("""Error fetching chapter {}-{}: {}\n\tOther infos: chapter path: '{}'. Chapter title: '{}'""".format(part_nbr, chapter_nbr, err, chap_path, chapter_title))
+                    html_page = browser.driver.page_source if getattr(browser, 'driver', None) else browser
+                    markdown_text, title = extract_course_quiz_page_as_markdown(html_page)
+                    
             else:
                 markdown_text, title, html_page = extract_course_activity_page(browser)
             chapter_infos = {
@@ -564,7 +578,7 @@ def main_selenium():
         # print("Parent destination directory: %s" % directory)
         only_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.onlyChapters]
         ignored_chapters = [(int(tup.split('-')[0]), int(tup.split('-')[1])) for tup in args.ignoreChapters]
-        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, only_chapters=only_chapters, ignored_chapters=ignored_chapters, all_videos_in_same_folder=not args.dispatchMedias)
+        fetch_course(nav, url, args.videoQuality, args.overwrite, directory, only_chapters=only_chapters, ignored_chapters=ignored_chapters, all_videos_in_same_folder=args.dispatchVideoFiles)
         print("---- Finished fetching the course %s ----\n" % (url))
 
 

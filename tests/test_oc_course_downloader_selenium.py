@@ -5,11 +5,12 @@
 import os
 import json
 
+import pytest
 import requests
 
+os.sys.path += ".."
 import oc_course_downloader_selenium as script
 import video_players as video_players_module
-
 
 def _content_of_file(filepath, mode='r'):
     with open(filepath, mode) as fh:
@@ -107,7 +108,9 @@ def test_paths_for_course():
     
     chapter_2_5 = chapter_infos
     # print("chapter_2_5:", chapter_2_5)
-    result_page_text, result_page_html, images_to_fetch, videos_to_fetch = script.paths_for_course(chapter_2_5, 2, 5, video_quality, prefix)
+    ### 
+    all_videos_in_same_folder = False
+    result_page_text, result_page_html, images_to_fetch, videos_to_fetch = script.paths_for_course(chapter_2_5, 2, 5, video_quality, prefix, all_videos_in_same_folder)
     download_infos = images_to_fetch + videos_to_fetch
     
     print("download_infos:\n%s" % json.dumps(download_infos, indent=2))
@@ -115,7 +118,17 @@ def test_paths_for_course():
     
     expectation_filepath = os.path.join(chapter_test_directory, 'result--paths_for_course_2-5-Utilisez des mocks.json')
     expected_result = json.loads(_content_of_file(expectation_filepath))
+    assert json.dumps(expected_result) == json.dumps(download_infos)
     
+    ###
+    all_videos_in_same_folder = True
+    result_page_text, result_page_html, images_to_fetch, videos_to_fetch = script.paths_for_course(chapter_2_5, 2, 5, video_quality, prefix, all_videos_in_same_folder)
+    download_infos = images_to_fetch + videos_to_fetch
+    
+    print("download_infos:\n%s" % json.dumps(download_infos, indent=2))
+    # print("download_infos[...]:", json.dumps(download_infos[0], indent=2))
+    expectation_filepath = os.path.join(chapter_test_directory, 'result--paths--all-videos-same-in-same-dir_for_course_2-5-Utilisez des mocks.json')
+    expected_result = json.loads(_content_of_file(expectation_filepath))
     assert json.dumps(expected_result) == json.dumps(download_infos)
 
 
