@@ -15,7 +15,8 @@ except:
     download, TrackerBase = None, None
 
 
-class UIProgressTracker(TrackerBase):
+# class UIProgressTracker(TrackerBase):
+class UIProgressTracker():
     def __init__(self, progressbar):
         self.progressbar = progressbar
         self.recvd = 0
