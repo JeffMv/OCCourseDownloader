@@ -1,4 +1,5 @@
 *.pyc
 run-my-script.sh
 tmp/
+.DS_Store
 .cache/v/cache/lastfailed

@@ -307,22 +307,27 @@ def fetch_course_page_video_informations(html_page, video_pages_html=None):
         video_frame_tags = [[j, None, vimeo_video_url_to_player_url(video_tag['src'])] for j, video_tag in enumerate(page_content_tag('video')) 
                             if 'src' in video_tag.attrs and video_tag.get('src').find('//vimeo.com/') >= 0]
     
-    assert video_pages_html is None or len(video_pages_html) >= len(video_frame_tags)    
+    assert video_pages_html is None or len(video_pages_html) >= len(video_frame_tags)
+    get_inner_tag_content = lambda x: x.get_text() if len(x.get_text()) > 0 else x.string
     for k, tag_details in enumerate(video_frame_tags):
-        # j, iframe_tag, video_src = tag_details
-        _, _, video_src = tag_details
+        # j, iframe_tag, video_src_page_url = tag_details
+        _, _, video_src_page_url = tag_details
         
-        # video/iframe tags of the course's videos
+        ## getting the content of the video/iframe tags of the course's videos
         if video_pages_html:
             iframe_source = video_pages_html[k]
         else:
-            resp = requests.get(video_src)
+            print("######### fetching page at  ")
+            resp = requests.get(video_src_page_url)
             iframe_source = resp.content.decode(encoding=resp.encoding)
         vimeo_page_soup = soupify_html(iframe_source)
-        script_tags_content = [tag.get_text() for tag in vimeo_page_soup.find_all('script') 
-                               if tag.get_text().find('''"mime":"video/mp4"''') >= 0]
+        script_tags_content = [get_inner_tag_content(tag) for tag in vimeo_page_soup.find_all('script') 
+                               if get_inner_tag_content(tag).find('''"mime":"video/mp4"''') >= 0]
+
+        # There used to be one and only one iframe with video details about the
+        # video to load in the vimeo video. (in 2019)
+        assert len(script_tags_content) == 1, "There are {} script tags with videos instead of just 1".format(len(script_tags_content))
         
-        assert len(script_tags_content) == 1
         content = script_tags_content[0]
         video_formats_infos_summary, video_formats_infos = vimeo_video_infos(content)
         
