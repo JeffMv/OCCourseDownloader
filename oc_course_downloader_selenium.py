@@ -5,7 +5,7 @@
 
 
 __author__ = "Jeffrey Mvutu Mabilama"
-__version__ = "0.1.2.1"
+__version__ = "0.1.2.2"
 __license__ = "CC-BY"
 
 
