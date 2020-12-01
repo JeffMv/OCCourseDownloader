@@ -25,6 +25,7 @@ On top of that, it allows you to bypass the maximum number of videos you can vie
 You will need to have the following dependencies installed:
 
 - `Selenium`  (installation instructions can be found [here](https://selenium-python.readthedocs.io/installation.html))
+- (Depending on your browser of choice) install a browser driver for Selenium. For instance, [`Gecko Driver`](https://github.com/mozilla/geckodriver/releases) for Mozilla  Firefox or [`ChromeDriver`](https://chromedriver.chromium.org/) for Google Chrome.
 
 
 
@@ -36,8 +37,8 @@ Otherwise, you can do it one by one.
 
 - `requests` : install with `pip install requests`
 - `BeautifulSoup` and `lxml` : install with `pip install bs4 lxml`
-- `tomd` for transforming HTML to Markdown files. (`pip install tomd`)
-  You can also use another Markdown converter by tampering with the `markdown.py` file.
+- `tomd` for transforming HTML to Markdown files
+  You can also use another Markdown converter by tampering with the `markdown.py` file in the codebase.
 
 
 
