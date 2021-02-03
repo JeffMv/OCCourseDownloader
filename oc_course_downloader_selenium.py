@@ -16,6 +16,7 @@ import netrc
 
 import requests
 
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
 import jmm.browsers
@@ -571,8 +572,10 @@ def main_selenium():
     
     ### login
     nav.get('https://openclassrooms.com/fr/login')
-    nav.waitTillExists('input#field_username')
-    nav.enter_textfield('input#field_username', args.username)
+    nav.waitTillExists('input#fielduserEmail')
+    nav.enter_textfield('input#fielduserEmail', args.username)
+    nav.enter_textfield('input#fielduserEmail', Keys.RETURN)
+    nav.waitTime(2)
     nav.enter_textfield('input#field_password', args.password)
     nav.click_element('button#login-button')
     nav.waitTime(5)
