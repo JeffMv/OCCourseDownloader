@@ -557,15 +557,13 @@ def main_selenium():
     parser = argParser()
     args = parser.parse_args()
     
-    # automatically 
-    # if args.netrc or (args.username is None and args.password is None):
     if args.netrc:
         args.username, args.password = credentials_from_netrc()
     else:
-        if args.username is None:
-            args.username = input("Please input your OpenClassrooms.com username: ")
+        if args.username is None or args.username == '-':
+            args.username = input("Please input your OpenClassrooms.com login email: ")
         
-        if args.password is None:
+        if args.password is None or args.username == '-':
             args.password = getpass.getpass("Openclassrooms.com password: ")
     
     nav = jmm.browsers.SeleniumHelper()
