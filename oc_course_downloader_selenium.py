@@ -430,13 +430,13 @@ def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, vi
     filepath = text_infos[1]
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     if not os.path.exists(filepath) or overwrite:
-        with open(filepath, 'w') as fh:
+        with open(filepath, 'w', encoding="utf-8") as fh:
             fh.write(text_infos[2])
     
     filepath = html_infos[1]
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     if not os.path.exists(filepath) or overwrite:
-        with open(filepath, 'w') as fh:
+        with open(filepath, 'w', encoding="utf-8") as fh:
             fh.write(html_infos[2])
     
     ### fetching the images and videos
