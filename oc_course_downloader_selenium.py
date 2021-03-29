@@ -13,6 +13,7 @@ import os
 import argparse
 import getpass
 import netrc
+import string
 
 import requests
 
@@ -416,6 +417,20 @@ def paths_for_course(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix
     
     return text_infos, html_infos, images_download_infos, video_download_infos
 
+def clean_filepath(path):
+    """Removes characters may not be used in a file path
+    """
+    valid_chars = string.ascii_letters + string.hexdigits
+    valid_chars += """.-_,()[]{}!#' =@$%"""
+    valid_chars += os.path.sep
+    valid_chars = set(valid_chars)
+    drive, relative = os.path.splitdrive(path)
+    filtered = "".join([c for c in relative if c in valid_chars])
+    components = filtered.split(os.path.sep)
+    components = [comp.strip() for comp in components]
+    relative = os.path.sep.join(components)
+    result = os.path.join(drive, relative)
+    return result if len(result) > 0 else None
 
 def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, video_quality, prefix, overwrite, all_videos_in_same_folder):
     """Fetches and writes following the architecture pattern.
@@ -428,13 +443,17 @@ def fetch_and_save_course_chapter_infos(chapter_infos, part_nbr, chapter_nbr, vi
     
     ### Saving the text and HTML
     filepath = text_infos[1]
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    filepath = clean_filepath(filepath)
+    parent = os.path.dirname(filepath)
+    os.makedirs(parent, exist_ok=True)
     if not os.path.exists(filepath) or overwrite:
         with open(filepath, 'w', encoding="utf-8") as fh:
             fh.write(text_infos[2])
     
     filepath = html_infos[1]
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    filepath = clean_filepath(filepath)
+    parent = os.path.dirname(filepath)
+    os.makedirs(parent, exist_ok=True)
     if not os.path.exists(filepath) or overwrite:
         with open(filepath, 'w', encoding="utf-8") as fh:
             fh.write(html_infos[2])
