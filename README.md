@@ -24,22 +24,8 @@ On top of that, it allows you to bypass the maximum number of videos you can vie
 
 You will need to have the following dependencies installed:
 
-- `Selenium`  (installation instructions can be found [here](https://selenium-python.readthedocs.io/installation.html))
+- Install You can install python dependencies with one command: `pip install -r requirements.txt`.
 - (Depending on your browser of choice) install a browser driver for Selenium. For instance, [`Gecko Driver`](https://github.com/mozilla/geckodriver/releases) for Mozilla  Firefox or [`ChromeDriver`](https://chromedriver.chromium.org/) for Google Chrome.
-
-
-
-**Python dependencies**
-
-You can install python dependencies with one command: `pip install requests bs4 lxml tomd requests_download progressbar`.
-
-Otherwise, you can do it one by one.
-
-- `requests` : install with `pip install requests`
-- `BeautifulSoup` and `lxml` : install with `pip install bs4 lxml`
-- `tomd` for transforming HTML to Markdown files
-  You can also use another Markdown converter by tampering with the `markdown.py` file in the codebase.
-
 
 
 **Optional Python dependencies**
@@ -57,7 +43,7 @@ git clone https://github.com/JeffMv/OCCourseDownloader.git
 cd OCCourseDownloader
 
 # use it
-python oc_course_downloader_selenium.py --help
+python oc_course_dld.py --help
 ```
 
 
