@@ -5,7 +5,7 @@
 
 
 __author__ = "Jeffrey Mvutu Mabilama"
-__version__ = "0.1.2.3"
+__version__ = "0.1.2.4"
 __license__ = "CC-BY"
 
 
@@ -160,13 +160,16 @@ def argParser():
         python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 540p $url [–-dispatchVideoFiles]
         
         # Skip video files
-        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 0p
+        python oc_course_downloader_selenium.py [-n] --onlyChapters 3-4 -q 0p $url
         """
         )
         
     parser.add_argument('--username', '-u', help="username or email of the service")
     parser.add_argument('--password', '-p', help="password of the service. If not provided it will be asked in a secure way interactively")
     parser.add_argument('--netrc', '-n', action="store_true", help="Reads the credentials from a netrc file")
+    parser.add_argument('--browser', '-b', dest="userBrowser", default="firefox",
+        choices=[val.name.lower() for val in jmm.browsers.SeleniumHelper.Browser],
+        help="The browser to use whem downloading.")
     
     parser.add_argument('--dispatchVideoFiles', action="store_false", help="""Dispatches videos files and downloads them to their respective chapters.""")
     # parser.add_argument('--groupMedias', '-g', action="store_true", help="""Groups media files and downloads them to the same location.""")
@@ -177,6 +180,7 @@ def argParser():
     parser.add_argument('--onlyChapters', '--only', nargs="+", default=[], help="""The only chapters to fetch. in the form part-chapter like 2-4 to ignore chapter 4 of part 2). Example: 0-1 1-1 1-2 2-1 2-3.
     If --ignoreChapters is also specified, the ignored chapters will filter this list.""")
     
+
     parser.add_argument('courseUrls', nargs="+", help="Course urls of the courses to fetch. Example: https://openclassrooms.com/fr/courses/4425126-testez-votre-projet-avec-python/")
     return parser
 
@@ -585,15 +589,28 @@ def main_selenium():
         if args.password is None or args.username == '-':
             args.password = getpass.getpass("Openclassrooms.com password: ")
     
-    nav = jmm.browsers.SeleniumHelper()
+
+    browser_name = args.userBrowser
+    nav = jmm.browsers.SeleniumHelper(browser_name=browser_name)
+
+
     
     ### login
     nav.get('https://openclassrooms.com/fr/login')
-    nav.waitTillExists('input#fielduserEmail')
-    nav.enter_textfield('input#fielduserEmail', args.username)
-    nav.enter_textfield('input#fielduserEmail', Keys.RETURN)
+    # cookies banner
+    nav.waitTime(3)
+    nav.click_element('button#truste-consent-required')
+    # login
+    sFieldUsername = "input#field-userEmail-1"
+    sFieldPassword = "input[name=_password]"
+    nav.waitTillExists(sFieldUsername)
+    nav.enter_textfield(sFieldUsername, args.username)
     nav.waitTime(2)
-    nav.enter_textfield('input#field_password', args.password)
+    nav.click_element('button#continue-button')
+    # nav.enter_textfield(sFieldUsername, Keys.RETURN)
+
+    nav.waitTime(2)
+    nav.enter_textfield(sFieldPassword, args.password)
     nav.click_element('button#login-button')
     nav.waitTime(5)
     
